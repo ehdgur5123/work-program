@@ -38,3 +38,15 @@ export async function fetchDeleteName(
     return null;
   }
 }
+
+export async function fetchDeleteSymbol(
+  id: string
+): Promise<SymbolItem | null> {
+  try {
+    const response = await axios.delete(`/symbols/${id}`);
+    return response.data;
+  } catch (err) {
+    console.error("❌ 기호 삭제 실패:", err);
+    return null;
+  }
+}

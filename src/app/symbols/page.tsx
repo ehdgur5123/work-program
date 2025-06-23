@@ -10,9 +10,11 @@ export default async function SymbolPage() {
   return (
     <>
       <div className="text-6xl text-center p-5 m-20">Windows Alt Code</div>
+
       <div className="flex items-center justify-center">
         <ClientSideSymbolSearch initialSymbols={initialSymbols || []} />
       </div>
+      <div className="h-20"></div>
     </>
   );
 }

@@ -24,6 +24,7 @@ export default function NameList({ symbol, onUpdatedSymbol }: NameListProps) {
       }
     } catch (err) {
       alert("삭제 실패");
+      onUpdatedSymbol(symbol);
       // 실패 시 복원 (optional: 복원할 이전 상태 따로 관리 필요)
     }
   };

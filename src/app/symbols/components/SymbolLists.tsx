@@ -10,7 +10,7 @@ interface SymbolListProps {
 
 export default function SymbolLists({ symbols, mode }: SymbolListProps) {
   // 기호를 복사합니다.
-  const [symbolDataList, setSymbolDataList] = useState(symbols);
+  const [symbolDataList, setSymbolDataList] = useState<SymbolItem[]>([]);
 
   const copySymbol = (symbol: string) => {
     navigator.clipboard.writeText(symbol);
@@ -50,6 +50,11 @@ export default function SymbolLists({ symbols, mode }: SymbolListProps) {
                       prev.map((item) =>
                         item._id === updated._id ? updated : item
                       )
+                    );
+                  }}
+                  onDelete={(deletedId) => {
+                    setSymbolDataList((prev) =>
+                      prev.filter((item) => item._id !== deletedId)
                     );
                   }}
                 />

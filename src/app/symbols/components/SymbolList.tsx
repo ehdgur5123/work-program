@@ -1,17 +1,24 @@
 "use client";
 import { SymbolItem } from "@/app/symbols/types";
-import { useState } from "react";
-import { fetchAddName } from "@/app/symbols/controllers/fetchSymbols";
+import { useEffect, useState } from "react";
+import {
+  fetchAddName,
+  fetchDeleteSymbol,
+} from "@/app/symbols/controllers/fetchSymbols";
 import NameList from "./NameList";
 
 interface SymbolListProps {
   symbol: SymbolItem;
   onUpdate: (updated: SymbolItem) => void;
+  onDelete: (deletedId: string) => void;
 }
 
-export default function SymbolList({ symbol, onUpdate }: SymbolListProps) {
+export default function SymbolList({
+  symbol,
+  onUpdate,
+  onDelete,
+}: SymbolListProps) {
   const [value, setValue] = useState("");
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmedValue = value.trim();
@@ -27,9 +34,29 @@ export default function SymbolList({ symbol, onUpdate }: SymbolListProps) {
         onUpdate(optimistic);
       } catch {
         alert("추가 실패했습니다");
+        // 삭제한 값 백업 후 여기에 실패 시, 다시 추가하는 기능 넣어야 함
       }
     }
     setValue("");
+  };
+
+  const deleteSymbolClick = async () => {
+    const confirmText = prompt(
+      "정말 삭제하시겠습니까? 삭제하려면 '삭제'를 입력하세요."
+    );
+
+    if (confirmText !== "삭제") {
+      alert("삭제가 취소되었습니다.");
+      return;
+    }
+
+    try {
+      onDelete(symbol._id);
+      await fetchDeleteSymbol(symbol._id);
+    } catch (err) {
+      alert("삭제 실패");
+      // 삭제 실패 시, 추가하는 코드 구현 필요
+    }
   };
 
   return (
@@ -73,7 +100,10 @@ export default function SymbolList({ symbol, onUpdate }: SymbolListProps) {
 
       {/* 삭제 버튼 */}
       <div className="col-start-6 flex items-center justify-end">
-        <div className="hover:text-gray-500 rounded-full text-3xl mr-2 active:scale-80">
+        <div
+          className="hover:text-gray-500 rounded-full text-3xl mr-2 active:scale-80"
+          onClick={deleteSymbolClick}
+        >
           ×
         </div>
       </div>
