@@ -1,11 +1,13 @@
 // lib/axios.ts
-import axios from 'axios';
+import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api',
+  baseURL:
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    "https://work-program.vercel.app/api",
   timeout: 5000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
