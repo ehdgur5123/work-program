@@ -10,8 +10,13 @@ export default function Search({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSearch(value);
-    setValue("");
+    const trimmedValue = value.trim();
+    if (!trimmedValue) {
+      alert("검색어를 입력하세요");
+    } else {
+      handleSearch(value);
+      setValue("");
+    }
   };
 
   return (
