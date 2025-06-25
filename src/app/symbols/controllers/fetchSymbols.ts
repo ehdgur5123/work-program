@@ -5,7 +5,12 @@ export async function fetchSymbols(
   search: string
 ): Promise<SymbolItem[] | null> {
   try {
-    const response = await axios.get("/symbols", { params: { search } });
+    const response = await axios.get("/symbols", {
+      params: { search },
+      headers: {
+        "Cache-Control": "no-store", // ✅ 캐시 사용하지 않도록 설정
+      },
+    });
     return response.data;
   } catch (err) {
     console.error("❌ 심볼 가져오기 실패:", err);
