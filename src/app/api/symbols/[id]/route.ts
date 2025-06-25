@@ -12,15 +12,24 @@ export async function GET(
     const symbol = await SymbolModel.findById(id);
 
     if (!symbol) {
-      return NextResponse.json({ error: "Symbol not found" }, { status: 404 });
+      const res = NextResponse.json(
+        { error: "Symbol not found" },
+        { status: 404 }
+      );
+      res.headers.set("Access-Control-Allow-Origin", "*");
+      return res;
     }
 
-    return NextResponse.json(symbol);
+    const res = NextResponse.json(symbol);
+    res.headers.set("Access-Control-Allow-Origin", "*");
+    return res;
   } catch {
-    return NextResponse.json(
+    const res = NextResponse.json(
       { error: "Error fetching symbol" },
       { status: 500 }
     );
+    res.headers.set("Access-Control-Allow-Origin", "*");
+    return res;
   }
 }
 
@@ -34,17 +43,23 @@ export async function PATCH(
     const { name } = await req.json();
 
     if (!name || typeof name !== "string") {
-      return NextResponse.json({ error: "잘못된 name" }, { status: 400 });
+      const res = NextResponse.json({ error: "잘못된 name" }, { status: 400 });
+      res.headers.set("Access-Control-Allow-Origin", "*");
+      return res;
     }
     const updated = await SymbolModel.findByIdAndUpdate(
       id,
-      { $addToSet: { name } }, // 중복 방지
+      { $addToSet: { name } },
       { new: true }
     );
 
-    return NextResponse.json(updated);
+    const res = NextResponse.json(updated);
+    res.headers.set("Access-Control-Allow-Origin", "*");
+    return res;
   } catch {
-    return NextResponse.json({ error: "업데이트 실패" }, { status: 500 });
+    const res = NextResponse.json({ error: "업데이트 실패" }, { status: 500 });
+    res.headers.set("Access-Control-Allow-Origin", "*");
+    return res;
   }
 }
 
@@ -56,30 +71,47 @@ export async function DELETE(
   const { id } = await params;
 
   try {
-    // 요청 바디에서 name이 있는지 확인
     const body = await req.json().catch(() => ({}));
     const name = body?.name;
 
     if (name && typeof name === "string") {
-      // ✅ name 하나 삭제
       const updated = await SymbolModel.findByIdAndUpdate(
         id,
         { $pull: { name } },
         { new: true }
       );
-      return NextResponse.json(updated);
+      const res = NextResponse.json(updated);
+      res.headers.set("Access-Control-Allow-Origin", "*");
+      return res;
     } else {
-      // ✅ 심볼 전체 삭제
       const deleted = await SymbolModel.findByIdAndDelete(id);
       if (!deleted) {
-        return NextResponse.json(
+        const res = NextResponse.json(
           { error: "삭제할 심볼이 없습니다." },
           { status: 404 }
         );
+        res.headers.set("Access-Control-Allow-Origin", "*");
+        return res;
       }
-      return NextResponse.json({ message: "삭제 성공", deleted });
+      const res = NextResponse.json({ message: "삭제 성공", deleted });
+      res.headers.set("Access-Control-Allow-Origin", "*");
+      return res;
     }
   } catch {
-    return NextResponse.json({ error: "삭제 실패" }, { status: 500 });
+    const res = NextResponse.json({ error: "삭제 실패" }, { status: 500 });
+    res.headers.set("Access-Control-Allow-Origin", "*");
+    return res;
   }
+}
+
+// CORS 프리플라이트 요청 처리
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, PATCH, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  });
 }

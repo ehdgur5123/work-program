@@ -17,5 +17,19 @@ export async function GET(req: Request) {
     ],
   });
 
-  return NextResponse.json(symbols);
+  const res = NextResponse.json(symbols);
+  res.headers.set("Access-Control-Allow-Origin", "*"); // 모든 도메인 허용 (필요 시 조절)
+  return res;
+}
+
+// CORS 프리플라이트 요청 처리
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204, // No Content
+    headers: {
+      "Access-Control-Allow-Origin": "*", // 모든 도메인 허용 (필요 시 조절)
+      "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  });
 }
