@@ -1,6 +1,6 @@
 "use client";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { fetchSymbols } from "@/app/symbols/controllers/fetchSymbols";
 import SymbolLists from "./SymbolLists";
 import Search from "./Search";

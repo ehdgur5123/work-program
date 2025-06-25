@@ -1,6 +1,6 @@
 "use client";
 import { SymbolItem } from "@/app/symbols/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   fetchAddName,
   fetchDeleteSymbol,
@@ -53,7 +53,7 @@ export default function SymbolList({
     try {
       onDelete(symbol._id);
       await fetchDeleteSymbol(symbol._id);
-    } catch (err) {
+    } catch {
       alert("삭제 실패");
       // 삭제 실패 시, 추가하는 코드 구현 필요
     }

@@ -1,7 +1,6 @@
 "use client";
 
 import { fetchDeleteName } from "@/app/symbols/controllers/fetchSymbols";
-import { useEffect, useState } from "react";
 import { SymbolItem } from "@/app/symbols/types";
 
 interface NameListProps {
@@ -22,7 +21,7 @@ export default function NameList({ symbol, onUpdatedSymbol }: NameListProps) {
       if (updated) {
         onUpdatedSymbol(updated); // 서버 최종 반영 결과로 덮어쓰기
       }
-    } catch (err) {
+    } catch {
       alert("삭제 실패");
       onUpdatedSymbol(symbol);
       // 실패 시 복원 (optional: 복원할 이전 상태 따로 관리 필요)

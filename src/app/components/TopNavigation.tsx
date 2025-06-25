@@ -16,8 +16,13 @@ export default function TopNavigation() {
       </Link>
       <div className="flex gap-3 p-2">
         <SignedOut>
-          <SignInButton className="border-1 p-1 text-sm" />
-          <SignUpButton className="border-1 p-1 text-sm" />
+          <SignInButton>
+            <button className="border-1 p-1 text-sm">Sign in</button>
+          </SignInButton>
+
+          <SignUpButton>
+            <button className="border-1 p-1 text-sm">Sign up</button>
+          </SignUpButton>
         </SignedOut>
       </div>
       <SignedIn>

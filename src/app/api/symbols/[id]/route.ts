@@ -2,10 +2,13 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { SymbolModel } from "@/app/symbols/models/Symbol";
 import { NextResponse, NextRequest } from "next/server";
 
-export async function GET(req: Request, context: { params: { id: string } }) {
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectToDatabase();
-    const { id } = await context.params;
+    const { id } = await params;
     const symbol = await SymbolModel.findById(id);
 
     if (!symbol) {
@@ -13,7 +16,7 @@ export async function GET(req: Request, context: { params: { id: string } }) {
     }
 
     return NextResponse.json(symbol);
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: "Error fetching symbol" },
       { status: 500 }
@@ -23,11 +26,11 @@ export async function GET(req: Request, context: { params: { id: string } }) {
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-    const { id } = await context.params;
+    const { id } = await params;
     const { name } = await req.json();
 
     if (!name || typeof name !== "string") {
@@ -40,17 +43,17 @@ export async function PATCH(
     );
 
     return NextResponse.json(updated);
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "업데이트 실패" }, { status: 500 });
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectToDatabase();
-  const { id } = await context.params;
+  const { id } = await params;
 
   try {
     // 요청 바디에서 name이 있는지 확인
@@ -76,7 +79,7 @@ export async function DELETE(
       }
       return NextResponse.json({ message: "삭제 성공", deleted });
     }
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "삭제 실패" }, { status: 500 });
   }
 }
