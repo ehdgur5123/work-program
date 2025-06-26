@@ -51,7 +51,7 @@ export default function ClientSideSymbolSearch({
             className="text-sm p-1 border-1 cursor-pointer hover:text-blue-100 active:scale-90"
             onClick={() => setMode(!mode)}
           >
-            {mode ? "카피모드" : "태그모드"}
+            {mode ? "태그모드" : "카피모드"}
           </button>
         </div>
       </div>

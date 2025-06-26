@@ -45,14 +45,14 @@ export default function SymbolLists({ symbols, mode }: SymbolListProps) {
                 <SymbolList
                   key={symbol._id}
                   symbol={symbol}
-                  onUpdate={(updated) => {
+                  onNameUpdate={(updated) => {
                     setSymbolDataList((prev) =>
                       prev.map((item) =>
                         item._id === updated._id ? updated : item
                       )
                     );
                   }}
-                  onDelete={(deletedId) => {
+                  onSymbolDelete={(deletedId) => {
                     setSymbolDataList((prev) =>
                       prev.filter((item) => item._id !== deletedId)
                     );

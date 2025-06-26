@@ -2,6 +2,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import { SymbolModel } from "@/app/symbols/models/Symbol";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(req: Request) {
   await connectToDatabase();
@@ -19,6 +20,7 @@ export async function GET(req: Request) {
 
   const res = NextResponse.json(symbols);
   res.headers.set("Access-Control-Allow-Origin", "*"); // 모든 도메인 허용 (필요 시 조절)
+  revalidatePath("/symbols");
   return res;
 }
 

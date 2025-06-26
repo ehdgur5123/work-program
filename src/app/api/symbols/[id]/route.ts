@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import { SymbolModel } from "@/app/symbols/models/Symbol";
 import { NextResponse, NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   _req: Request,
@@ -55,6 +56,7 @@ export async function PATCH(
 
     const res = NextResponse.json(updated);
     res.headers.set("Access-Control-Allow-Origin", "*");
+    revalidatePath("/symbols");
     return res;
   } catch {
     const res = NextResponse.json({ error: "업데이트 실패" }, { status: 500 });
@@ -82,6 +84,7 @@ export async function DELETE(
       );
       const res = NextResponse.json(updated);
       res.headers.set("Access-Control-Allow-Origin", "*");
+      revalidatePath("/symbols");
       return res;
     } else {
       const deleted = await SymbolModel.findByIdAndDelete(id);
@@ -95,6 +98,7 @@ export async function DELETE(
       }
       const res = NextResponse.json({ message: "삭제 성공", deleted });
       res.headers.set("Access-Control-Allow-Origin", "*");
+      revalidatePath("/symbols");
       return res;
     }
   } catch {

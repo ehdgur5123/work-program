@@ -9,14 +9,14 @@ import NameList from "./NameList";
 
 interface SymbolListProps {
   symbol: SymbolItem;
-  onUpdate: (updated: SymbolItem) => void;
-  onDelete: (deletedId: string) => void;
+  onNameUpdate: (updated: SymbolItem) => void;
+  onSymbolDelete: (deletedId: string) => void;
 }
 
 export default function SymbolList({
   symbol,
-  onUpdate,
-  onDelete,
+  onNameUpdate,
+  onSymbolDelete,
 }: SymbolListProps) {
   const [value, setValue] = useState("");
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -28,16 +28,19 @@ export default function SymbolList({
     } else if (symbol.name.includes(trimmedValue)) {
       alert(`${trimmedValue}가 이미 있습니다`);
     } else {
+      const optimistic = { ...symbol, name: [...symbol.name, trimmedValue] };
+      onNameUpdate(optimistic);
+      setValue("");
       try {
-        await fetchAddName(symbol._id, trimmedValue);
-        const optimistic = { ...symbol, name: [...symbol.name, trimmedValue] };
-        onUpdate(optimistic);
+        const updated = await fetchAddName(symbol._id, trimmedValue);
+        if (updated) {
+          onNameUpdate(updated);
+        }
       } catch {
         alert("추가 실패했습니다");
-        // 삭제한 값 백업 후 여기에 실패 시, 다시 추가하는 기능 넣어야 함
+        onNameUpdate(symbol);
       }
     }
-    setValue("");
   };
 
   const deleteSymbolClick = async () => {
@@ -51,7 +54,7 @@ export default function SymbolList({
     }
 
     try {
-      onDelete(symbol._id);
+      onSymbolDelete(symbol._id);
       await fetchDeleteSymbol(symbol._id);
     } catch {
       alert("삭제 실패");
@@ -95,7 +98,7 @@ export default function SymbolList({
         태그
       </div>
       <div className="col-start-3 col-span-4 row-start-2 row-span-4 p-2 border border-dashed rounded-md text-left text-sm overflow-auto max-h-[168px]">
-        <NameList symbol={symbol} onUpdatedSymbol={onUpdate} />
+        <NameList symbol={symbol} onNameUpdate={onNameUpdate} />
       </div>
 
       {/* 삭제 버튼 */}

@@ -5,13 +5,13 @@ import { SymbolItem } from "@/app/symbols/types";
 
 interface NameListProps {
   symbol: SymbolItem;
-  onUpdatedSymbol: (updated: SymbolItem) => void;
+  onNameUpdate: (updated: SymbolItem) => void;
 }
 
-export default function NameList({ symbol, onUpdatedSymbol }: NameListProps) {
+export default function NameList({ symbol, onNameUpdate }: NameListProps) {
   const deleteNameClick = async (nameToDelete: string) => {
     // 먼저 UI 업데이트 (낙관적 처리)
-    onUpdatedSymbol({
+    onNameUpdate({
       ...symbol, // 전달받은 symbol 객체가 있다면
       name: symbol.name.filter((name) => name !== nameToDelete),
     });
@@ -19,12 +19,11 @@ export default function NameList({ symbol, onUpdatedSymbol }: NameListProps) {
     try {
       const updated = await fetchDeleteName(symbol._id, nameToDelete);
       if (updated) {
-        onUpdatedSymbol(updated); // 서버 최종 반영 결과로 덮어쓰기
+        onNameUpdate(updated); // 서버 최종 반영 결과로 덮어쓰기
       }
     } catch {
       alert("삭제 실패");
-      onUpdatedSymbol(symbol);
-      // 실패 시 복원 (optional: 복원할 이전 상태 따로 관리 필요)
+      onNameUpdate(symbol);
     }
   };
 

@@ -7,9 +7,6 @@ export async function fetchSymbols(
   try {
     const response = await axios.get("/symbols", {
       params: { search },
-      headers: {
-        "Cache-Control": "no-store", // ✅ 캐시 사용하지 않도록 설정
-      },
     });
     return response.data;
   } catch (err) {
@@ -21,7 +18,7 @@ export async function fetchSymbols(
 export async function fetchAddName(
   id: string,
   name: string
-): Promise<SymbolItem[] | null> {
+): Promise<SymbolItem | null> {
   try {
     const response = await axios.patch(`/symbols/${id}`, { name });
     return response.data;
