@@ -6,6 +6,7 @@ import {
   fetchDeleteSymbol,
 } from "@/app/symbols/controllers/fetchSymbols";
 import NameList from "./NameList";
+import { fetchDeleteName } from "@/app/symbols/controllers/fetchSymbols";
 
 interface SymbolListProps {
   symbol: SymbolItem;
@@ -40,6 +41,24 @@ export default function SymbolList({
         alert("추가 실패했습니다");
         onNameUpdate(symbol);
       }
+    }
+  };
+
+  const deleteNameClick = async (nameToDelete: string) => {
+    // 먼저 UI 업데이트 (낙관적 처리)
+    onNameUpdate({
+      ...symbol, // 전달받은 symbol 객체가 있다면
+      name: symbol.name.filter((name) => name !== nameToDelete),
+    });
+
+    try {
+      const updated = await fetchDeleteName(symbol._id, nameToDelete);
+      if (updated) {
+        onNameUpdate(updated); // 서버 최종 반영 결과로 덮어쓰기
+      }
+    } catch {
+      alert("삭제 실패");
+      onNameUpdate(symbol);
     }
   };
 
@@ -98,7 +117,7 @@ export default function SymbolList({
         태그
       </div>
       <div className="col-start-3 col-span-4 row-start-2 row-span-4 p-2 border border-dashed rounded-md text-left text-sm overflow-auto max-h-[168px]">
-        <NameList symbol={symbol} onNameUpdate={onNameUpdate} />
+        <NameList symbol={symbol} deleteNameClick={deleteNameClick} />
       </div>
 
       {/* 삭제 버튼 */}

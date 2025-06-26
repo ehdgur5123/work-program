@@ -4,19 +4,9 @@ import { SymbolModel } from "@/app/symbols/models/Symbol";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
-export async function GET(req: Request) {
+export async function GET() {
   await connectToDatabase();
-
-  const { searchParams } = new URL(req.url);
-  const search = searchParams.get("search") || "";
-
-  const symbols = await SymbolModel.find({
-    $or: [
-      { name: { $regex: search, $options: "i" } },
-      { code: { $regex: search, $options: "i" } },
-      { symbol: { $regex: search, $options: "i" } },
-    ],
-  });
+  const symbols = await SymbolModel.find({});
 
   const res = NextResponse.json(symbols);
   res.headers.set("Access-Control-Allow-Origin", "*"); // 모든 도메인 허용 (필요 시 조절)

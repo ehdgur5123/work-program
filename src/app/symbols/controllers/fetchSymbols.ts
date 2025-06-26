@@ -1,13 +1,9 @@
 import axios from "@/lib/axios";
 import { SymbolItem } from "@/app/symbols/types";
 
-export async function fetchSymbols(
-  search: string
-): Promise<SymbolItem[] | null> {
+export async function fetchSymbols(): Promise<SymbolItem[] | null> {
   try {
-    const response = await axios.get("/symbols", {
-      params: { search },
-    });
+    const response = await axios.get("/symbols");
     return response.data;
   } catch (err) {
     console.error("❌ 심볼 가져오기 실패:", err);
