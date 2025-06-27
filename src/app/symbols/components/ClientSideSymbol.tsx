@@ -24,8 +24,9 @@ export default function ClientSideSymbol({
 
   const handleSearch = (search: string) => {
     setHasSearch(true);
-    const searchResult = symbols.filter((item) =>
-      item.name.some((n) => n.includes(search))
+    const searchResult = symbols.filter(
+      (item) =>
+        item.name.some((n) => n.includes(search)) || item.code.includes(search)
     );
     if (Array.isArray(searchResult) && searchResult.length > 0) {
       setSearchValue(searchResult);
@@ -92,7 +93,7 @@ export default function ClientSideSymbol({
       </div>
 
       <div className="md:hidden block">
-        <div className="flex flex-col justify-center gap-3 w-100">
+        <div className="flex flex-col justify-center gap-3 w-100 p-2">
           <Search handleSearch={handleSearch} />
           <div className="flex flex-row gap-2 justify-end">
             <button

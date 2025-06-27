@@ -57,7 +57,7 @@ export default function SymbolList({
         onNameUpdate(updated); // 서버 최종 반영 결과로 덮어쓰기
       }
     } catch {
-      alert("삭제 실패");
+      alert("태그 삭제 실패");
       onNameUpdate(symbol);
     }
   };
@@ -76,8 +76,8 @@ export default function SymbolList({
       onSymbolDelete(symbol._id);
       await fetchDeleteSymbol(symbol._id);
     } catch {
-      alert("삭제 실패");
-      // 삭제 실패 시, 추가하는 코드 구현 필요
+      alert("기호 삭제 실패");
+      onNameUpdate(symbol);
     }
   };
 

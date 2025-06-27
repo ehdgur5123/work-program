@@ -1,5 +1,6 @@
 import { fetchSymbols } from "@/app/symbols/controllers/fetchSymbols";
 import ClientSideSymbol from "./components/ClientSideSymbol";
+// import TopToScroll from "./components/TopToScroll";
 
 export default async function SymbolPage() {
   const initialSymbols = await fetchSymbols();
@@ -9,10 +10,7 @@ export default async function SymbolPage() {
 
   return (
     <>
-      <div className="hidden md:block text-6xl text-center p-5 m-20">
-        기호찾기
-      </div>
-      <div className="block md:hidden text-3xl text-center p-3 m-2">
+      <div className="text-6xl md:text-6xl text-center p-3 m-2 md:p-5 md:m-20">
         기호찾기
       </div>
 
@@ -20,6 +18,7 @@ export default async function SymbolPage() {
         <ClientSideSymbol initialSymbols={initialSymbols || []} />
       </div>
       <div className="h-20"></div>
+      {/* <TopToScroll /> */}
     </>
   );
 }
