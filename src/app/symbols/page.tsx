@@ -9,7 +9,12 @@ export default async function SymbolPage() {
 
   return (
     <>
-      <div className="text-6xl text-center p-5 m-20">Windows Alt Code</div>
+      <div className="hidden md:block text-6xl text-center p-5 m-20">
+        기호찾기
+      </div>
+      <div className="block md:hidden text-3xl text-center p-3 m-2">
+        기호찾기
+      </div>
 
       <div className="flex items-center justify-center">
         <ClientSideSymbol initialSymbols={initialSymbols || []} />

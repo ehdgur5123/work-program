@@ -22,16 +22,16 @@ export default function SymbolLists({
   return (
     <>
       {mode ? (
-        <div className="grid grid-cols-8 gap-2">
+        <div className="grid md:grid-cols-8 grid-cols-4 gap-2">
           {symbols
             ? symbols.map((symbol) => (
                 <div
                   key={symbol._id}
-                  className="border-1 pt-2 pl-2 pr-2 text-center hover:scale-110 active:scale-90"
+                  className="border-1 md:pt-2 md:pl-2 md:pr-2 text-center hover:scale-110 active:scale-90 rounded-2xl"
                   onClick={() => copySymbol(symbol.symbol)}
                 >
-                  <div>{symbol.symbol}</div>
-                  <div>{symbol.code}</div>
+                  <div className="pt-1">{symbol.symbol}</div>
+                  <div className="text-xs md:text-sm p-1">{symbol.code}</div>
                 </div>
               ))
             : null}
