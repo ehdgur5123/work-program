@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import SymbolLists from "./SymbolLists";
 import Search from "./Search";
 import { SymbolItem } from "@/app/symbols/types";
+import SymbolHandleButton from "./Button/SymbolHandleButton";
+import { TableCellsIcon } from "@heroicons/react/24/solid";
 
 interface ClientSideSymbolProps {
   initialSymbols: SymbolItem[];
@@ -38,124 +40,80 @@ export default function ClientSideSymbol({
 
   return (
     <>
-      <div className="hidden md:block">
-        <div className="flex flex-col w-180 justify-center gap-10">
+      <div className="flex flex-col w-100 justify-center gap-3 p-2 md:w-180">
+        <div className="hidden md:block">
           <div className="flex justify-between items-center">
             <Search handleSearch={handleSearch} />
             <div className="flex flex-row gap-2">
-              <button
-                className="text-sm p-1 border-1 cursor-pointer hover:text-blue-100 active:scale-90"
-                onClick={() => {
+              <SymbolHandleButton
+                handleClick={() => {
                   setSymbols(initialSymbols);
                   setHasSearch(false);
                 }}
               >
                 전체보기
-              </button>
-              <button className="text-sm p-1 border-1 cursor-pointer hover:text-blue-100 active:scale-90">
+              </SymbolHandleButton>
+
+              <SymbolHandleButton handleClick={() => {}}>
                 기호추가
-              </button>
-              <button
-                className="text-sm p-1 border-1 cursor-pointer hover:text-blue-100 active:scale-90"
-                onClick={() => setMode(!mode)}
+              </SymbolHandleButton>
+
+              <SymbolHandleButton
+                handleClick={() => {
+                  setMode(!mode);
+                }}
               >
                 {mode ? "태그모드" : "카피모드"}
-              </button>
+              </SymbolHandleButton>
             </div>
           </div>
-          <div>
-            {hasSearch ? (
-              Array.isArray(searchValue) && searchValue.length > 0 ? (
-                <SymbolLists
-                  symbols={searchValue}
-                  setSymbols={setSearchValue}
-                  mode={mode}
-                />
-              ) : (
-                <div className="flex items-center justify-center">
-                  <DotLottieReact
-                    src="https://lottie.host/7568b83c-65f6-4a6b-bd4a-1bdbc2b65276/lgWezNYmwt.lottie"
-                    loop
-                    autoplay
-                    style={{ width: 600, height: 400 }}
-                  />
-                </div>
-              )
-            ) : (
-              <SymbolLists
-                symbols={symbols}
-                setSymbols={setSymbols}
-                mode={mode}
-              />
-            )}
-          </div>
         </div>
-      </div>
-
-      <div className="md:hidden block">
-        <div className="flex flex-col justify-center gap-3 w-100 p-2">
+        <div className="md:hidden block">
           <Search handleSearch={handleSearch} />
           <div className="flex flex-row gap-2 justify-end">
-            <button
-              className="w-8 h-8 p-1 flex items-center justify-center border border-gray-400 hover:text-blue-100 rounded-full"
-              onClick={() => {
+            <SymbolHandleButton
+              handleClick={() => {
                 setSymbols(initialSymbols);
                 setHasSearch(false);
               }}
+              mobile={true}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="size-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
-                />
-              </svg>
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center border border-gray-400 hover:text-blue-100 rounded-full">
+              <TableCellsIcon className="size-5" />
+            </SymbolHandleButton>
+            <SymbolHandleButton handleClick={() => {}} mobile={true}>
               +
-            </button>
-            <button
-              className="w-8 h-8 flex items-center justify-center border border-gray-400 hover:text-blue-100 rounded-full"
-              onClick={() => setMode(!mode)}
+            </SymbolHandleButton>
+            <SymbolHandleButton
+              handleClick={() => {
+                setMode(!mode);
+              }}
+              mobile={true}
             >
               {mode ? "T" : "C"}
-            </button>
-          </div>
-
-          <div>
-            {hasSearch ? (
-              Array.isArray(searchValue) && searchValue.length > 0 ? (
-                <SymbolLists
-                  symbols={searchValue}
-                  setSymbols={setSearchValue}
-                  mode={mode}
-                />
-              ) : (
-                <div className="flex items-center justify-center">
-                  <DotLottieReact
-                    src="https://lottie.host/7568b83c-65f6-4a6b-bd4a-1bdbc2b65276/lgWezNYmwt.lottie"
-                    loop
-                    autoplay
-                    style={{ width: 600, height: 400 }}
-                  />
-                </div>
-              )
-            ) : (
-              <SymbolLists
-                symbols={symbols}
-                setSymbols={setSymbols}
-                mode={mode}
-              />
-            )}
+            </SymbolHandleButton>
           </div>
         </div>
+
+        {hasSearch ? (
+          Array.isArray(searchValue) && searchValue.length > 0 ? (
+            <SymbolLists
+              symbols={searchValue}
+              setSymbols={setSearchValue}
+              mode={mode}
+            />
+          ) : (
+            <div className="flex items-center justify-center">
+              <DotLottieReact
+                src="https://lottie.host/7568b83c-65f6-4a6b-bd4a-1bdbc2b65276/lgWezNYmwt.lottie"
+                loop
+                autoplay
+                style={{ width: 600, height: 400 }}
+              />
+            </div>
+          )
+        ) : (
+          <SymbolLists symbols={symbols} setSymbols={setSymbols} mode={mode} />
+        )}
       </div>
     </>
   );

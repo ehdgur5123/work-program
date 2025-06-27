@@ -10,14 +10,9 @@ export default async function SymbolPage() {
 
   return (
     <>
-      <div className="text-6xl md:text-6xl text-center p-3 m-2 md:p-5 md:m-20">
-        기호찾기
-      </div>
-
       <div className="flex items-center justify-center">
         <ClientSideSymbol initialSymbols={initialSymbols || []} />
       </div>
-      <div className="h-20"></div>
       <ScrollToTop />
     </>
   );
