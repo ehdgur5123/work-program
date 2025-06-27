@@ -82,46 +82,9 @@ export default function SymbolList({
   };
 
   return (
-    <div className="border border-gray-300 rounded-xl shadow-sm p-4 grid grid-rows-6 grid-cols-6 gap-2 text-center">
-      {/* 심볼 크게 표시 */}
-      <div className="row-start-1 row-span-3 col-span-2 flex text-6xl text-black items-center justify-center border rounded-md bg-gray-100">
-        {symbol.symbol}
-      </div>
-
-      {/* 유니코드 */}
-      <p className="row-start-4 col-start-1 col-span-1 p-2 font-semibold text-sm text-gray-600">
-        유니코드
-      </p>
-      <div className="row-start-4 col-start-2 col-span-4 p-2 text-left text-sm">
-        {symbol.unicode}
-      </div>
-
-      {/* HTML */}
-      <p className="row-start-5 col-start-1 p-2 font-semibold text-sm text-gray-600">
-        html
-      </p>
-      <div className="row-start-5 col-start-2 col-span-4 p-2 text-left text-sm">
-        {symbol.html}
-      </div>
-
-      {/* Alt Code */}
-      <p className="row-start-6 col-start-1 p-2 font-semibold text-sm text-gray-600">
-        alt Code
-      </p>
-      <div className="row-start-6 col-start-2 col-span-4 p-2 text-left text-sm">
-        {symbol.code}
-      </div>
-
-      {/* 태그 영역 */}
-      <div className="col-start-3 row-start-1 row-span-1 text-lg font-semibold text-gray-600 flex items-center justify-start ml-3">
-        태그
-      </div>
-      <div className="col-start-3 col-span-4 row-start-2 row-span-4 p-2 border border-dashed rounded-md text-left text-sm overflow-auto max-h-[168px]">
-        <NameList symbol={symbol} deleteNameClick={deleteNameClick} />
-      </div>
-
+    <div className="border border-gray-300 rounded-xl shadow-sm p-4 max-w-150">
       {/* 삭제 버튼 */}
-      <div className="col-start-6 flex items-center justify-end">
+      <div className="flex items-center justify-end">
         <div
           className="hover:text-gray-500 rounded-full text-3xl mr-2 active:scale-80"
           onClick={deleteSymbolClick}
@@ -129,9 +92,40 @@ export default function SymbolList({
           ×
         </div>
       </div>
+      {/* 심볼 크게 표시 */}
+      <div className="flex flex-row gap-4">
+        <div className="w-20 h-20 flex text-6xl text-black items-center justify-center border rounded-md bg-gray-100">
+          {symbol.symbol}
+        </div>
+        <div className="flex flex-col justify-between">
+          {/* 유니코드 */}
+          <div className="flex gap-2 text-sm">
+            <p className="font-semibold text-gray-600 w-20">유니코드</p>
+            <div className="text-left">{symbol.unicode}</div>
+          </div>
+          {/* HTML */}
+          <div className="flex gap-2 text-sm">
+            <p className="font-semibold  text-gray-600 w-20">html</p>
+            <div className="text-left">{symbol.html}</div>
+          </div>
+          {/* Alt Code */}
+          <div className="flex gap-2 text-sm">
+            <p className="font-semibold  text-gray-600 w-20">alt Code</p>
+            <div className="text-left">{symbol.code}</div>
+          </div>
+        </div>
+      </div>
+      {/* 태그 영역 */}
+      <div className="text-sm font-semibold text-gray-600 flex items-center justify-start mt-2">
+        태그
+      </div>
+      <div className="mt-1 p-2 border border-dashed rounded-md text-left text-sm overflow-auto h-30">
+        <NameList symbol={symbol} deleteNameClick={deleteNameClick} />
+      </div>
+
       {/* 태그 추가 폼 */}
       <form
-        className="col-span-4 row-start-6 col-start-3 flex justify-end items-center gap-3"
+        className="flex justify-end items-center gap-3 mt-2"
         onSubmit={handleSubmit}
       >
         <label htmlFor="add_tag" className="text-sm">

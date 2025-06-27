@@ -27,17 +27,21 @@ export default function SymbolLists({
             ? symbols.map((symbol) => (
                 <div
                   key={symbol._id}
-                  className="border-1 md:pt-2 md:pl-2 md:pr-2 text-center hover:scale-110 active:scale-90 rounded-2xl"
+                  className="flex flex-col min-h-20 justify-center gap-2 min-w-20 border-1 md:pt-2 md:pl-2 md:pr-2 text-center hover:scale-110 active:scale-90 rounded-2xl"
                   onClick={() => copySymbol(symbol.symbol)}
                 >
-                  <div className="pt-1">{symbol.symbol}</div>
-                  <div className="text-xs md:text-sm p-1">{symbol.code}</div>
+                  <div className="min-h-8 inline-block pt-1">
+                    {symbol.symbol}
+                  </div>
+                  <div className="inline-block text-xs md:text-sm p-1">
+                    {symbol.code}
+                  </div>
                 </div>
               ))
             : null}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-2">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
           {symbols
             ? symbols.map((symbol) => (
                 <SymbolList
