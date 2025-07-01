@@ -18,13 +18,11 @@ export default function ClientSideSymbol({
   const [symbols, setSymbols] = useState<SymbolItem[]>(initialSymbols);
   const [mode, setMode] = useState(true);
   const [hasSymbolAdd, setHasSymbolAdd] = useState(false);
-
+  const [hasSearch, setHasSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState<SymbolItem[]>([]);
   useEffect(() => {
     setSymbols(initialSymbols);
   }, [initialSymbols]);
-
-  const [hasSearch, setHasSearch] = useState(false);
-  const [searchValue, setSearchValue] = useState<SymbolItem[]>([]);
 
   // 검색기능 핸들링
   const handleSearch = (search: string) => {
@@ -89,7 +87,7 @@ export default function ClientSideSymbol({
           <div className="flex flex-row gap-2 justify-end">
             <SymbolHandleButton
               handleClick={() => {
-                setSymbols(initialSymbols);
+                setSymbols(symbols);
                 setHasSearch(false);
                 setHasSymbolAdd(false);
               }}
