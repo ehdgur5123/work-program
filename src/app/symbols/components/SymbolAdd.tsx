@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { fetchAddSymbol } from "../controllers/fetchSymbols";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-export default function SymbolAdd() {
+import { SymbolItem } from "../types";
+
+interface SymbolAddProps {
+  onNewSymbolChange: (symbol: SymbolItem) => void;
+}
+
+export default function SymbolAdd({ onNewSymbolChange }: SymbolAddProps) {
   const RESET = {
     symbol: "",
     unicode: "",
@@ -50,6 +56,7 @@ export default function SymbolAdd() {
       alert("이미 존재하는 기호입니다.");
     } else if (response) {
       alert("✅ 기호가 성공적으로 추가되었습니다.");
+      onNewSymbolChange(response);
       setFormData((prev) => ({
         ...prev,
         symbol: "",

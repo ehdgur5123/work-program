@@ -48,6 +48,10 @@ export default function ClientSideSymbol({
     setHasSymbolAdd(!hasSymbolAdd);
   };
 
+  const handleNewSymbolChange = (newSymbol: SymbolItem) => {
+    setSymbols((prev) => [...prev, newSymbol]);
+  };
+
   return (
     <>
       <div className="flex flex-col w-100 justify-center gap-3 p-2 md:w-180">
@@ -57,7 +61,7 @@ export default function ClientSideSymbol({
             <div className="flex flex-row gap-2">
               <SymbolHandleButton
                 handleClick={() => {
-                  setSymbols(initialSymbols);
+                  setSymbols(symbols);
                   setHasSearch(false);
                   setHasSymbolAdd(false);
                 }}
@@ -115,7 +119,7 @@ export default function ClientSideSymbol({
         </div>
         {hasSymbolAdd ? (
           <div className="flex justify-center">
-            <SymbolAdd />
+            <SymbolAdd onNewSymbolChange={handleNewSymbolChange} />
           </div>
         ) : hasSearch ? (
           Array.isArray(searchValue) && searchValue.length > 0 ? (
