@@ -28,7 +28,7 @@ export default function Search({
     <>
       <form
         onSubmit={handleSubmit}
-        className="flex gap-2 justify-end items-center"
+        className="flex gap-2 justify-end items-center mb-2"
       >
         <label htmlFor="search">검색</label>
         <input
@@ -40,7 +40,7 @@ export default function Search({
         />
         <button
           type="submit"
-          className="cursor-pointer text-center text-xs rounded-lg p-2 mr-[-8px] w-10"
+          className="cursor-pointer rounded-lg w-6 hover:text-gray-500 active:scale-80"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -48,6 +48,7 @@ export default function Search({
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
+            className="size-6"
           >
             <path
               strokeLinecap="round"

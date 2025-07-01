@@ -6,6 +6,7 @@ import Search from "./Search";
 import { SymbolItem } from "@/app/symbols/types";
 import SymbolHandleButton from "./Button/SymbolHandleButton";
 import { TableCellsIcon } from "@heroicons/react/24/solid";
+import SymbolAdd from "./SymbolAdd";
 
 interface ClientSideSymbolProps {
   initialSymbols: SymbolItem[];
@@ -16,6 +17,7 @@ export default function ClientSideSymbol({
 }: ClientSideSymbolProps) {
   const [symbols, setSymbols] = useState<SymbolItem[]>(initialSymbols);
   const [mode, setMode] = useState(true);
+  const [hasSymbolAdd, setHasSymbolAdd] = useState(false);
 
   useEffect(() => {
     setSymbols(initialSymbols);
@@ -24,11 +26,14 @@ export default function ClientSideSymbol({
   const [hasSearch, setHasSearch] = useState(false);
   const [searchValue, setSearchValue] = useState<SymbolItem[]>([]);
 
+  // 검색기능 핸들링
   const handleSearch = (search: string) => {
     setHasSearch(true);
     const searchResult = symbols.filter(
       (item) =>
-        item.name.some((n) => n.includes(search)) || item.code.includes(search)
+        item.name.some((n) => n.includes(search)) ||
+        item.code.includes(search) ||
+        item.symbol.includes(search)
     );
     if (Array.isArray(searchResult) && searchResult.length > 0) {
       setSearchValue(searchResult);
@@ -36,6 +41,11 @@ export default function ClientSideSymbol({
       setSearchValue([]);
     }
     console.log(Boolean(searchValue));
+  };
+
+  // 기호추가 핸들링
+  const handleSymbolAdd = () => {
+    setHasSymbolAdd(!hasSymbolAdd);
   };
 
   return (
@@ -49,18 +59,20 @@ export default function ClientSideSymbol({
                 handleClick={() => {
                   setSymbols(initialSymbols);
                   setHasSearch(false);
+                  setHasSymbolAdd(false);
                 }}
               >
                 전체보기
               </SymbolHandleButton>
 
-              <SymbolHandleButton handleClick={() => {}}>
+              <SymbolHandleButton handleClick={handleSymbolAdd}>
                 기호추가
               </SymbolHandleButton>
 
               <SymbolHandleButton
                 handleClick={() => {
                   setMode(!mode);
+                  setHasSymbolAdd(false);
                 }}
               >
                 {mode ? "태그모드" : "카피모드"}
@@ -75,26 +87,37 @@ export default function ClientSideSymbol({
               handleClick={() => {
                 setSymbols(initialSymbols);
                 setHasSearch(false);
+                setHasSymbolAdd(false);
               }}
               mobile={true}
+              title="전체보기"
             >
               <TableCellsIcon className="size-5" />
             </SymbolHandleButton>
-            <SymbolHandleButton handleClick={() => {}} mobile={true}>
+            <SymbolHandleButton
+              handleClick={handleSymbolAdd}
+              mobile={true}
+              title="기호추가"
+            >
               +
             </SymbolHandleButton>
             <SymbolHandleButton
               handleClick={() => {
                 setMode(!mode);
+                setHasSymbolAdd(false);
               }}
               mobile={true}
+              title="모드변경"
             >
               {mode ? "T" : "C"}
             </SymbolHandleButton>
           </div>
         </div>
-
-        {hasSearch ? (
+        {hasSymbolAdd ? (
+          <div className="flex justify-center">
+            <SymbolAdd />
+          </div>
+        ) : hasSearch ? (
           Array.isArray(searchValue) && searchValue.length > 0 ? (
             <SymbolLists
               symbols={searchValue}
