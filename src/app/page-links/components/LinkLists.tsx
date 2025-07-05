@@ -1,12 +1,14 @@
 import LinkList from "./LinkList";
-import links from "@/app/api/page-links/links.json";
+import { LinkItem } from "@/app/page-links/types";
 
-export default function LinkLists() {
-  console.log(links);
+interface LinkListsProps {
+  links: LinkItem[];
+}
+export default async function LinkLists({ links }: LinkListsProps) {
   return (
     <>
-      {links.map((item, index) => (
-        <LinkList linkData={item} key={index} />
+      {links.map((item: LinkItem) => (
+        <LinkList linkData={item} key={item.url} />
       ))}
     </>
   );

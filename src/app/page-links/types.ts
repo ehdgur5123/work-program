@@ -13,3 +13,11 @@ export interface LinkItem {
   logo: string;
   category: LinkCategory;
 }
+
+export interface PaginatedLinkResponse {
+  data: LinkItem[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
