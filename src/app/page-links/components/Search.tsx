@@ -1,10 +1,22 @@
 "use client";
 
-import { ChevronDoubleDownIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import DetailedSearch from "./DetailedSearch";
 
-export default function Search() {
+interface SearchProps {
+  handleSearch: (search: string) => void;
+}
+export default function Search({ handleSearch }: SearchProps) {
+  const [searchValue, setSearchValue] = useState("");
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (searchValue.length === 0) {
+      alert("검색어를 입력하세요.");
+    } else {
+      handleSearch(searchValue);
+    }
+    setSearchValue("");
   };
 
   return (
@@ -14,15 +26,18 @@ export default function Search() {
         onSubmit={handleSubmit}
       >
         <label htmlFor="search">SEARCH</label>
-        <input type="text" id="search" className="bg-white h-8" />
+        <input
+          type="text"
+          id="search"
+          className="bg-white h-8 text-black"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
         <button className="bg-blue-500 h-8 pl-2 pr-2 hover:bg-blue-400 active:bg-blue-300">
           확인
         </button>
       </form>
-      <button className="w-full rounded-b-2xl p-2 bg-gray-800 flex justify-center gap-1 hover:bg-gray-700 active:p-1">
-        <ChevronDoubleDownIcon className="size-6" />
-        <p>상세 검색</p>
-      </button>
+      <DetailedSearch />
     </div>
   );
 }

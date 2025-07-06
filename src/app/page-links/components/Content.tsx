@@ -2,32 +2,19 @@
 
 import AddLink from "@/app/page-links/components/AddLink";
 import LinkLists from "@/app/page-links/components/LinkLists";
-import NextPage from "./NextPage";
-import { getToLink } from "@/app/page-links/controllers/axiosLink";
-import { useEffect, useState } from "react";
-// import links from "@/app/api/page-links/links.json";
-import { PaginatedLinkResponse } from "@/app/page-links/types";
-export default function Content() {
-  const [links, setLinks] = useState<PaginatedLinkResponse | null>(null);
+import { LinkItem } from "@/app/page-links/types";
 
-  useEffect(() => {
-    const getToLinkFunction = async () => {
-      const links = await getToLink(1);
-      setLinks(links);
-    };
-    getToLinkFunction();
-  }, []);
+interface ContentProps {
+  links: LinkItem[];
+}
 
-  if (!links) return <div>로딩</div>;
-
-  console.log(links);
+export default function Content({ links }: ContentProps) {
   return (
     <div className="border-2">
       <div className="grid grid-cols-3 p-4 gap-4 rounded-2xl">
         <AddLink />
-        <LinkLists links={links.data} />
+        <LinkLists links={links} />
       </div>
-      <NextPage pages={links.totalPages} currentPage={links.page} />
     </div>
   );
 }
