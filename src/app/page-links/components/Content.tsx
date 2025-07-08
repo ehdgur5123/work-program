@@ -10,7 +10,7 @@ interface ContentProps {
 
 export default function Content({ links }: ContentProps) {
   return (
-    <div className="border-2">
+    <div className="border-2 h-[450px]">
       <div className="grid grid-cols-3 p-4 gap-4 rounded-2xl">
         <AddLink />
         <LinkLists links={links} />

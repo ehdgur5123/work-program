@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import DetailedSearch from "./DetailedSearch";
 
 interface SearchProps {
   handleSearch: (search: string) => void;
@@ -20,7 +19,7 @@ export default function Search({ handleSearch }: SearchProps) {
   };
 
   return (
-    <div className="rounded-2xl p-3 flex flex-col items-end justify-center gap-3">
+    <div className="rounded-2xl pr-3 flex flex-col items-end justify-center gap-3">
       <form
         className="flex gap-3 justify-center items-center"
         onSubmit={handleSubmit}
@@ -33,11 +32,10 @@ export default function Search({ handleSearch }: SearchProps) {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        <button className="bg-blue-500 h-8 pl-2 pr-2 hover:bg-blue-400 active:bg-blue-300">
+        <button className="bg-blue-500 h-8 pl-2 pr-2 hover:bg-blue-400 active:bg-blue-300 cursor-pointer">
           확인
         </button>
       </form>
-      <DetailedSearch />
     </div>
   );
 }
