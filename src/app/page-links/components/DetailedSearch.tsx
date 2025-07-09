@@ -3,7 +3,6 @@ import {
   ChevronDoubleDownIcon,
   ChevronDoubleUpIcon,
 } from "@heroicons/react/24/solid";
-import { LinkItem } from "@/app/page-links/types";
 import { useEffect, useState } from "react";
 import { getToSummary } from "../controllers/axiosLink";
 import CategorySection from "@/app/page-links/components/CategorySection";

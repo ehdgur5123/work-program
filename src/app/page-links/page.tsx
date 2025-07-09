@@ -40,7 +40,7 @@ export default function PageLinks() {
 
   useEffect(() => {
     fetchLinks(1, "", category);
-  }, []);
+  }, [category]);
 
   const resetSearch = () => {
     setCategory({ large: "", medium: "", small: "" });
