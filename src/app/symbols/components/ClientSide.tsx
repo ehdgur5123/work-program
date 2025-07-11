@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import ClientSideSymbol from "@/app/symbols/components/ClientSideSymbol";
 import ScrollToTop from "@/app/symbols/components/ScrollToTop";
 import LoadingSpinner from "../loading";
 import { SymbolItem } from "@/app/symbols/types";
+import { fetchSymbols } from "../controllers/fetchSymbols";
 
 export default function ClientSide() {
   const [symbols, setSymbols] = useState<SymbolItem[] | null>(null);
@@ -13,8 +13,8 @@ export default function ClientSide() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<SymbolItem[]>("/api/symbols");
-        setSymbols(response.data);
+        const response = await fetchSymbols();
+        setSymbols(response);
       } catch (error) {
         console.error("심볼 데이터 로딩 실패:", error);
         setSymbols([]);
@@ -25,10 +25,12 @@ export default function ClientSide() {
     fetchData();
   }, []);
 
+  useEffect(() => {}, [symbols]);
+
   if (loading) return <LoadingSpinner />;
 
   if (!symbols || symbols.length === 0) {
-    return <p>심볼데이터가 없습니다.</p>;
+    return <p>No Symbol Data</p>;
   }
 
   return (

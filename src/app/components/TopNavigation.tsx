@@ -1,11 +1,3 @@
-"use client";
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function TopNavigation() {
@@ -15,19 +7,10 @@ export default function TopNavigation() {
         <h1 className="p-2">로고</h1>
       </Link>
       <div className="flex gap-3 p-2">
-        <SignedOut>
-          <SignInButton>
-            <button className="border-1 p-1 text-sm">Sign in</button>
-          </SignInButton>
+        <button className="border-1 p-1 text-sm">Sign in</button>
 
-          <SignUpButton>
-            <button className="border-1 p-1 text-sm">Sign up</button>
-          </SignUpButton>
-        </SignedOut>
+        <button className="border-1 p-1 text-sm">Sign up</button>
       </div>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
     </header>
   );
 }

@@ -9,7 +9,12 @@ export default function Home() {
         <Link href="/symbols" className={linkStyle}>
           기호찾기
         </Link>
-        <Link href="/page-links" className={linkStyle}>인터넷 링크</Link>
+        <Link href="/page-links" className={linkStyle}>
+          인터넷 링크
+        </Link>
+        <Link href="/symbol-search" className={linkStyle}>
+          기호 검색
+        </Link>
       </div>
     </div>
   );

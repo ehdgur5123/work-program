@@ -26,14 +26,11 @@ export default function ScrollToTop() {
       {isVisible && (
         <div
           onClick={scrollToTop}
-          className="fixed bottom-0 h-10 left-1/2 -translate-x-1/2 p-1 w-full text-center shadow-lg"
-          style={{
-            background:
-              "linear-gradient(0deg,rgba(144, 166, 157, 0.9) 10%, rgba(227, 230, 232, 1) 50%, rgba(41, 110, 171, 0.9) 92%",
-          }}
+          className="fixed bottom-5 md:bottom-10 rounded-full right-5 md:right-90 h-12 w-12 p-2 text-center shadow-lg bg-gray-400 hover:scale-110
+          active:scale-90"
         >
           <button>
-            <ChevronDoubleUpIcon className="size-6 text-gray-500 scroll-to-top" />
+            <ChevronDoubleUpIcon className="size-6 text-black scroll-to-top" />
           </button>
         </div>
       )}
