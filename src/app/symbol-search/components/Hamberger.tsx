@@ -1,9 +1,17 @@
 "use client";
-import { Bars4Icon, DivideIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { Bars4Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import SymbolAddPage from "./SymbolAddPage";
+import { SymbolItem } from "@/app/symbol-search/types";
 
-export default function Hamberger() {
+interface HambergerProps {
+  handleNewSymbol: (newSymbol: SymbolItem) => void;
+  copySymbols: SymbolItem[] | null;
+}
+export default function Hamberger({
+  handleNewSymbol,
+  copySymbols,
+}: HambergerProps) {
   const [barToggle, setBarToggle] = useState(false);
   const [symbolAddToggle, setSymbolAddToggle] = useState(false);
   const [symbolDelToggle, setSymbolDelToggle] = useState(false);
@@ -30,7 +38,9 @@ export default function Hamberger() {
                 setSymbolAddToggle(!symbolAddToggle);
                 setSymbolDelToggle(false);
               }}
-              className=" p-2 w-full text-center hover:bg-gray-400 rounded-2xl active:scale-90"
+              className={`p-2 w-full text-center hover:bg-gray-400 rounded-2xl active:scale-90 ${
+                symbolAddToggle ? "bg-gray-500" : ""
+              }`}
             >
               기호 추가
             </button>
@@ -39,15 +49,22 @@ export default function Hamberger() {
                 setSymbolDelToggle(!symbolDelToggle);
                 setSymbolAddToggle(false);
               }}
-              className=" p-2 w-full text-center hover:bg-gray-400 rounded-2xl active:scale-90"
+              className={`p-2 w-full text-center hover:bg-gray-400 rounded-2xl active:scale-90 ${
+                symbolDelToggle ? "bg-gray-500" : ""
+              }`}
             >
               기호 수정·삭제
             </button>
           </div>
         </div>
       ) : null}
-      {symbolAddToggle ? <SymbolAddPage /> : null}
-      {symbolDelToggle ? <div className="w-[700px] bg-red-300"></div> : null}
+      {symbolAddToggle ? (
+        <SymbolAddPage
+          handleNewSymbol={handleNewSymbol}
+          copySymbols={copySymbols}
+        />
+      ) : null}
+      {symbolDelToggle ? <div className="md:w-[800px] bg-red-300"></div> : null}
     </>
   );
 }

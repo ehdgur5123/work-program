@@ -13,8 +13,9 @@ export default function SymbolSearchPage() {
   const [axiosSymbols, setAxiosSymbols] = useState<SymbolItem[] | null>([]);
   const [copySymbols, setCopySymbols] = useState<SymbolItem[] | null>([]);
   const [searchSymbols, setSearchSymbols] = useState<SymbolItem[] | null>([]);
-  const [newSymbols, setNewSymbol] = useState<SymbolItem | null>(null);
+  const [newSymbol, setNewSymbol] = useState<SymbolItem | null>(null);
   const [hasSearch, setHasSearch] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const getSymbol = async () => {
@@ -30,13 +31,25 @@ export default function SymbolSearchPage() {
   }, []);
 
   useEffect(() => {
-    if (copySymbols && newSymbols) {
-      setCopySymbols((prev) => (prev ? [...prev, newSymbols] : [newSymbols]));
+    if (copySymbols && newSymbol) {
+      setCopySymbols((prev) => (prev ? [...prev, newSymbol] : [newSymbol]));
     }
-  }, [newSymbols]);
+    if (
+      newSymbol?.name.some((n) => n.includes(search)) ||
+      newSymbol?.code.includes(search) ||
+      newSymbol?.symbol.includes(search)
+    ) {
+      setSearchSymbols((prev) => (prev ? [...prev, newSymbol] : [newSymbol]));
+    }
+  }, [newSymbol]);
+
+  const handleNewSymbol = (newSymbol: SymbolItem) => {
+    setNewSymbol(newSymbol);
+  };
 
   const handleSearch = (search: string) => {
     setHasSearch(true);
+    setSearch(search);
     const searchResult = copySymbols?.filter(
       (symbol) =>
         symbol.name.some((n) => n.includes(search)) ||
@@ -67,7 +80,10 @@ export default function SymbolSearchPage() {
           </div>
           <SymbolLists symbols={hasSearch ? searchSymbols : copySymbols} />
         </div>
-        <Hamberger />
+        <Hamberger
+          handleNewSymbol={handleNewSymbol}
+          copySymbols={copySymbols}
+        />
       </div>
       <div className="h-20"></div>
 

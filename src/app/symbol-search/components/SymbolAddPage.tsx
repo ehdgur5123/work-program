@@ -2,21 +2,31 @@
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { fetchAddSymbol } from "@/app/symbol-search/controllers/fetchSymbols";
 import { useEffect, useState } from "react";
-import { SymbolItem } from "@/app/symbol-search/types";
 import InputData from "./InputData";
+import { SymbolItem } from "@/app/symbol-search/types";
 
-export default function SymbolAddPage() {
+interface SymbolAddPageProps {
+  handleNewSymbol: (newSymbol: SymbolItem) => void;
+  copySymbols: SymbolItem[] | null;
+}
+
+export default function SymbolAddPage({
+  handleNewSymbol,
+  copySymbols,
+}: SymbolAddPageProps) {
+  const nameInitialValue = ["", "", "", "", ""];
   const symbolInitialValue = {
     _id: "",
     symbol: "",
     unicode: "",
     html: "",
-    name: [],
+    name: nameInitialValue,
     code: "",
   };
+  const messageInitialValue = { text: "", color: "text-black" };
   const [newSymbol, setNewSymbol] = useState<SymbolItem>(symbolInitialValue);
-  const [nameList, setNameList] = useState(["", "", "", "", ""]);
-
+  const [nameList, setNameList] = useState(nameInitialValue);
+  const [message, setMessage] = useState(messageInitialValue);
   const nameListChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -25,9 +35,49 @@ export default function SymbolAddPage() {
     updatedList[index] = e.target.value;
     setNameList(updatedList);
   };
+
+  const validateSymbolData = (newSymbol: SymbolItem) => {
+    if (newSymbol.symbol.trim().length === 0) {
+      setMessage({ text: "기호를 입력해주세요", color: "text-red-500" });
+      return false;
+    } else if (newSymbol.symbol.trim().length >= 2) {
+      setMessage({
+        text: "기호는 1글자만 입력해야 합니다.",
+        color: "text-red-500",
+      });
+      return false;
+    } else if (
+      copySymbols?.some(
+        (item) => item.symbol.trim() === newSymbol.symbol.trim()
+      )
+    ) {
+      setMessage({
+        text: "이미 존재하는 기호입니다.",
+        color: "text-red-500",
+      });
+      return false;
+    }
+
+    return true;
+  };
   const symbolSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // await fetchAddSymbol(newSymbol);
+    if (!validateSymbolData(newSymbol)) return;
+
+    const code = newSymbol.code.trim().length === 0 ? "None" : newSymbol.code;
+    const updatedSymbol = { ...newSymbol, _id: crypto.randomUUID(), code };
+    try {
+      setNewSymbol(updatedSymbol);
+      handleNewSymbol(updatedSymbol);
+      const { _id, ...symbolWithoutId } = updatedSymbol;
+      console.log(_id);
+      await fetchAddSymbol(symbolWithoutId);
+      setMessage({ text: "추가가 완료되었습니다.", color: "text-green-500" });
+    } catch {
+      setMessage({ text: "전송에 실패하였습니다.", color: "text-red-500" });
+    } finally {
+      setNewSymbol({ ...symbolInitialValue, name: nameList });
+    }
   };
 
   useEffect(() => {
@@ -39,90 +89,92 @@ export default function SymbolAddPage() {
   }, [nameList]);
 
   return (
-    <div className="w-[700px] bg-amber-300">
-      <form
-        className="flex flex-col border border-gray-300 rounded-xl shadow-sm p-4 max-w-150"
-        onSubmit={symbolSubmit}
-      >
-        {/* 삭제 버튼 */}
+    <div className="md:w-[800px]">
+      {/* 초기화 버튼 */}
+      <div className="fixed flex flex-col border border-gray-300 rounded-xl shadow-sm p-4 max-w-150">
         <div className="flex items-center justify-end">
           <button
-            onClick={() =>
-              setNewSymbol({ ...symbolInitialValue, name: nameList })
-            }
+            onClick={() => {
+              setNewSymbol(symbolInitialValue);
+              setNameList(nameInitialValue);
+              setMessage(messageInitialValue);
+            }}
             className="cursor-pointer hover:text-gray-500 rounded-full text-3xl active:scale-80"
           >
             <ArrowPathIcon className="size-6 mb-3" />
           </button>
         </div>
-
-        <div className="flex flex-row gap-4">
-          <div className="flex flex-col justify-between gap-2">
-            {/* 기호 */}
-            <InputData
-              label="기호"
-              id="symbol"
-              placeholder="기호(필수)"
-              value={newSymbol.symbol}
-              handleChange={(e) => {
-                setNewSymbol({ ...newSymbol, symbol: e.target.value });
-              }}
-            />
-            <InputData
-              label="유니코드"
-              id="unicode"
-              placeholder="유니코드"
-              value={newSymbol.unicode}
-              handleChange={(e) => {
-                setNewSymbol({ ...newSymbol, unicode: e.target.value });
-              }}
-            />
-            <InputData
-              label="html"
-              id="html"
-              placeholder="html"
-              value={newSymbol.html}
-              handleChange={(e) => {
-                setNewSymbol({ ...newSymbol, html: e.target.value });
-              }}
-            />
-            <InputData
-              label="Alt Code"
-              id="altCode"
-              placeholder="Alt Code"
-              value={newSymbol.code}
-              handleChange={(e) => {
-                setNewSymbol({ ...newSymbol, code: e.target.value });
-              }}
-            />
+        <form onSubmit={symbolSubmit}>
+          <div className="flex flex-row gap-4">
+            <div className="flex flex-col justify-between gap-2">
+              <InputData
+                label="기호"
+                id="symbol"
+                placeholder="기호(필수)"
+                value={newSymbol.symbol}
+                handleChange={(e) => {
+                  setNewSymbol({ ...newSymbol, symbol: e.target.value });
+                }}
+              />
+              <InputData
+                label="유니코드"
+                id="unicode"
+                placeholder="유니코드"
+                value={newSymbol.unicode}
+                handleChange={(e) => {
+                  setNewSymbol({ ...newSymbol, unicode: e.target.value });
+                }}
+              />
+              <InputData
+                label="html"
+                id="html"
+                placeholder="html"
+                value={newSymbol.html}
+                handleChange={(e) => {
+                  setNewSymbol({ ...newSymbol, html: e.target.value });
+                }}
+              />
+              <InputData
+                label="Alt Code"
+                id="altCode"
+                placeholder="Alt Code"
+                value={newSymbol.code}
+                handleChange={(e) => {
+                  setNewSymbol({ ...newSymbol, code: e.target.value });
+                }}
+              />
+            </div>
           </div>
-        </div>
-        {/* 태그 영역 */}
-        <label
-          htmlFor="add_tag_0"
-          className="text-sm font-semibold text-gray-600 flex items-center justify-start my-2"
-        >
-          태그
-        </label>
-        <div className="flex flex-row gap-2">
-          {nameList.map((item, index) => (
-            <input
-              key={index}
-              id={`add_tag_${index}`}
-              value={item}
-              onChange={(e) => nameListChange(e, index)}
-              className="bg-white text-black border px-2 py-1 rounded text-xs mb-1 w-full h-7"
-            />
-          ))}
-        </div>
+          {/* 태그 영역 */}
+          <label
+            htmlFor="add_tag_0"
+            className="text-sm font-semibold text-gray-600 flex items-center justify-start my-2"
+          >
+            태그
+          </label>
+          <div className="flex flex-row gap-2">
+            {nameList.map((item, index) => (
+              <input
+                key={index}
+                id={`add_tag_${index}`}
+                value={item}
+                onChange={(e) => nameListChange(e, index)}
+                className="bg-white text-black border px-2 py-1 rounded text-xs mb-1 w-full h-7"
+              />
+            ))}
+          </div>
 
-        <button
-          type="submit"
-          className="px-3 py-1 bg-blue-500 text-white rounded text-sm cursor-pointer hover:bg-blue-400 active:bg-blue-200 w-full mt-2"
-        >
-          확인
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="px-3 py-1 bg-blue-500 text-white rounded text-sm cursor-pointer hover:bg-blue-400 active:bg-blue-200 w-full mt-2"
+          >
+            확인
+          </button>
+        </form>
+        <div className={`text-center mt-3 h-5 ${message.color}`}>
+          {message.text}
+        </div>
+      </div>
     </div>
   );
 }
