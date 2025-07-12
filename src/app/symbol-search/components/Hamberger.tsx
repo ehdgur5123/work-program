@@ -1,6 +1,5 @@
 "use client";
 import { Bars4Icon, DivideIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
 import { useState } from "react";
 import SymbolAddPage from "./SymbolAddPage";
 
