@@ -1,13 +1,19 @@
 "use client";
 
-import { SymbolItem } from "@/app/symbol-search/types";
+import { SymbolItem, hambergerToggleListType } from "@/app/symbol-search/types";
 import { useState } from "react";
 
 interface SymbolListProps {
   symbols: SymbolItem[] | null;
+  handleSymbol: (symbol: SymbolItem) => void;
+  hambergerToggleList: hambergerToggleListType;
 }
 
-export default function SymbolLists({ symbols }: SymbolListProps) {
+export default function SymbolLists({
+  symbols,
+  handleSymbol,
+  hambergerToggleList,
+}: SymbolListProps) {
   const [copiedSymbol, setCopiedSymbol] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{
     x: number;
@@ -45,11 +51,22 @@ export default function SymbolLists({ symbols }: SymbolListProps) {
           Copyed!
         </div>
       )}
-      <div className="grid md:grid-cols-8 grid-cols-4 items-center justify-center gap-3">
+      <div
+        className={`grid grid-cols-4 items-center justify-center gap-3 ${
+          hambergerToggleList.symbolAddToggle ||
+          hambergerToggleList.symbolUpdateToggle ||
+          hambergerToggleList.symbolDeleteToggle
+            ? "md:grid-cols-4"
+            : "md:grid-cols-8"
+        }`}
+      >
         {symbols?.map((symbol) => (
           <div
             key={symbol._id}
-            onClick={(e) => symbolCopy(symbol.symbol, e)}
+            onClick={(e) => {
+              symbolCopy(symbol.symbol, e);
+              handleSymbol(symbol);
+            }}
             className="border-2 rounded-2xl flex flex-col gap-2 p-2 items-center justify-center hover:scale-110 active:scale-90 cursor-pointer"
           >
             <div className="text-2xl">{symbol.symbol}</div>

@@ -7,3 +7,9 @@ export interface SymbolItem {
   name: string[];
   code: string;
 }
+
+export interface hambergerToggleListType {
+  symbolAddToggle: boolean;
+  symbolUpdateToggle: boolean;
+  symbolDeleteToggle: boolean;
+}

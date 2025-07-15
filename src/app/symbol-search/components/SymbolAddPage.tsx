@@ -106,7 +106,7 @@ export default function SymbolAddPage({
         </div>
         <form onSubmit={symbolSubmit}>
           <div className="flex flex-row gap-4">
-            <div className="flex flex-col justify-between gap-2">
+            <div className="flex flex-col justify-between gap-4">
               <InputData
                 label="기호"
                 id="symbol"
@@ -148,7 +148,7 @@ export default function SymbolAddPage({
           {/* 태그 영역 */}
           <label
             htmlFor="add_tag_0"
-            className="text-sm font-semibold text-gray-600 flex items-center justify-start my-2"
+            className="text-lg font-semibold text-white flex items-center justify-start my-2"
           >
             태그
           </label>
@@ -159,14 +159,14 @@ export default function SymbolAddPage({
                 id={`add_tag_${index}`}
                 value={item}
                 onChange={(e) => nameListChange(e, index)}
-                className="bg-white text-black border px-2 py-1 rounded text-xs mb-1 w-full h-7"
+                className=" text-white border-2 px-2 py-1 rounded-sm mb-1 w-full h-9"
               />
             ))}
           </div>
 
           <button
             type="submit"
-            className="px-3 py-1 bg-blue-500 text-white rounded text-sm cursor-pointer hover:bg-blue-400 active:bg-blue-200 w-full mt-2"
+            className="px-3 py-1 border-2 text-white rounded-sm text-2xl cursor-pointer hover:bg-gray-500 active:scale-90 w-full mt-2"
           >
             확인
           </button>

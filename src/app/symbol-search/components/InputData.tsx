@@ -14,8 +14,8 @@ export default function InputData({
   handleChange,
 }: InputDataProps) {
   return (
-    <div className="flex gap-2 text-sm items-center">
-      <label htmlFor={id} className="font-semibold text-gray-600 w-20">
+    <div className="flex gap-4 items-center">
+      <label htmlFor={id} className="font-semibold text-white w-20 text-lg">
         {label}
       </label>
       <input
@@ -26,7 +26,7 @@ export default function InputData({
         onChange={(e) => {
           handleChange(e);
         }}
-        className="bg-white text-black border px-2 py-1 rounded text-xs"
+        className="text-white border-2 px-2 py-1 rounded-sm"
       />
     </div>
   );
