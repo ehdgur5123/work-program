@@ -20,6 +20,11 @@ export default function SymbolLists({
     y: number;
   } | null>(null);
 
+  const showToggleTrue =
+    hambergerToggleList.symbolAddToggle ||
+    hambergerToggleList.symbolUpdateToggle ||
+    hambergerToggleList.symbolDeleteToggle;
+
   const symbolCopy = (symbol: string, event: React.MouseEvent) => {
     navigator.clipboard.writeText(symbol);
     setCopiedSymbol(symbol);
@@ -33,6 +38,25 @@ export default function SymbolLists({
 
   return (
     <>
+      <div
+        className={`grid grid-cols-4 items-center justify-center gap-3 ${
+          showToggleTrue ? "md:grid-cols-4" : "md:grid-cols-8"
+        }`}
+      >
+        {symbols?.map((symbol) => (
+          <div
+            key={symbol._id}
+            onClick={(e) => {
+              symbolCopy(symbol.symbol, e);
+              handleSymbol(symbol);
+            }}
+            className="border-2 rounded-2xl flex flex-col gap-2 p-2 items-center justify-center hover:scale-110 active:scale-90 cursor-pointer"
+          >
+            <div className="text-2xl">{symbol.symbol}</div>
+            <div className="text-sm">{symbol.code}</div>
+          </div>
+        ))}
+      </div>
       {copiedSymbol && tooltipPosition && (
         <div
           style={{
@@ -51,29 +75,6 @@ export default function SymbolLists({
           Copyed!
         </div>
       )}
-      <div
-        className={`grid grid-cols-4 items-center justify-center gap-3 ${
-          hambergerToggleList.symbolAddToggle ||
-          hambergerToggleList.symbolUpdateToggle ||
-          hambergerToggleList.symbolDeleteToggle
-            ? "md:grid-cols-4"
-            : "md:grid-cols-8"
-        }`}
-      >
-        {symbols?.map((symbol) => (
-          <div
-            key={symbol._id}
-            onClick={(e) => {
-              symbolCopy(symbol.symbol, e);
-              handleSymbol(symbol);
-            }}
-            className="border-2 rounded-2xl flex flex-col gap-2 p-2 items-center justify-center hover:scale-110 active:scale-90 cursor-pointer"
-          >
-            <div className="text-2xl">{symbol.symbol}</div>
-            <div className="text-sm">{symbol.code}</div>
-          </div>
-        ))}
-      </div>
     </>
   );
 }

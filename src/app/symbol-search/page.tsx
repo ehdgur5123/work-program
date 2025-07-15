@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import { fetchSymbols } from "./controllers/fetchSymbols";
 import { SymbolItem, hambergerToggleListType } from "@/app/symbol-search/types";
 import ScrollToTop from "@/app/symbols/components/ScrollToTop";
-import LoadingSpinner from "./components/Loading";
+import { LoadingSpinner } from "./components/Loading";
 import SymbolLists from "@/app/symbol-search/components/SymbolLists";
 import SearchSymbol from "@/app/symbol-search/components/SearchSymbol";
 import ResetSearch from "./components/ResetSearch";
 import Hamberger from "./components/Hamberger";
 import SymbolAddPage from "./components/SymbolAddPage";
+import SymbolUpdatePage from "./components/SymbolUpdatePage";
 
 export default function SymbolSearchPage() {
   const [axiosSymbols, setAxiosSymbols] = useState<SymbolItem[] | null>(null);
@@ -25,6 +26,11 @@ export default function SymbolSearchPage() {
       symbolUpdateToggle: false,
       symbolDeleteToggle: false,
     });
+
+  const showToggleTrue =
+    hambergerToggleList.symbolAddToggle ||
+    hambergerToggleList.symbolUpdateToggle ||
+    hambergerToggleList.symbolDeleteToggle;
 
   useEffect(() => {
     const getSymbol = async () => {
@@ -87,16 +93,35 @@ export default function SymbolSearchPage() {
   return (
     <>
       <h1 className="my-10 mx-auto text-7xl text-center">기호 검색</h1>
-      <div className="flex flex-col gap-2 mx-auto max-w-4xl p-5">
-        <div className="flex p-2 gap-2 items-center justify-end">
-          <SearchSymbol handleSearch={handleSearch} />
-          <ResetSearch handleSearch={resetSearchClick} />
+      <div className={`mx-auto max-w-7xl ${showToggleTrue ? "flex" : ""}`}>
+        <div
+          className={`flex flex-col gap-2 p-5 min-h-[1000px] ${
+            showToggleTrue ? "w-1/2" : "w-full"
+          }`}
+        >
+          <div className="flex p-2 gap-2 items-center justify-end">
+            <SearchSymbol handleSearch={handleSearch} />
+            <ResetSearch handleSearch={resetSearchClick} />
+          </div>
+          <SymbolLists
+            symbols={hasSearch ? searchSymbols : copySymbols}
+            handleSymbol={handleSymbol}
+            hambergerToggleList={hambergerToggleList}
+          />
         </div>
-        <SymbolLists
-          symbols={hasSearch ? searchSymbols : copySymbols}
-          handleSymbol={handleSymbol}
-          hambergerToggleList={hambergerToggleList}
-        />
+        {hambergerToggleList.symbolAddToggle ? (
+          <div className="relative w-1/2 ">
+            <div className="sticky top-50">
+              <SymbolAddPage
+                handleNewSymbol={handleNewSymbol}
+                copySymbols={copySymbols}
+              />
+            </div>
+          </div>
+        ) : null}
+        {hambergerToggleList.symbolUpdateToggle ? (
+          <SymbolUpdatePage selectedSymbol={selectedSymbol} />
+        ) : null}
       </div>
       <div className="h-20"></div>
       <Hamberger
