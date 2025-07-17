@@ -61,6 +61,7 @@ export default function SymbolSearchPage() {
   }, [newSymbol]);
 
   const handleNewSymbol = (newSymbol: SymbolItem) => {
+    // 아이디 변경 값 갱신해야 함.
     setNewSymbol(newSymbol);
   };
 
@@ -93,7 +94,11 @@ export default function SymbolSearchPage() {
   return (
     <>
       <h1 className="my-10 mx-auto text-7xl text-center">기호 검색</h1>
-      <div className={`mx-auto max-w-7xl ${showToggleTrue ? "flex" : ""}`}>
+      <div
+        className={`mx-auto max-w-7xl ${
+          showToggleTrue ? "flex min-w-3xl" : ""
+        }`}
+      >
         <div
           className={`flex flex-col gap-2 p-5 min-h-[1000px] ${
             showToggleTrue ? "w-1/2" : "w-full"
@@ -110,7 +115,7 @@ export default function SymbolSearchPage() {
           />
         </div>
         {hambergerToggleList.symbolAddToggle ? (
-          <div className="relative w-1/2 ">
+          <div className="relative w-1/2">
             <div className="sticky top-50">
               <SymbolAddPage
                 handleNewSymbol={handleNewSymbol}
@@ -120,7 +125,11 @@ export default function SymbolSearchPage() {
           </div>
         ) : null}
         {hambergerToggleList.symbolUpdateToggle ? (
-          <SymbolUpdatePage selectedSymbol={selectedSymbol} />
+          <div className="relative w-1/2">
+            <div className="sticky top-50">
+              <SymbolUpdatePage selectedSymbol={selectedSymbol} />
+            </div>
+          </div>
         ) : null}
       </div>
       <div className="h-20"></div>

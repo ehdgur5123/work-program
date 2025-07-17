@@ -66,15 +66,32 @@ export default function SymbolAddPage({
     event.preventDefault();
     if (!validateSymbolData(newSymbol)) return;
 
-    const code = newSymbol.code.trim().length === 0 ? "None" : newSymbol.code;
-    const updatedSymbol = { ...newSymbol, _id: crypto.randomUUID(), code };
+    const cleanOrNone = (value: string) =>
+      value.trim().length === 0 ? "None" : value.trim();
+
+    const unicode = cleanOrNone(newSymbol.unicode);
+    const html = cleanOrNone(newSymbol.html);
+    const code = cleanOrNone(newSymbol.code);
+    const name = newSymbol.name.filter((n) => n.trim().length !== 0);
+
+    const updatedSymbol: SymbolItem = {
+      ...newSymbol,
+      _id: crypto.randomUUID(),
+      unicode,
+      html,
+      code,
+      name,
+    };
+
     setIsLoading(true);
     try {
       setNewSymbol(updatedSymbol);
       handleNewSymbol(updatedSymbol);
       const { _id, ...symbolWithoutId } = updatedSymbol;
-      console.log(_id);
-      await fetchAddSymbol(symbolWithoutId);
+      const response = await fetchAddSymbol(symbolWithoutId);
+      if (response !== null && response !== "EXISTS") {
+        handleNewSymbol({ ...updatedSymbol, _id: response._id });
+      }
       setMessage({ text: "추가가 완료되었습니다.", color: "text-green-500" });
     } catch {
       setMessage({ text: "전송에 실패하였습니다.", color: "text-red-500" });
@@ -85,15 +102,11 @@ export default function SymbolAddPage({
   };
 
   useEffect(() => {
-    console.log(newSymbol);
-  }, [newSymbol]);
-
-  useEffect(() => {
     setNewSymbol({ ...newSymbol, name: nameList });
   }, [nameList]);
 
   return (
-    <div className="flex flex-col border border-gray-300 rounded-xl shadow-sm p-4">
+    <div className="flex flex-col border-2 rounded-xl shadow-sm p-4 m-5">
       <div className="flex items-center justify-end">
         <button
           onClick={() => {
