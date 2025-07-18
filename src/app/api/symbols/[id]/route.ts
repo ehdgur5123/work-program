@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { SymbolModel } from "@/app/symbols/models/Symbol";
 import { NextResponse, NextRequest } from "next/server";
 import { revalidatePath } from "next/cache";
+import { ObjectId } from "mongodb";
 
 export async function GET(
   _req: Request,
@@ -62,6 +63,44 @@ export async function PATCH(
     const res = NextResponse.json({ error: "업데이트 실패" }, { status: 500 });
     res.headers.set("Access-Control-Allow-Origin", "*");
     return res;
+  }
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await connectToDatabase();
+    const { id } = await params;
+    const { unicode, html, code, name } = await req.json();
+
+    if (!ObjectId.isValid(id)) {
+      return NextResponse.json({ error: "유효하지 않은 ID" }, { status: 400 });
+    }
+
+    const updated = await SymbolModel.findByIdAndUpdate(
+      id,
+      {
+        unicode,
+        html,
+        code,
+        name,
+      },
+      { new: true } // 업데이트된 문서를 반환
+    );
+
+    if (!updated) {
+      return NextResponse.json(
+        { error: "기호를 찾을 수 없음" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(updated, { status: 200 });
+  } catch (err) {
+    console.error("❌ 업데이트 에러:", err);
+    return NextResponse.json({ error: "업데이트 실패" }, { status: 500 });
   }
 }
 

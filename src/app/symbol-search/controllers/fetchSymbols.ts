@@ -88,3 +88,16 @@ export async function fetchDeleteSymbol(
     return null;
   }
 }
+
+export async function fetchUpdateSymbol(
+  id: string,
+  symbolToModify: Partial<SymbolItem>
+): Promise<SymbolItem | null> {
+  try {
+    const response = await axios.put(`/symbols/${id}`, symbolToModify);
+    return response.data;
+  } catch (err) {
+    console.error("❌ 기호 업데이트 실패:", err);
+    return null;
+  }
+}

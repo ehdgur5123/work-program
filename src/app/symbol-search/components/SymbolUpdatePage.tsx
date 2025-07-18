@@ -3,12 +3,9 @@
 import { SymbolItem } from "@/app/symbol-search/types";
 import { useEffect, useState } from "react";
 import InputData from "./InputData";
-import {
-  PlusCircleIcon,
-  XMarkIcon,
-  XCircleIcon,
-} from "@heroicons/react/24/solid";
-// import { 심볼수정패치 } from "@/app/symbol-search/controllers/fetchSymbols";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import { fetchUpdateSymbol } from "@/app/symbol-search/controllers/fetchSymbols";
+import { LoadingSpinnerSmall } from "./Loading";
 
 interface SymbolUpdatePageProps {
   selectedSymbol: SymbolItem | null;
@@ -25,9 +22,11 @@ export default function SymbolUpdatePage({
     name: selectedSymbol?.name,
     code: selectedSymbol?.code,
   };
-
+  const messageInitialValue = { text: "", color: "text-black" };
   const [symbolToModify, setSymbolToModify] = useState(symbolInitialValue);
   const [addName, setAddName] = useState("");
+  const [message, setMessage] = useState(messageInitialValue);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setSymbolToModify(symbolInitialValue);
@@ -37,19 +36,36 @@ export default function SymbolUpdatePage({
     console.log(symbolToModify);
   }, [symbolToModify]);
 
-  const symbolSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const updateSymbolSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
+    if (!selectedSymbol?._id) return;
+    setIsLoading(true);
+    try {
+      await fetchUpdateSymbol(selectedSymbol?._id, symbolToModify);
+      setMessage({ text: "변경이 완료되었습니다.", color: "text-green-500" });
+    } catch {
+      setMessage({ text: "전송에 실패하였습니다.", color: "text-red-500" });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const addNameClick = () => {
+    if (addName.trim().length === 0) {
+      setMessage({ text: "이름을 입력해주세요", color: "text-red-500" });
+      return;
+    }
     if (symbolToModify.name?.some((n) => n === addName)) {
-      alert("이미 있는 기호입니다.");
+      setMessage({ text: "이미 있는 이름입니다.", color: "text-red-500" });
       return;
     }
     setSymbolToModify((prev) => ({
       ...prev,
       name: [...(prev.name || []), addName],
     }));
+    setMessage({ text: "확인을 눌러주세요", color: "text-yellow-500" });
     setAddName("");
   };
 
@@ -58,6 +74,7 @@ export default function SymbolUpdatePage({
       ...prev,
       name: prev.name?.filter((n) => n !== item) || [],
     }));
+    setMessage({ text: "확인을 눌러주세요", color: "text-yellow-500" });
   };
 
   return (
@@ -68,7 +85,7 @@ export default function SymbolUpdatePage({
         </div>
       ) : (
         <form
-          onSubmit={symbolSubmit}
+          onSubmit={updateSymbolSubmit}
           className="text-center p-4 border-2 rounded-2xl max-w-full"
         >
           <div className="flex gap-5">
@@ -130,6 +147,7 @@ export default function SymbolUpdatePage({
                   onChange={(e) => setAddName(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
+                      e.preventDefault();
                       addNameClick();
                     }
                   }}
@@ -174,6 +192,9 @@ export default function SymbolUpdatePage({
           </div>
         </form>
       )}
+      <div className={`text-center mt-3 h-5 ${message.color}`}>
+        {isLoading ? <LoadingSpinnerSmall /> : message.text}
+      </div>
     </div>
   );
 }

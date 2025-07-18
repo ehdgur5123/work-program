@@ -47,23 +47,51 @@ export default function SymbolSearchPage() {
     getSymbol();
   }, []);
 
-  useEffect(() => {
-    if (copySymbols && newSymbol) {
-      setCopySymbols((prev) => (prev ? [...prev, newSymbol] : [newSymbol]));
-    }
-    if (
-      newSymbol?.name.some((n) => n.includes(search)) ||
-      newSymbol?.code.includes(search) ||
-      newSymbol?.symbol.includes(search)
-    ) {
-      setSearchSymbols((prev) => (prev ? [...prev, newSymbol] : [newSymbol]));
-    }
-  }, [newSymbol]);
-
-  const handleNewSymbol = (newSymbol: SymbolItem) => {
-    // 아이디 변경 값 갱신해야 함.
-    setNewSymbol(newSymbol);
+  // 1. 서버에서 받은 새 심볼 처리
+  const handleNewSymbol = (newSymbolValue: SymbolItem) => {
+    setNewSymbol(newSymbolValue); // 항상 설정
   };
+
+  // 2. newSymbol이 바뀔 때 copySymbols, searchSymbols 동기화
+  useEffect(() => {
+    if (!newSymbol) return;
+
+    // copySymbols 업데이트
+    setCopySymbols((prev) => {
+      if (!prev) return [newSymbol];
+
+      const exists = prev.some((item) => item.symbol === newSymbol.symbol);
+      if (exists) {
+        // 기존 symbol이 있으면 ID만 교체 (또는 전체 교체)
+        return prev.map((item) =>
+          item.symbol === newSymbol.symbol ? newSymbol : item
+        );
+      } else {
+        return [...prev, newSymbol];
+      }
+    });
+
+    // searchSymbols 업데이트
+    const matchesSearch =
+      newSymbol.name.some((n) => n.includes(search)) ||
+      newSymbol.code.includes(search) ||
+      newSymbol.symbol.includes(search);
+
+    if (matchesSearch) {
+      setSearchSymbols((prev) => {
+        if (!prev) return [newSymbol];
+
+        const exists = prev.some((item) => item.symbol === newSymbol.symbol);
+        if (exists) {
+          return prev.map((item) =>
+            item.symbol === newSymbol.symbol ? newSymbol : item
+          );
+        } else {
+          return [...prev, newSymbol];
+        }
+      });
+    }
+  }, [newSymbol, search]);
 
   const handleSearch = (search: string) => {
     setHasSearch(true);
