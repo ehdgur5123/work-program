@@ -9,10 +9,14 @@ import { LoadingSpinnerSmall } from "./Loading";
 
 interface SymbolUpdatePageProps {
   selectedSymbol: SymbolItem | null;
+  handleMessage: (text: string, color: string) => void;
+  message: { text: string; color: string };
 }
 
 export default function SymbolUpdatePage({
   selectedSymbol,
+  handleMessage,
+  message,
 }: SymbolUpdatePageProps) {
   const symbolInitialValue = {
     _id: selectedSymbol?._id,
@@ -22,10 +26,10 @@ export default function SymbolUpdatePage({
     name: selectedSymbol?.name,
     code: selectedSymbol?.code,
   };
-  const messageInitialValue = { text: "", color: "text-black" };
+
   const [symbolToModify, setSymbolToModify] = useState(symbolInitialValue);
   const [addName, setAddName] = useState("");
-  const [message, setMessage] = useState(messageInitialValue);
+
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -44,9 +48,9 @@ export default function SymbolUpdatePage({
     setIsLoading(true);
     try {
       await fetchUpdateSymbol(selectedSymbol?._id, symbolToModify);
-      setMessage({ text: "변경이 완료되었습니다.", color: "text-green-500" });
+      handleMessage("변경이 완료되었습니다.", "text-green-500");
     } catch {
-      setMessage({ text: "전송에 실패하였습니다.", color: "text-red-500" });
+      handleMessage("전송에 실패하였습니다.", "text-red-500");
     } finally {
       setIsLoading(false);
     }
@@ -54,18 +58,18 @@ export default function SymbolUpdatePage({
 
   const addNameClick = () => {
     if (addName.trim().length === 0) {
-      setMessage({ text: "이름을 입력해주세요", color: "text-red-500" });
+      handleMessage("이름을 입력해주세요", "text-red-500");
       return;
     }
     if (symbolToModify.name?.some((n) => n === addName)) {
-      setMessage({ text: "이미 있는 이름입니다.", color: "text-red-500" });
+      handleMessage("이미 있는 이름입니다.", "text-red-500");
       return;
     }
     setSymbolToModify((prev) => ({
       ...prev,
       name: [...(prev.name || []), addName],
     }));
-    setMessage({ text: "확인을 눌러주세요", color: "text-yellow-500" });
+    handleMessage("확인을 눌러주세요", "text-yellow-500");
     setAddName("");
   };
 
@@ -74,7 +78,7 @@ export default function SymbolUpdatePage({
       ...prev,
       name: prev.name?.filter((n) => n !== item) || [],
     }));
-    setMessage({ text: "확인을 눌러주세요", color: "text-yellow-500" });
+    handleMessage("확인을 눌러주세요", "text-yellow-500");
   };
 
   return (

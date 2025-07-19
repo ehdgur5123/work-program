@@ -9,11 +9,15 @@ import { LoadingSpinnerSmall } from "@/app/symbol-search/components/Loading";
 interface SymbolAddPageProps {
   handleNewSymbol: (newSymbol: SymbolItem) => void;
   copySymbols: SymbolItem[] | null;
+  handleMessage: (text: string, color: string) => void;
+  message: { text: string; color: string };
 }
 
 export default function SymbolAddPage({
   handleNewSymbol,
   copySymbols,
+  handleMessage,
+  message,
 }: SymbolAddPageProps) {
   const nameInitialValue = ["", "", "", "", ""];
   const symbolInitialValue = {
@@ -24,10 +28,10 @@ export default function SymbolAddPage({
     name: nameInitialValue,
     code: "",
   };
-  const messageInitialValue = { text: "", color: "text-black" };
+
   const [newSymbol, setNewSymbol] = useState<SymbolItem>(symbolInitialValue);
   const [nameList, setNameList] = useState(nameInitialValue);
-  const [message, setMessage] = useState(messageInitialValue);
+
   const [isLoading, setIsLoading] = useState(false);
   const nameListChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -40,23 +44,26 @@ export default function SymbolAddPage({
 
   const validateSymbolData = (newSymbol: SymbolItem) => {
     if (newSymbol.symbol.trim().length === 0) {
-      setMessage({ text: "기호를 입력해주세요", color: "text-red-500" });
+      // setMessage({ text: "기호를 입력해주세요", color: "text-red-500" });
+      handleMessage("기호를 입력해주세요", "text-red-500");
       return false;
     } else if (newSymbol.symbol.trim().length >= 2) {
-      setMessage({
-        text: "기호는 1글자만 입력해야 합니다.",
-        color: "text-red-500",
-      });
+      // setMessage({
+      //   text: "기호는 1글자만 입력해야 합니다.",
+      //   color: "text-red-500",
+      // });
+      handleMessage("기호는 1글자만 입력해야 합니다.", "text-red-500");
       return false;
     } else if (
       copySymbols?.some(
         (item) => item.symbol.trim() === newSymbol.symbol.trim()
       )
     ) {
-      setMessage({
-        text: "이미 존재하는 기호입니다.",
-        color: "text-red-500",
-      });
+      // setMessage({
+      //   text: "이미 존재하는 기호입니다.",
+      //   color: "text-red-500",
+      // });
+      handleMessage("이미 존재하는 기호입니다.", "text-red-500");
       return false;
     }
 
@@ -92,9 +99,11 @@ export default function SymbolAddPage({
       if (response !== null && response !== "EXISTS") {
         handleNewSymbol({ ...updatedSymbol, _id: response._id });
       }
-      setMessage({ text: "추가가 완료되었습니다.", color: "text-green-500" });
+      // setMessage({ text: "추가가 완료되었습니다.", color: "text-green-500" });
+      handleMessage("추가가 완료되었습니다.", "text-green-500");
     } catch {
-      setMessage({ text: "전송에 실패하였습니다.", color: "text-red-500" });
+      // setMessage({ text: "전송에 실패하였습니다.", color: "text-red-500" });
+      handleMessage("전송에 실패하였습니다.", "text-red-500");
     } finally {
       setNewSymbol({ ...symbolInitialValue, name: nameList });
       setIsLoading(false);
@@ -112,7 +121,8 @@ export default function SymbolAddPage({
           onClick={() => {
             setNewSymbol(symbolInitialValue);
             setNameList(nameInitialValue);
-            setMessage(messageInitialValue);
+            // setMessage(messageInitialValue);
+            handleMessage("", "text-black-500");
           }}
           className="cursor-pointer hover:text-gray-500 rounded-full text-3xl active:scale-80"
         >

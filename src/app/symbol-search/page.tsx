@@ -10,6 +10,7 @@ import ResetSearch from "./components/ResetSearch";
 import Hamberger from "./components/Hamberger";
 import SymbolAddPage from "./components/SymbolAddPage";
 import SymbolUpdatePage from "./components/SymbolUpdatePage";
+import SymbolDeletePage from "./components/SymbolDeletePage";
 
 export default function SymbolSearchPage() {
   const [axiosSymbols, setAxiosSymbols] = useState<SymbolItem[] | null>(null);
@@ -20,6 +21,10 @@ export default function SymbolSearchPage() {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSymbol, setSelectedSymbol] = useState<SymbolItem | null>(null);
+  const [selectedSymbols, setSelectedSymbols] = useState<SymbolItem[] | null>(
+    []
+  );
+  const [message, setMessage] = useState({ text: "", color: "text-black" });
   const [hambergerToggleList, setHambergerToggleList] =
     useState<hambergerToggleListType>({
       symbolAddToggle: false,
@@ -93,6 +98,10 @@ export default function SymbolSearchPage() {
     }
   }, [newSymbol, search]);
 
+  useEffect(() => {
+    handleMessage("", "text-black-500");
+  }, [hambergerToggleList]);
+
   const handleSearch = (search: string) => {
     setHasSearch(true);
     setSearch(search);
@@ -115,7 +124,25 @@ export default function SymbolSearchPage() {
   };
 
   const handleSymbol = (symbol: SymbolItem) => {
-    setSelectedSymbol(symbol);
+    if (hambergerToggleList.symbolUpdateToggle) {
+      setSelectedSymbol(symbol);
+    }
+
+    if (hambergerToggleList.symbolDeleteToggle) {
+      setSelectedSymbols((prev) => {
+        const exists = prev?.some((n) => n._id === symbol._id);
+        if (exists) {
+          handleMessage("이미 있는 기호입니다.", "text-red-500");
+          return prev;
+        }
+        handleMessage("", "text-black-500");
+        return prev ? [...prev, symbol] : [symbol];
+      });
+    }
+  };
+
+  const handleMessage = (text: string, color: string) => {
+    setMessage({ text: text, color: color });
   };
 
   if (isLoading) return <LoadingSpinner />;
@@ -148,6 +175,8 @@ export default function SymbolSearchPage() {
               <SymbolAddPage
                 handleNewSymbol={handleNewSymbol}
                 copySymbols={copySymbols}
+                handleMessage={handleMessage}
+                message={message}
               />
             </div>
           </div>
@@ -155,7 +184,23 @@ export default function SymbolSearchPage() {
         {hambergerToggleList.symbolUpdateToggle ? (
           <div className="relative w-1/2">
             <div className="sticky top-50">
-              <SymbolUpdatePage selectedSymbol={selectedSymbol} />
+              <SymbolUpdatePage
+                selectedSymbol={selectedSymbol}
+                handleMessage={handleMessage}
+                message={message}
+              />
+            </div>
+          </div>
+        ) : null}
+        {hambergerToggleList.symbolDeleteToggle ? (
+          <div className="relative w-1/2">
+            <div className="sticky top-50">
+              <SymbolDeletePage
+                selectedSymbols={selectedSymbols}
+                setSelectedSymbols={setSelectedSymbols}
+                handleMessage={handleMessage}
+                message={message}
+              />
             </div>
           </div>
         ) : null}
