@@ -6,17 +6,21 @@ import InputData from "./InputData";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { fetchUpdateSymbol } from "@/app/symbol-search/controllers/fetchSymbols";
 import { LoadingSpinnerSmall } from "./Loading";
+import isEqual from "lodash.isequal";
+import { omit } from "lodash";
 
 interface SymbolUpdatePageProps {
   selectedSymbol: SymbolItem | null;
   handleMessage: (text: string, color: string) => void;
   message: { text: string; color: string };
+  handleModifiedSymbol: (symbolToModify: SymbolItem) => void;
 }
 
 export default function SymbolUpdatePage({
   selectedSymbol,
   handleMessage,
   message,
+  handleModifiedSymbol,
 }: SymbolUpdatePageProps) {
   const symbolInitialValue = {
     _id: selectedSymbol?._id,
@@ -34,20 +38,38 @@ export default function SymbolUpdatePage({
 
   useEffect(() => {
     setSymbolToModify(symbolInitialValue);
+    handleMessage("", "text-black-500");
   }, [selectedSymbol]);
 
-  useEffect(() => {
-    console.log(symbolToModify);
-  }, [symbolToModify]);
+  const normalizeSymbolData = (symbol: SymbolItem): SymbolItem => {
+    return {
+      ...symbol,
+      unicode: symbol.unicode?.trim() || "None",
+      html: symbol.html?.trim() || "None",
+      code: symbol.code?.trim() || "None",
+    };
+  };
 
   const updateSymbolSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
     if (!selectedSymbol?._id) return;
+
+    const normalized = normalizeSymbolData(symbolToModify as SymbolItem);
+    const normalizedSelected = normalizeSymbolData(selectedSymbol);
+
+    if (isEqual(omit(normalized, "__v"), omit(normalizedSelected, "__v"))) {
+      handleMessage("변경사항이 없습니다.", "text-yellow-500");
+      return;
+    }
+
     setIsLoading(true);
+
     try {
-      await fetchUpdateSymbol(selectedSymbol?._id, symbolToModify);
+      handleModifiedSymbol(normalized);
+      const response = await fetchUpdateSymbol(selectedSymbol._id, normalized);
+      if (response) setSymbolToModify(response);
       handleMessage("변경이 완료되었습니다.", "text-green-500");
     } catch {
       handleMessage("전송에 실패하였습니다.", "text-red-500");

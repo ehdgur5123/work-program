@@ -1,7 +1,7 @@
 "use client";
 import { SymbolItem } from "@/app/symbol-search/types";
-import { useEffect, useState } from "react";
-import { LoadingSpinnerSmall } from "./Loading";
+// import { useState } from "react";
+// import { LoadingSpinnerSmall } from "./Loading";
 import { XCircleIcon } from "@heroicons/react/24/solid";
 interface SymbolDeletePageProps {
   selectedSymbols: SymbolItem[] | null;
@@ -12,10 +12,10 @@ interface SymbolDeletePageProps {
 export default function SymbolDeletePage({
   selectedSymbols,
   setSelectedSymbols,
-  handleMessage,
+  // handleMessage,
   message,
 }: SymbolDeletePageProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div className="m-5 border-2 rounded-xl shadow-sm p-4 min-h-[450px] flex flex-col items-center justify-center">
@@ -56,7 +56,7 @@ export default function SymbolDeletePage({
         </>
       )}
       <div className={`text-center mt-3 h-5 ${message.color}`}>
-        {isLoading ? <LoadingSpinnerSmall /> : message.text}
+        {/* {isLoading ? <LoadingSpinnerSmall /> : message.text} */}
       </div>
     </div>
   );

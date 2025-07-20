@@ -67,12 +67,13 @@ export async function PATCH(
 }
 
 export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  req: Request,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-    const { id } = await params;
+    const params = await context.params;
+    const id = params.id;
     const { unicode, html, code, name } = await req.json();
 
     if (!ObjectId.isValid(id)) {

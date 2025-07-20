@@ -45,6 +45,7 @@ export default function SymbolSearchPage() {
         setCopySymbols(response);
       } catch (err) {
         console.log("에러: ", err);
+        console.log(axiosSymbols);
       } finally {
         setIsLoading(false);
       }
@@ -141,6 +142,20 @@ export default function SymbolSearchPage() {
     }
   };
 
+  const handleModifiedSymbol = (modifiedSymbol: SymbolItem) => {
+    if (!modifiedSymbol._id) return;
+
+    const updateArray = (symbols: SymbolItem[] | null) =>
+      symbols
+        ? symbols.map((item) =>
+            item._id === modifiedSymbol._id ? modifiedSymbol : item
+          )
+        : null;
+    setSelectedSymbol(modifiedSymbol);
+    setCopySymbols((prev) => updateArray(prev));
+    setSearchSymbols((prev) => updateArray(prev));
+  };
+
   const handleMessage = (text: string, color: string) => {
     setMessage({ text: text, color: color });
   };
@@ -188,6 +203,7 @@ export default function SymbolSearchPage() {
                 selectedSymbol={selectedSymbol}
                 handleMessage={handleMessage}
                 message={message}
+                handleModifiedSymbol={handleModifiedSymbol}
               />
             </div>
           </div>
