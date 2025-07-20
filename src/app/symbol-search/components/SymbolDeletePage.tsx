@@ -1,21 +1,45 @@
 "use client";
 import { SymbolItem } from "@/app/symbol-search/types";
-// import { useState } from "react";
-// import { LoadingSpinnerSmall } from "./Loading";
+import { useEffect, useState } from "react";
+import { LoadingSpinnerSmall } from "./Loading";
 import { XCircleIcon } from "@heroicons/react/24/solid";
+import { fetchDeleteSymbols } from "@/app/symbol-search/controllers/fetchSymbols";
+
 interface SymbolDeletePageProps {
   selectedSymbols: SymbolItem[] | null;
   setSelectedSymbols: React.Dispatch<React.SetStateAction<SymbolItem[] | null>>;
   handleMessage: (text: string, color: string) => void;
   message: { text: string; color: string };
+  handleDeletedSymbols: () => void;
 }
 export default function SymbolDeletePage({
   selectedSymbols,
   setSelectedSymbols,
-  // handleMessage,
+  handleMessage,
   message,
+  handleDeletedSymbols,
 }: SymbolDeletePageProps) {
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [deleteIdList, setDeleteIdList] = useState<string[]>([]);
+
+  const symbolsDeleteClick = async () => {
+    setIsLoading(true);
+    const ids = selectedSymbols?.map((symbol) => symbol._id) ?? [];
+    setDeleteIdList(ids);
+    try {
+      await fetchDeleteSymbols(ids);
+      handleMessage("삭제가 완료되었습니다.", "text-green-500");
+      handleDeletedSymbols();
+    } catch {
+      handleMessage("삭제에 실패하였습니다.", "text-red-500");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log(deleteIdList);
+  }, [deleteIdList]);
 
   return (
     <div className="m-5 border-2 rounded-xl shadow-sm p-4 min-h-[450px] flex flex-col items-center justify-center">
@@ -34,11 +58,12 @@ export default function SymbolDeletePage({
                 <button
                   className="absolute top-0 right-0 p-1 hover:text-gray-500 active:scale-75"
                   type="button"
-                  onClick={() =>
+                  onClick={() => {
                     setSelectedSymbols((prev) =>
                       (prev ?? []).filter((n) => n._id !== symbol._id)
-                    )
-                  }
+                    );
+                    handleMessage("", "text-black-500");
+                  }}
                 >
                   <XCircleIcon className="size-7" />
                 </button>
@@ -50,13 +75,14 @@ export default function SymbolDeletePage({
           <button
             type="button"
             className="px-3 py-1 border-2 text-white rounded-sm text-2xl cursor-pointer hover:bg-gray-500 active:scale-90 w-full mt-2"
+            onClick={symbolsDeleteClick}
           >
             확인
           </button>
         </>
       )}
       <div className={`text-center mt-3 h-5 ${message.color}`}>
-        {/* {isLoading ? <LoadingSpinnerSmall /> : message.text} */}
+        {isLoading ? <LoadingSpinnerSmall /> : message.text}
       </div>
     </div>
   );

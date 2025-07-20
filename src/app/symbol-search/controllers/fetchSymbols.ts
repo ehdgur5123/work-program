@@ -89,6 +89,18 @@ export async function fetchDeleteSymbol(
   }
 }
 
+export async function fetchDeleteSymbols(
+  ids: string[]
+): Promise<SymbolItem | null> {
+  try {
+    const response = await axios.delete(`/symbols`, { data: { ids } });
+    return response.data;
+  } catch (err) {
+    console.error("❌ 기호 삭제 실패:", err);
+    return null;
+  }
+}
+
 export async function fetchUpdateSymbol(
   id: string,
   symbolToModify: Partial<SymbolItem>

@@ -55,6 +55,20 @@ export async function POST(req: NextRequest) {
   }
 }
 
+export async function DELETE(req: NextRequest) {
+  try {
+    await connectToDatabase();
+    const { ids } = await req.json();
+    await SymbolModel.deleteMany({ _id: { $in: ids } });
+    return NextResponse.json({ message: "Deleted successfully" });
+  } catch {
+    return NextResponse.json(
+      { error: "Failed to delete symbols" },
+      { status: 500 }
+    );
+  }
+}
+
 // CORS 프리플라이트 요청 처리
 export async function OPTIONS() {
   return new Response(null, {

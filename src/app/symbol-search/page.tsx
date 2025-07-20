@@ -11,6 +11,7 @@ import Hamberger from "./components/Hamberger";
 import SymbolAddPage from "./components/SymbolAddPage";
 import SymbolUpdatePage from "./components/SymbolUpdatePage";
 import SymbolDeletePage from "./components/SymbolDeletePage";
+import EmptyResult from "@/app/symbol-search/components/EmptyResult";
 
 export default function SymbolSearchPage() {
   const [axiosSymbols, setAxiosSymbols] = useState<SymbolItem[] | null>(null);
@@ -25,6 +26,7 @@ export default function SymbolSearchPage() {
     []
   );
   const [message, setMessage] = useState({ text: "", color: "text-black" });
+  const [isSearchValue, setIsSearchValue] = useState(false);
   const [hambergerToggleList, setHambergerToggleList] =
     useState<hambergerToggleListType>({
       symbolAddToggle: false,
@@ -114,14 +116,17 @@ export default function SymbolSearchPage() {
     );
     if (Array.isArray(searchResult) && searchResult.length > 0) {
       setSearchSymbols(searchResult);
+      setIsSearchValue(false);
     } else {
       setSearchSymbols([]);
+      setIsSearchValue(true);
     }
   };
 
   const resetSearchClick = () => {
     setSearchSymbols([]);
     setHasSearch(false);
+    setIsSearchValue(false);
   };
 
   const handleSymbol = (symbol: SymbolItem) => {
@@ -133,7 +138,7 @@ export default function SymbolSearchPage() {
       setSelectedSymbols((prev) => {
         const exists = prev?.some((n) => n._id === symbol._id);
         if (exists) {
-          handleMessage("이미 있는 기호입니다.", "text-red-500");
+          handleMessage("이미 선택된 기호입니다.", "text-red-500");
           return prev;
         }
         handleMessage("", "text-black-500");
@@ -154,6 +159,21 @@ export default function SymbolSearchPage() {
     setSelectedSymbol(modifiedSymbol);
     setCopySymbols((prev) => updateArray(prev));
     setSearchSymbols((prev) => updateArray(prev));
+  };
+
+  const handleDeletedSymbols = () => {
+    if (!selectedSymbols || !copySymbols) return;
+
+    const selectedIds = selectedSymbols.map((symbol) => symbol._id);
+
+    const filterSymbols = (symbols: SymbolItem[] | null) =>
+      symbols
+        ? symbols.filter((symbol) => !selectedIds.includes(symbol._id))
+        : null;
+
+    setCopySymbols((prev) => filterSymbols(prev));
+    setSearchSymbols((prev) => filterSymbols(prev));
+    setSelectedSymbols([]);
   };
 
   const handleMessage = (text: string, color: string) => {
@@ -178,11 +198,15 @@ export default function SymbolSearchPage() {
             <SearchSymbol handleSearch={handleSearch} />
             <ResetSearch handleSearch={resetSearchClick} />
           </div>
-          <SymbolLists
-            symbols={hasSearch ? searchSymbols : copySymbols}
-            handleSymbol={handleSymbol}
-            hambergerToggleList={hambergerToggleList}
-          />
+          {isSearchValue ? (
+            <EmptyResult />
+          ) : (
+            <SymbolLists
+              symbols={hasSearch ? searchSymbols : copySymbols}
+              handleSymbol={handleSymbol}
+              hambergerToggleList={hambergerToggleList}
+            />
+          )}
         </div>
         {hambergerToggleList.symbolAddToggle ? (
           <div className="relative w-1/2">
@@ -216,6 +240,7 @@ export default function SymbolSearchPage() {
                 setSelectedSymbols={setSelectedSymbols}
                 handleMessage={handleMessage}
                 message={message}
+                handleDeletedSymbols={handleDeletedSymbols}
               />
             </div>
           </div>
