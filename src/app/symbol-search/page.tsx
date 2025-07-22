@@ -27,6 +27,7 @@ export default function SymbolSearchPage() {
   );
   const [message, setMessage] = useState({ text: "", color: "text-black" });
   const [isSearchValue, setIsSearchValue] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [hambergerToggleList, setHambergerToggleList] =
     useState<hambergerToggleListType>({
       symbolAddToggle: false,
@@ -53,6 +54,17 @@ export default function SymbolSearchPage() {
       }
     };
     getSymbol();
+  }, []);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768); // 예: 768px 이하이면 모바일
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize); // 창 크기 변경 대응
+
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // 1. 서버에서 받은 새 심볼 처리
@@ -103,6 +115,8 @@ export default function SymbolSearchPage() {
 
   useEffect(() => {
     handleMessage("", "text-black-500");
+    setSelectedSymbol(null);
+    setSelectedSymbols([]);
   }, [hambergerToggleList]);
 
   const handleSearch = (search: string) => {
@@ -186,12 +200,12 @@ export default function SymbolSearchPage() {
       <h1 className="my-10 mx-auto text-7xl text-center">기호 검색</h1>
       <div
         className={`mx-auto max-w-7xl ${
-          showToggleTrue ? "flex min-w-3xl" : ""
+          showToggleTrue ? "md:flex md:min-w-3xl" : ""
         }`}
       >
         <div
-          className={`flex flex-col gap-2 p-5 min-h-[1000px] ${
-            showToggleTrue ? "w-1/2" : "w-full"
+          className={`flex flex-col gap-2 p-5 min-h-[1000px] max-w-4xl mx-auto ${
+            showToggleTrue ? "md:w-1/2 w-full" : "w-full"
           }`}
         >
           <div className="flex p-2 gap-2 items-center justify-end">
@@ -209,8 +223,12 @@ export default function SymbolSearchPage() {
           )}
         </div>
         {hambergerToggleList.symbolAddToggle ? (
-          <div className="relative w-1/2">
-            <div className="sticky top-50">
+          <div
+            className={
+              isMobile ? "fixed bottom-0 w-full bg-black" : "relative w-1/2"
+            }
+          >
+            <div className="md:sticky md:top-50">
               <SymbolAddPage
                 handleNewSymbol={handleNewSymbol}
                 copySymbols={copySymbols}
@@ -221,8 +239,14 @@ export default function SymbolSearchPage() {
           </div>
         ) : null}
         {hambergerToggleList.symbolUpdateToggle ? (
-          <div className="relative w-1/2">
-            <div className="sticky top-50">
+          <div
+            className={
+              isMobile
+                ? "fixed bottom-0 w-full bg-black max-h-[500px]"
+                : "relative w-1/2"
+            }
+          >
+            <div className="md:sticky md:top-50">
               <SymbolUpdatePage
                 selectedSymbol={selectedSymbol}
                 handleMessage={handleMessage}
@@ -233,8 +257,14 @@ export default function SymbolSearchPage() {
           </div>
         ) : null}
         {hambergerToggleList.symbolDeleteToggle ? (
-          <div className="relative w-1/2">
-            <div className="sticky top-50">
+          <div
+            className={
+              isMobile
+                ? "fixed bottom-0 w-full bg-black max-h-[500px]"
+                : "relative w-1/2"
+            }
+          >
+            <div className="md:sticky md:top-50">
               <SymbolDeletePage
                 selectedSymbols={selectedSymbols}
                 setSelectedSymbols={setSelectedSymbols}
@@ -246,10 +276,11 @@ export default function SymbolSearchPage() {
           </div>
         ) : null}
       </div>
-      <div className="h-20"></div>
+      <div className={showToggleTrue && isMobile ? "h-[500px]" : "h-20"}></div>
       <Hamberger
         hambergerToggleList={hambergerToggleList}
         setHambergerToggleList={setHambergerToggleList}
+        isMobile={isMobile}
       />
       <ScrollToTop />
     </>

@@ -40,7 +40,7 @@ export default function SymbolLists({
     <>
       <div
         className={`grid grid-cols-4 items-center justify-center gap-3 ${
-          showToggleTrue ? "md:grid-cols-4" : "md:grid-cols-8"
+          showToggleTrue ? "md:grid-cols-5" : "md:grid-cols-8"
         }`}
       >
         {symbols?.map((symbol) => (

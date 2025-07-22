@@ -5,10 +5,12 @@ import { hambergerToggleListType } from "@/app/symbol-search/types";
 interface HambergerProps {
   hambergerToggleList: hambergerToggleListType;
   setHambergerToggleList: React.Dispatch<hambergerToggleListType>;
+  isMobile: boolean;
 }
 export default function Hamberger({
   hambergerToggleList,
   setHambergerToggleList,
+  isMobile,
 }: HambergerProps) {
   const [barToggle, setBarToggle] = useState(false);
 
@@ -37,6 +39,7 @@ export default function Hamberger({
                   symbolUpdateToggle: false,
                   symbolDeleteToggle: false,
                 });
+                if (isMobile) setBarToggle(false);
               }}
               className={`p-2 w-full text-center hover:bg-gray-400 rounded-2xl active:scale-90 ${
                 hambergerToggleList.symbolAddToggle ? "bg-gray-500" : ""
@@ -51,6 +54,7 @@ export default function Hamberger({
                   symbolUpdateToggle: !hambergerToggleList.symbolUpdateToggle,
                   symbolDeleteToggle: false,
                 });
+                if (isMobile) setBarToggle(false);
               }}
               className={`p-2 w-full text-center hover:bg-gray-400 rounded-2xl active:scale-90 ${
                 hambergerToggleList.symbolUpdateToggle ? "bg-gray-500" : ""
@@ -65,6 +69,7 @@ export default function Hamberger({
                   symbolUpdateToggle: false,
                   symbolDeleteToggle: !hambergerToggleList.symbolDeleteToggle,
                 });
+                if (isMobile) setBarToggle(false);
               }}
               className={`p-2 w-full text-center hover:bg-gray-400 rounded-2xl active:scale-90 ${
                 hambergerToggleList.symbolDeleteToggle ? "bg-gray-500" : ""
