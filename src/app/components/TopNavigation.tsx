@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Ghost } from "lucide-react";
 import LoginButton from "./LoginButton";
