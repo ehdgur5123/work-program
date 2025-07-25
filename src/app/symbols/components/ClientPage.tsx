@@ -6,7 +6,7 @@ import LoadingSpinner from "../loading";
 import { SymbolItem } from "@/app/symbols/types";
 import { fetchSymbols } from "../controllers/fetchSymbols";
 
-export default function ClientSide() {
+export default function ClientPage() {
   const [symbols, setSymbols] = useState<SymbolItem[] | null>(null);
   const [loading, setLoading] = useState(true);
 
