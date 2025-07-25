@@ -223,57 +223,32 @@ export default function SymbolSearchPage() {
           )}
         </div>
         {hambergerToggleList.symbolAddToggle ? (
-          <div
-            className={
-              isMobile ? "fixed bottom-0 w-full bg-black" : "relative w-1/2"
-            }
-          >
-            <div className="md:sticky md:top-50">
-              <SymbolAddPage
-                handleNewSymbol={handleNewSymbol}
-                copySymbols={copySymbols}
-                handleMessage={handleMessage}
-                message={message}
-              />
-            </div>
-          </div>
+          <SymbolAddPage
+            handleNewSymbol={handleNewSymbol}
+            copySymbols={copySymbols}
+            handleMessage={handleMessage}
+            message={message}
+            isMobile={isMobile}
+          />
         ) : null}
         {hambergerToggleList.symbolUpdateToggle ? (
-          <div
-            className={
-              isMobile
-                ? "fixed bottom-0 w-full bg-black max-h-[500px]"
-                : "relative w-1/2"
-            }
-          >
-            <div className="md:sticky md:top-50">
-              <SymbolUpdatePage
-                selectedSymbol={selectedSymbol}
-                handleMessage={handleMessage}
-                message={message}
-                handleModifiedSymbol={handleModifiedSymbol}
-              />
-            </div>
-          </div>
+          <SymbolUpdatePage
+            selectedSymbol={selectedSymbol}
+            handleMessage={handleMessage}
+            message={message}
+            handleModifiedSymbol={handleModifiedSymbol}
+            isMobile={isMobile}
+          />
         ) : null}
         {hambergerToggleList.symbolDeleteToggle ? (
-          <div
-            className={
-              isMobile
-                ? "fixed bottom-0 w-full bg-black max-h-[500px]"
-                : "relative w-1/2"
-            }
-          >
-            <div className="md:sticky md:top-50">
-              <SymbolDeletePage
-                selectedSymbols={selectedSymbols}
-                setSelectedSymbols={setSelectedSymbols}
-                handleMessage={handleMessage}
-                message={message}
-                handleDeletedSymbols={handleDeletedSymbols}
-              />
-            </div>
-          </div>
+          <SymbolDeletePage
+            selectedSymbols={selectedSymbols}
+            setSelectedSymbols={setSelectedSymbols}
+            handleMessage={handleMessage}
+            message={message}
+            handleDeletedSymbols={handleDeletedSymbols}
+            isMobile={isMobile}
+          />
         ) : null}
       </div>
       <div className={showToggleTrue && isMobile ? "h-[500px]" : "h-20"}></div>

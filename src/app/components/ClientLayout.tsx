@@ -1,5 +1,7 @@
-// app/components/ClientLayout.tsx
+"use client";
 
+// app/components/ClientLayout.tsx
+import { SessionProvider } from "next-auth/react";
 import TopNavigation from "./TopNavigation";
 
 export default function ClientLayout({
@@ -9,8 +11,10 @@ export default function ClientLayout({
 }) {
   return (
     <>
-      <TopNavigation />
-      {children}
+      <SessionProvider>
+        <TopNavigation />
+        {children}
+      </SessionProvider>
     </>
   );
 }

@@ -15,7 +15,10 @@ export default function InputData({
 }: InputDataProps) {
   return (
     <div className="flex gap-4 items-center justify-center">
-      <label htmlFor={id} className="font-semibold text-white w-1/2 text-lg">
+      <label
+        htmlFor={id}
+        className="font-semibold text-white w-1/2 md:text-lg text-sm"
+      >
         {label}
       </label>
       <input
@@ -26,7 +29,7 @@ export default function InputData({
         onChange={(e) => {
           handleChange(e);
         }}
-        className="text-white border-2 px-2 py-1 rounded-sm w-1/2"
+        className="text-white border-2 px-2 py-1 rounded-sm w-1/2 md:text-lg text-sm"
       />
     </div>
   );

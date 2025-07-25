@@ -19,7 +19,7 @@ export default function Hamberger({
       {!barToggle ? (
         <button
           onClick={() => setBarToggle(!barToggle)}
-          className="p-2 rounded-full fixed top-25 left-5 bg-gray-400 text-black hover:scale-110 active:scale-90 z-10"
+          className="p-2 rounded-full fixed top-25 md:top-30 left-5 bg-gray-400 text-black hover:scale-110 active:scale-90 z-10"
         >
           <Bars4Icon className="size-7" />
         </button>

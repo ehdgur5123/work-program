@@ -26,7 +26,7 @@ export default function ScrollToTop() {
       {isVisible && (
         <div
           onClick={scrollToTop}
-          className="fixed bottom-5 md:bottom-10 rounded-full right-5 md:right-90 h-12 w-12 p-2 text-center shadow-lg bg-gray-400 hover:scale-110
+          className="fixed bottom-5 lg:bottom-10 rounded-full right-5 2xl:right-80 h-12 w-12 p-2 text-center shadow-lg bg-gray-400 hover:scale-110
           active:scale-90"
         >
           <button>
