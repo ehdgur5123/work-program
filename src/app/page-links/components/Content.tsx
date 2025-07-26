@@ -10,8 +10,8 @@ interface ContentProps {
 
 export default function Content({ links }: ContentProps) {
   return (
-    <div className="border-2 h-[450px]">
-      <div className="grid grid-cols-3 p-4 gap-4 rounded-2xl">
+    <div className="border-2 min-h-[450px] rounded-2xl">
+      <div className="flex flex-col p-4 gap-4 rounded-2xl">
         <AddLink />
         <LinkLists links={links} />
       </div>

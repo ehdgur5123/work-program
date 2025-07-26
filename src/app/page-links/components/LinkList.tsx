@@ -13,14 +13,11 @@ export default function LinkList({ linkData }: LinkListProps) {
   return (
     <Link
       href={linkData.url}
-      className="flex flex-col items-center gap-2 border-2 rounded-2xl p-4 w-full h-[200px] min-w-[150px] hover:bg-gray-500 active:scale-90"
+      className="flex items-center gap-2 border-2 rounded-2xl p-2 w-full hover:bg-gray-500 active:scale-90"
       target="_blank"
       rel="noopener noreferrer"
     >
-      <div className=" w-full text-center overflow-hidden line-clamp-1 text-[18px] ">
-        {linkData.title}
-      </div>
-      <div className="bg-white rounded-2xl flex-grow w-full flex justify-center items-center">
+      <div className="p-2 h-20 w-20 bg-white rounded-2xl flex justify-center items-center">
         <div>
           {imageError ? (
             <EyeSlashIcon className="size-8 text-black" />
@@ -34,10 +31,14 @@ export default function LinkList({ linkData }: LinkListProps) {
           )}
         </div>
       </div>
-
-      <div className="w-full text-center overflow-hidden line-clamp-1 text-sm">
-        {linkData.category.large} | {linkData.category.medium} |{" "}
-        {linkData.category.small}
+      <div className="flex flex-col items-center justify-center mx-auto">
+        <div className=" w-full text-center overflow-hidden line-clamp-1 text-2xl ">
+          {linkData.title}
+        </div>
+        <div className="w-full text-center overflow-hidden line-clamp-1 text-sm">
+          {linkData.category.large} | {linkData.category.medium} |{" "}
+          {linkData.category.small}
+        </div>
       </div>
     </Link>
   );

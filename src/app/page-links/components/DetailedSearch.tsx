@@ -1,8 +1,4 @@
 "use client";
-import {
-  ChevronDoubleDownIcon,
-  ChevronDoubleUpIcon,
-} from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { getToSummary } from "../controllers/axiosLink";
 import CategorySection from "@/app/page-links/components/CategorySection";
@@ -14,6 +10,7 @@ interface DetailedSearchProps {
     small: string;
   }) => void;
   resetTrigger: boolean;
+  isMobile: boolean;
 }
 
 type CategoryTree = {
@@ -35,9 +32,10 @@ type CategoryTree = {
 export default function DetailedSearch({
   handleCategory,
   resetTrigger,
+  isMobile,
 }: DetailedSearchProps) {
-  const [showSearch, setShowSearch] = useState(false);
   const [summary, setSummary] = useState<CategoryTree>();
+  const [showDetailSearch, setShowDetailSearch] = useState(false);
   const [large, setLarge] = useState("");
   const [medium, setMedium] = useState("");
   const [small, setSmall] = useState("");
@@ -59,10 +57,24 @@ export default function DetailedSearch({
     setSmall("");
   }, [resetTrigger]);
 
+  useEffect(() => {
+    if (!isMobile) setShowDetailSearch(true);
+  }, [isMobile]);
+
   return (
     <>
-      {showSearch && summary && (
-        <div className="flex flex-col w-full border-2">
+      {isMobile ? (
+        <button
+          className="w-full border-2 p-2 flex items-center justify-center active:scale-90"
+          onClick={() => setShowDetailSearch(!showDetailSearch)}
+        >
+          DETAIL SEARCH
+        </button>
+      ) : null}
+      {showDetailSearch && summary && (
+        <div
+          className={isMobile ? "fixed left-0 top-0 z-100 w-full bg-black" : ""}
+        >
           {/* 대분류 - 항상 표시 */}
           <CategorySection
             label="대분류"
@@ -101,18 +113,6 @@ export default function DetailedSearch({
           />
         </div>
       )}
-
-      <button
-        onClick={() => setShowSearch(!showSearch)}
-        className="w-full rounded-b-2xl p-2 bg-gray-800 flex justify-center gap-1 hover:bg-gray-700 active:bg-gray-600 cursor-pointer"
-      >
-        {showSearch ? (
-          <ChevronDoubleUpIcon className="size-6" />
-        ) : (
-          <ChevronDoubleDownIcon className="size-6" />
-        )}
-        <p>상세 검색</p>
-      </button>
     </>
   );
 }

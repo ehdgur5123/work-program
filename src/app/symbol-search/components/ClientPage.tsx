@@ -197,7 +197,9 @@ export default function ClientPage() {
   if (isLoading) return <LoadingSpinner />;
   return (
     <>
-      <h1 className="my-10 mx-auto text-7xl text-center">기호 검색</h1>
+      <h1 className="my-10 mx-auto md:text-7xl text-5xl text-center">
+        기호 검색
+      </h1>
       <div
         className={`mx-auto max-w-7xl ${
           showToggleTrue ? "md:flex md:min-w-3xl" : ""

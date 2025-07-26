@@ -20,6 +20,7 @@ export default function PageLinks() {
   const [searchValue, setSearchValue] = useState("");
   const [pageState, setPageState] = useState(1);
   const [resetFlag, setResetFlag] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [category, setCategory] = useState<CategoryProps>({
     large: "",
     medium: "",
@@ -37,6 +38,17 @@ export default function PageLinks() {
     setLinks(links);
     setTotalPages(links.totalPages);
   };
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768); // 예: 768px 이하이면 모바일
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize); // 창 크기 변경 대응
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   useEffect(() => {
     fetchLinks(1, "", category);
@@ -70,23 +82,26 @@ export default function PageLinks() {
   if (!links) return <LoadingSpinner />;
 
   return (
-    <>
-      <div className="flex items-center justify-end">
-        <Search handleSearch={handleSearch} />
-        <button className="p-2 border-2" onClick={resetSearch}>
-          <ArrowPathRoundedSquareIcon className="size-4" />
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between p-2 gap-3">
+        <button onClick={resetSearch}>
+          <ArrowPathRoundedSquareIcon className="size-8 hover:text-gray-500 active:scale-90" />
         </button>
+        <Search handleSearch={handleSearch} />
       </div>
+
       <DetailedSearch
         handleCategory={handleCategory}
         resetTrigger={resetFlag}
+        isMobile={isMobile}
       />
+
       <Content links={links.data} />
       <NextPage
         pages={totalPages}
         currentPage={links.page}
         nextPage={nextPage}
       />
-    </>
+    </div>
   );
 }

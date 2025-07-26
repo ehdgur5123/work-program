@@ -7,11 +7,11 @@ export default function LinksLayout({
 }) {
   return (
     <>
-      <h1 className="text-7xl text-center p-5 mb-3">인터넷 링크</h1>
-      <div className="flex justify-center items-center w-full">
-        <div className="flex flex-col gap-3 max-w-[600px] min-w-[600px]">
-          {children}
-        </div>
+      <h1 className="my-10 mx-auto md:text-7xl text-5xl text-center">
+        인터넷 링크
+      </h1>
+      <div className="p-5 min-h-[1000px] max-w-4xl mx-auto w-full">
+        {children}
       </div>
     </>
   );
