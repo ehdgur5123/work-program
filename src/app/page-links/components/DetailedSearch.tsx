@@ -1,60 +1,53 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getToSummary } from "../controllers/axiosLink";
 import CategorySection from "@/app/page-links/components/CategorySection";
+import useCategory from "@/app/page-links/hooks/useCategory";
 
 interface DetailedSearchProps {
   handleCategory: (category: {
-    large: string;
-    medium: string;
-    small: string;
+    selectedLarge: string;
+    selectedMedium: string;
+    selectedSmall: string;
   }) => void;
   resetTrigger: boolean;
   isMobile: boolean;
 }
-
-type CategoryTree = {
-  [large: string]: {
-    sum: number;
-    medium: {
-      [medium: string]: {
-        sum: number;
-        small: {
-          [small: string]: {
-            sum: number;
-          };
-        };
-      };
-    };
-  };
-};
 
 export default function DetailedSearch({
   handleCategory,
   resetTrigger,
   isMobile,
 }: DetailedSearchProps) {
-  const [summary, setSummary] = useState<CategoryTree>();
   const [showDetailSearch, setShowDetailSearch] = useState(false);
-  const [large, setLarge] = useState("");
-  const [medium, setMedium] = useState("");
-  const [small, setSmall] = useState("");
-  useEffect(() => {
-    handleCategory({ large, medium, small });
-  }, [large, medium, small]);
+
+  const {
+    isLoading,
+    data,
+    largeEntries,
+    selectedLarge,
+    setSelectedLarge,
+    mediumEntries,
+    selectedMedium,
+    setSelectedMedium,
+    smallEntries,
+    selectedSmall,
+    setSelectedSmall,
+  } = useCategory();
 
   useEffect(() => {
-    const fetchSummary = async () => {
-      const data = await getToSummary();
-      setSummary(data);
-    };
-    fetchSummary();
-  }, []);
+    if (!isLoading && data) {
+      handleCategory({ selectedLarge, selectedMedium, selectedSmall });
+    }
+  }, [selectedLarge, selectedMedium, selectedSmall, isLoading, data]);
+
+  const resetCategory = () => {
+    setSelectedLarge("");
+    setSelectedMedium("");
+    setSelectedSmall("");
+  };
 
   useEffect(() => {
-    setLarge("");
-    setMedium("");
-    setSmall("");
+    resetCategory();
   }, [resetTrigger]);
 
   useEffect(() => {
@@ -71,44 +64,46 @@ export default function DetailedSearch({
           DETAIL SEARCH
         </button>
       ) : null}
-      {showDetailSearch && summary && (
+      {showDetailSearch && data && (
         <div
-          className={isMobile ? "fixed left-0 top-0 z-100 w-full bg-black" : ""}
+          className={
+            isMobile
+              ? "fixed left-0 top-0 z-100 w-full bg-black border-2"
+              : "border-2 rounded-2xl"
+          }
         >
           {/* 대분류 - 항상 표시 */}
           <CategorySection
             label="대분류"
-            categories={Object.entries(summary)}
-            selected={large}
+            categories={largeEntries}
+            selected={selectedLarge}
             onSelect={(name) => {
-              setLarge(name);
-              setMedium("");
-              setSmall("");
+              setSelectedLarge(name);
+              setSelectedMedium("");
+              setSelectedSmall("");
             }}
+            style="border-b-2"
           />
 
           {/* 중분류 - 틀은 항상 표시, 내용은 조건부로 */}
           <CategorySection
             label="중분류"
-            categories={large ? Object.entries(summary[large].medium) : []}
-            selected={medium}
+            categories={mediumEntries}
+            selected={selectedMedium}
             onSelect={(name) => {
-              setMedium(name);
-              setSmall("");
+              setSelectedMedium(name);
+              setSelectedSmall("");
             }}
+            style="border-b-2"
           />
 
           {/* 소분류 - 틀은 항상 표시, 내용은 조건부로 */}
           <CategorySection
             label="소분류"
-            categories={
-              large && medium
-                ? Object.entries(summary[large].medium[medium].small)
-                : []
-            }
-            selected={small}
+            categories={smallEntries}
+            selected={selectedSmall}
             onSelect={(name) => {
-              setSmall(name);
+              setSelectedSmall(name);
             }}
           />
         </div>
@@ -116,15 +111,3 @@ export default function DetailedSearch({
     </>
   );
 }
-
-// Object.entries()와 구조 분해
-//  summary가 이런데이터라면,
-//    const summary = {
-//      "개발": { sum: 3 },
-//      "디자인": { sum: 5 }
-//    };
-//  Object.entries(summary)는 이렇게 변환됩니다:
-//    [
-//      ["개발", { sum: 3 }],
-//      ["디자인", { sum: 5 }]
-//    ]

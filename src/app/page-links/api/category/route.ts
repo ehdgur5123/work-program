@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import links from "@/app/api/page-links/links.json";
+import links from "@/app/page-links/api/links.json";
 
 type CategoryTree = {
   [large: string]: {
@@ -18,35 +18,35 @@ type CategoryTree = {
 };
 
 export async function GET() {
-  const summary: CategoryTree = {};
+  const category: CategoryTree = {};
 
   for (const link of links) {
     const { large, medium, small } = link.category;
 
     // 대분류가 없으면 초기화
-    if (!summary[large]) {
-      summary[large] = {
+    if (!category[large]) {
+      category[large] = {
         sum: 0,
         medium: {},
       };
     }
-    summary[large].sum++;
+    category[large].sum++;
 
     // 중분류가 없으면 초기화
-    if (!summary[large].medium[medium]) {
-      summary[large].medium[medium] = {
+    if (!category[large].medium[medium]) {
+      category[large].medium[medium] = {
         sum: 0,
         small: {},
       };
     }
-    summary[large].medium[medium].sum++;
+    category[large].medium[medium].sum++;
 
     // 소분류가 없으면 초기화
-    if (!summary[large].medium[medium].small[small]) {
-      summary[large].medium[medium].small[small] = { sum: 0 };
+    if (!category[large].medium[medium].small[small]) {
+      category[large].medium[medium].small[small] = { sum: 0 };
     }
-    summary[large].medium[medium].small[small].sum++;
+    category[large].medium[medium].small[small].sum++;
   }
 
-  return NextResponse.json(summary);
+  return NextResponse.json(category);
 }

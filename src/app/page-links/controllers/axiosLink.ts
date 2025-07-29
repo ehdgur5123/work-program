@@ -1,6 +1,8 @@
 import axios from "@/lib/axios";
 import { PaginatedLinkResponse } from "../types";
 
+const URL = "/page-links/api";
+
 export async function getToLink(
   page: number = 1,
   search: string | null = null,
@@ -10,7 +12,7 @@ export async function getToLink(
 ): Promise<PaginatedLinkResponse> {
   const LIMIT = 5;
 
-  const response = await axios.get("/page-links", {
+  const response = await axios.get(URL, {
     params: {
       page,
       limit: LIMIT,
@@ -24,7 +26,7 @@ export async function getToLink(
   return response.data;
 }
 
-export async function getToSummary() {
-  const response = await axios.get("/page-links/summary");
+export async function getToCategory() {
+  const response = await axios.get(`${URL}/category`);
   return response.data;
 }

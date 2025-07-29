@@ -1,8 +1,11 @@
 // app/api/page-links/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import links from "@/app/api/page-links/links.json";
+import links from "@/app/page-links/api/links.json";
+// import { connectToDatabase } from "@/lib/mongodb";
+// import { LinksModel } from "@/app/page-links/models/links"
 
-export function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
+  // await connectToDatabase();
   const { searchParams } = new URL(req.url);
 
   const page = parseInt(searchParams.get("page") || "1", 10);

@@ -1,24 +1,20 @@
-export default function AddLink() {
+"use client";
+
+import InputForm from "../components/InputForm";
+// import useCategory from "../hooks/useCategory";
+// import { useEffect } from "react";
+
+export default function AddLinkPage() {
   return (
     <>
-      <h1 className="bg-red-500 text-center text-4xl p-5">링크 추가</h1>
-      <form action="" className="flex">
-        <div className="flex flex-col">
-          <div className="flex gap-2">
-            <label htmlFor="url">URL</label>
-            <input
-              type="text"
-              id="url"
-              placeholder="URL을 입력하세요."
-              className="bg-white"
-            />
-          </div>
-          <div className="flex gap-2">
-            <label htmlFor="tag">태그</label>
-            <input type="tag" className="bg-white" />
-          </div>
-        </div>
-        <button type="submit">확인</button>
+      <form className="flex flex-col gap-3 p-2">
+        <InputForm label="URL" />
+        <InputForm label="대분류" />
+        <InputForm label="중분류" />
+        <InputForm label="소분류" />
+        <button className="p-2 border-2 text-white rounded-sm text-lg md:text-2xl cursor-pointer hover:bg-gray-500 active:scale-90 w-full">
+          확인
+        </button>
       </form>
     </>
   );

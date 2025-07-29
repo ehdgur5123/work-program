@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { fetchSymbols } from "@/app/symbol-search/controllers/fetchSymbols";
 import { SymbolItem, hambergerToggleListType } from "@/app/symbol-search/types";
-import ScrollToTop from "@/app/symbols/components/ScrollToTop";
-import { LoadingSpinner } from "@/app/symbol-search/components/Loading";
+import ScrollToTop from "@/app/components/ScrollToTop";
+import { LoadingSpinner } from "@/app/components/Loading";
 import SymbolLists from "@/app/symbol-search/components/SymbolLists";
 import SearchSymbol from "@/app/symbol-search/components/SearchSymbol";
 import ResetSearch from "@/app/symbol-search/components/ResetSearch";
@@ -11,9 +11,11 @@ import Hamberger from "@/app/symbol-search/components/Hamberger";
 import SymbolAddPage from "@/app/symbol-search/components/SymbolAddPage";
 import SymbolUpdatePage from "@/app/symbol-search/components/SymbolUpdatePage";
 import SymbolDeletePage from "@/app/symbol-search/components/SymbolDeletePage";
-import EmptyResult from "@/app/symbol-search/components/EmptyResult";
+import EmptyResult from "@/app/components/EmptyResult";
+import useIsMobile from "@/app/hooks/useIsMobile";
 
 export default function ClientPage() {
+  const isMobile = useIsMobile();
   const [axiosSymbols, setAxiosSymbols] = useState<SymbolItem[] | null>(null);
   const [copySymbols, setCopySymbols] = useState<SymbolItem[] | null>([]);
   const [searchSymbols, setSearchSymbols] = useState<SymbolItem[] | null>([]);
@@ -27,7 +29,6 @@ export default function ClientPage() {
   );
   const [message, setMessage] = useState({ text: "", color: "text-black" });
   const [isSearchValue, setIsSearchValue] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [hambergerToggleList, setHambergerToggleList] =
     useState<hambergerToggleListType>({
       symbolAddToggle: false,
@@ -54,17 +55,6 @@ export default function ClientPage() {
       }
     };
     getSymbol();
-  }, []);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 768); // 예: 768px 이하이면 모바일
-    };
-
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize); // 창 크기 변경 대응
-
-    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // 1. 서버에서 받은 새 심볼 처리

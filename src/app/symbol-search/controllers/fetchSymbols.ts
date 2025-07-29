@@ -8,25 +8,14 @@ interface InstanceError {
   };
 }
 
+const URL = "/symbol-search/api/symbols";
+
 export async function fetchSymbols(): Promise<SymbolItem[] | null> {
   try {
-    const response = await axios.get("/symbols");
+    const response = await axios.get(URL);
     return response.data;
   } catch (err) {
     console.error("❌ 심볼 가져오기 실패:", err);
-    return null;
-  }
-}
-
-export async function fetchAddName(
-  id: string,
-  name: string
-): Promise<SymbolItem | null> {
-  try {
-    const response = await axios.patch(`/symbols/${id}`, { name });
-    return response.data;
-  } catch (err) {
-    console.error("❌ 태그 추가 실패:", err);
     return null;
   }
 }
@@ -51,7 +40,7 @@ export async function fetchAddSymbol(data: {
   };
 
   try {
-    const response = await axios.post(`/symbols`, payload);
+    const response = await axios.post(URL, payload);
     return response.data;
   } catch (error: unknown) {
     const err = error as InstanceError;
@@ -64,36 +53,11 @@ export async function fetchAddSymbol(data: {
   }
 }
 
-export async function fetchDeleteName(
-  id: string,
-  name: string
-): Promise<SymbolItem | null> {
-  try {
-    const response = await axios.delete(`/symbols/${id}`, { data: { name } });
-    return response.data;
-  } catch (err) {
-    console.error("❌ 태그 삭제 실패:", err);
-    return null;
-  }
-}
-
-export async function fetchDeleteSymbol(
-  id: string
-): Promise<SymbolItem | null> {
-  try {
-    const response = await axios.delete(`/symbols/${id}`);
-    return response.data;
-  } catch (err) {
-    console.error("❌ 기호 삭제 실패:", err);
-    return null;
-  }
-}
-
 export async function fetchDeleteSymbols(
   ids: string[]
 ): Promise<SymbolItem | null> {
   try {
-    const response = await axios.delete(`/symbols`, { data: { ids } });
+    const response = await axios.delete(URL, { data: { ids } });
     return response.data;
   } catch (err) {
     console.error("❌ 기호 삭제 실패:", err);
@@ -106,7 +70,7 @@ export async function fetchUpdateSymbol(
   symbolToModify: Partial<SymbolItem>
 ): Promise<SymbolItem | null> {
   try {
-    const response = await axios.put(`/symbols/${id}`, symbolToModify);
+    const response = await axios.put(`${URL}/${id}`, symbolToModify);
     return response.data;
   } catch (err) {
     console.error("❌ 기호 업데이트 실패:", err);

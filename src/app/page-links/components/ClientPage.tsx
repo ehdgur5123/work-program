@@ -8,10 +8,13 @@ import LoadingSpinner from "@/app/page-links/loading";
 import NextPage from "@/app/page-links/components/NextPage";
 import DetailedSearch from "@/app/page-links/components/DetailedSearch";
 import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/solid";
+import EmptyResult from "@/app/components/EmptyResult";
+import useIsMobile from "@/app/hooks/useIsMobile";
+
 type CategoryProps = {
-  large: string;
-  medium: string;
-  small: string;
+  selectedLarge: string;
+  selectedMedium: string;
+  selectedSmall: string;
 };
 
 export default function PageLinks() {
@@ -20,45 +23,55 @@ export default function PageLinks() {
   const [searchValue, setSearchValue] = useState("");
   const [pageState, setPageState] = useState(1);
   const [resetFlag, setResetFlag] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
+  const [isEmptyResult, setIsEmptyResult] = useState(false);
   const [category, setCategory] = useState<CategoryProps>({
-    large: "",
-    medium: "",
-    small: "",
+    selectedLarge: "",
+    selectedMedium: "",
+    selectedSmall: "",
   });
 
   // 공통 fetch 함수
   const fetchLinks = async (
     page = 1,
     search = "",
-    category: CategoryProps = { large: "", medium: "", small: "" }
+    category: CategoryProps = {
+      selectedLarge: "",
+      selectedMedium: "",
+      selectedSmall: "",
+    }
   ) => {
-    const { large, medium, small } = category;
+    const {
+      selectedLarge: large,
+      selectedMedium: medium,
+      selectedSmall: small,
+    } = category;
     const links = await getToLink(page, search, large, medium, small);
     setLinks(links);
     setTotalPages(links.totalPages);
   };
 
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 768); // 예: 768px 이하이면 모바일
-    };
-
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize); // 창 크기 변경 대응
-
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  useEffect(() => {
     fetchLinks(1, "", category);
   }, [category]);
 
+  useEffect(() => {
+    if (totalPages === 0) {
+      setIsEmptyResult(true);
+    } else {
+      setIsEmptyResult(false);
+    }
+  }, [totalPages]);
+
   const resetSearch = () => {
-    setCategory({ large: "", medium: "", small: "" });
+    setCategory({ selectedLarge: "", selectedMedium: "", selectedSmall: "" });
     setPageState(1);
     setSearchValue("");
-    fetchLinks(pageState, searchValue, { large: "", medium: "", small: "" });
+    fetchLinks(pageState, searchValue, {
+      selectedLarge: "",
+      selectedMedium: "",
+      selectedSmall: "",
+    });
     setResetFlag((prev) => !prev);
   };
 
@@ -96,7 +109,7 @@ export default function PageLinks() {
         isMobile={isMobile}
       />
 
-      <Content links={links.data} />
+      {!isEmptyResult ? <Content links={links.data} /> : <EmptyResult />}
       <NextPage
         pages={totalPages}
         currentPage={links.page}

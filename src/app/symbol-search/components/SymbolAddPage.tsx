@@ -4,7 +4,7 @@ import { fetchAddSymbol } from "@/app/symbol-search/controllers/fetchSymbols";
 import { useEffect, useState } from "react";
 import InputData from "./InputData";
 import { SymbolItem } from "@/app/symbol-search/types";
-import { LoadingSpinnerSmall } from "@/app/symbol-search/components/Loading";
+import { LoadingSpinnerSmall } from "@/app/components/Loading";
 
 interface SymbolAddPageProps {
   handleNewSymbol: (newSymbol: SymbolItem) => void;

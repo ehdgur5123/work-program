@@ -27,7 +27,7 @@ export default function Search({ handleSearch }: SearchProps) {
       <input
         type="text"
         id="search"
-        className="bg-white h-8 text-black"
+        className="bg-white h-8 text-black pl-2"
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
       />

@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/lib/mongodb";
-import { SymbolModel } from "@/app/symbols/models/Symbol";
+import { SymbolModel } from "@/app/symbol-search/models/symbol";
 import { NextResponse, NextRequest } from "next/server";
 import { revalidatePath } from "next/cache";
 import { ObjectId } from "mongodb";

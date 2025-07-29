@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import InputData from "./InputData";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { fetchUpdateSymbol } from "@/app/symbol-search/controllers/fetchSymbols";
-import { LoadingSpinnerSmall } from "./Loading";
+import { LoadingSpinnerSmall } from "../../components/Loading";
 import isEqual from "lodash.isequal";
 import { omit } from "lodash";
 

@@ -1,7 +1,7 @@
 "use client";
 import { SymbolItem } from "@/app/symbol-search/types";
 import { useEffect, useState } from "react";
-import { LoadingSpinnerSmall } from "./Loading";
+import { LoadingSpinnerSmall } from "../../components/Loading";
 import { XCircleIcon } from "@heroicons/react/24/solid";
 import { fetchDeleteSymbols } from "@/app/symbol-search/controllers/fetchSymbols";
 

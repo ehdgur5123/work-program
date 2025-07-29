@@ -5,6 +5,7 @@ interface CategorySectionProps {
   categories: [string, { sum: number }][];
   selected?: string;
   onSelect: (name: string) => void;
+  style?: string;
 }
 
 export default function CategorySection({
@@ -12,9 +13,11 @@ export default function CategorySection({
   categories,
   selected,
   onSelect,
+  style,
 }: CategorySectionProps) {
+  console.log(categories);
   return (
-    <div className="flex gap-2 h-20 items-center p-2 border-2">
+    <div className={`flex gap-2 h-20 items-center p-2 ${style}`}>
       <p className="p-1 text-lg mr-3 w-20">{label}</p>
       <div className="w-full overflow-x-auto">
         <div className="flex gap-2 whitespace-nowrap">
