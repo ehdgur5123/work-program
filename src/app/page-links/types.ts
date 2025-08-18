@@ -21,3 +21,9 @@ export interface PaginatedLinkResponse {
   total: number;
   totalPages: number;
 }
+
+export interface CategoryProps {
+  selectedLarge: string;
+  selectedMedium: string;
+  selectedSmall: string;
+}

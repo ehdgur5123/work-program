@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import CategorySection from "@/app/page-links/components/CategorySection";
 import useCategory from "@/app/page-links/hooks/useCategory";
+import useIsMobile from "@/app/hooks/useIsMobile";
 
 interface DetailedSearchProps {
   handleCategory: (category: {
@@ -10,16 +11,14 @@ interface DetailedSearchProps {
     selectedSmall: string;
   }) => void;
   resetTrigger: boolean;
-  isMobile: boolean;
 }
 
 export default function DetailedSearch({
   handleCategory,
   resetTrigger,
-  isMobile,
 }: DetailedSearchProps) {
   const [showDetailSearch, setShowDetailSearch] = useState(false);
-
+  const isMobile = useIsMobile();
   const {
     isLoading,
     data,

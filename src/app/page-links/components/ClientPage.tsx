@@ -7,14 +7,19 @@ import { getToLink } from "@/app/page-links/controllers/axiosLink";
 import LoadingSpinner from "@/app/page-links/loading";
 import NextPage from "@/app/page-links/components/NextPage";
 import DetailedSearch from "@/app/page-links/components/DetailedSearch";
-import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/solid";
 import EmptyResult from "@/app/components/EmptyResult";
-import useIsMobile from "@/app/hooks/useIsMobile";
+import ResetButton from "@/app/page-links/components/ResetButton";
 
 type CategoryProps = {
   selectedLarge: string;
   selectedMedium: string;
   selectedSmall: string;
+};
+
+const initialCategory = {
+  selectedLarge: "",
+  selectedMedium: "",
+  selectedSmall: "",
 };
 
 export default function PageLinks() {
@@ -23,23 +28,14 @@ export default function PageLinks() {
   const [searchValue, setSearchValue] = useState("");
   const [pageState, setPageState] = useState(1);
   const [resetFlag, setResetFlag] = useState(false);
-  const isMobile = useIsMobile();
   const [isEmptyResult, setIsEmptyResult] = useState(false);
-  const [category, setCategory] = useState<CategoryProps>({
-    selectedLarge: "",
-    selectedMedium: "",
-    selectedSmall: "",
-  });
+  const [category, setCategory] = useState<CategoryProps>(initialCategory);
 
   // 공통 fetch 함수
   const fetchLinks = async (
     page = 1,
     search = "",
-    category: CategoryProps = {
-      selectedLarge: "",
-      selectedMedium: "",
-      selectedSmall: "",
-    }
+    category: CategoryProps = initialCategory
   ) => {
     const {
       selectedLarge: large,
@@ -56,6 +52,10 @@ export default function PageLinks() {
   }, [category]);
 
   useEffect(() => {
+    fetchLinks(1, searchValue, category);
+  }, [searchValue]);
+
+  useEffect(() => {
     if (totalPages === 0) {
       setIsEmptyResult(true);
     } else {
@@ -63,22 +63,17 @@ export default function PageLinks() {
     }
   }, [totalPages]);
 
-  const resetSearch = () => {
-    setCategory({ selectedLarge: "", selectedMedium: "", selectedSmall: "" });
+  const handleReset = () => {
+    setCategory(initialCategory);
     setPageState(1);
     setSearchValue("");
-    fetchLinks(pageState, searchValue, {
-      selectedLarge: "",
-      selectedMedium: "",
-      selectedSmall: "",
-    });
+    fetchLinks(pageState, searchValue, initialCategory);
     setResetFlag((prev) => !prev);
   };
 
   const handleSearch = async (search: string) => {
     setSearchValue(search);
-    setPageState(1); // 검색 시 1페이지로 초기화
-    await fetchLinks(1, search, category);
+    setPageState(1);
   };
 
   const nextPage = async (page: number) => {
@@ -97,16 +92,13 @@ export default function PageLinks() {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between p-2 gap-3">
-        <button onClick={resetSearch}>
-          <ArrowPathRoundedSquareIcon className="size-8 hover:text-gray-500 active:scale-90" />
-        </button>
+        <ResetButton handleReset={handleReset} />
         <Search handleSearch={handleSearch} />
       </div>
 
       <DetailedSearch
         handleCategory={handleCategory}
         resetTrigger={resetFlag}
-        isMobile={isMobile}
       />
 
       {!isEmptyResult ? <Content links={links.data} /> : <EmptyResult />}

@@ -108,5 +108,16 @@
       "medium": "프론트엔드",
       "small": "코드 실험"
     }
+  },
+  {
+    "url": "https://m.cafe.naver.com/ca-fe/anjun2",
+    "title": "방재기사 블로그",
+    "content": "방재기사 관련 블로그",
+    "logo": "",
+    "category": {
+      "large": "방재",
+      "medium": "방재기사",
+      "small": "블로그"
+    }
   }
 ]
