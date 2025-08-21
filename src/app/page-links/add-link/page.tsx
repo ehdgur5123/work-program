@@ -1,10 +1,11 @@
 "use client";
-
+import axios from "axios";
 import InputForm from "../components/InputForm";
 import useCategory from "@/app/page-links/hooks/useCategory";
 import { useState, useEffect } from "react";
 import useUrlValidation from "../hooks/validation/useUrlValidation";
 import { postToURL } from "../controllers/axiosLink";
+import { LoadingSpinnerSmall } from "@/app/components/Loading";
 
 export default function AddLinkPage() {
   const {
@@ -21,6 +22,8 @@ export default function AddLinkPage() {
 
   const [url, setUrl] = useState("");
   const [hasSubmit, setHasSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", color: "text-black" });
 
   const responseData = {
     URL: url,
@@ -40,11 +43,24 @@ export default function AddLinkPage() {
   const submitUrl = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validationMessage) {
-      alert(validationMessage);
+      setMessage({ text: validationMessage, color: "text-red" });
       return;
     }
     setHasSubmit(!hasSubmit);
-    await postToURL(responseData);
+    setIsLoading(true);
+    try {
+      await postToURL(responseData);
+      setMessage({ text: "추가가 완료되었습니다.", color: "text-green" });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const serverMessage =
+          error?.response?.data?.error || "알 수 없는 오류가 발생했습니다.";
+        setMessage({ text: serverMessage, color: "text-red" });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+
     resetValue();
   };
 
@@ -108,10 +124,9 @@ export default function AddLinkPage() {
           확인
         </button>
       </form>
-      <div>{url}</div>
-      <div>{selectedLarge}</div>
-      <div>{selectedMedium}</div>
-      <div>{selectedSmall}</div>
+      <div className={`text-center mt-3 h-5 ${message.color}-500`}>
+        {isLoading ? <LoadingSpinnerSmall /> : message.text}
+      </div>
     </>
   );
 }

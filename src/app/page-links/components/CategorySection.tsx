@@ -15,7 +15,6 @@ export default function CategorySection({
   onSelect,
   style,
 }: CategorySectionProps) {
-  console.log(categories);
   return (
     <div className={`flex gap-2 h-20 items-center p-2 ${style}`}>
       <p className="p-1 text-lg mr-3 w-20">{label}</p>

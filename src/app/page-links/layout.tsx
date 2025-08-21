@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 export default function LinksLayout({
@@ -8,7 +9,7 @@ export default function LinksLayout({
   return (
     <>
       <h1 className="my-10 mx-auto md:text-7xl text-5xl text-center">
-        인터넷 링크
+        <Link href="/page-links">인터넷 링크</Link>
       </h1>
       <div className="p-5 min-h-[1000px] max-w-4xl mx-auto w-full">
         {children}

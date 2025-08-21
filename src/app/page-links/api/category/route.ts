@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import links from "@/app/page-links/api/links.json";
+// import links from "@/app/page-links/api/links.json";
+import { connectToDatabase } from "@/lib/mongodb";
+import { LinksModel } from "@/app/page-links/models/links";
 
 type CategoryTree = {
   [large: string]: {
@@ -18,7 +20,9 @@ type CategoryTree = {
 };
 
 export async function GET() {
+  await connectToDatabase();
   const category: CategoryTree = {};
+  const links = await LinksModel.find({});
 
   for (const link of links) {
     const { large, medium, small } = link.category;

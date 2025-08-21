@@ -31,7 +31,7 @@ export default function LinkList({ linkData }: LinkListProps) {
           )}
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center mx-auto">
+      <div className="flex-1 flex flex-col items-center justify-center mx-auto">
         <div className=" w-full text-center overflow-hidden line-clamp-1 text-2xl ">
           {linkData.title}
         </div>
