@@ -1,3 +1,4 @@
+"use client";
 import LinkList from "./LinkList";
 import { LinkItem } from "@/app/page-links/types";
 

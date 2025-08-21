@@ -5,13 +5,18 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 interface DropdownProps {
   data: string[];
-  setter?: (value: string) => void;
+  selectedValue?: string;
+  setSelectedValue?: (value: string) => void;
   handleValue?: (item: string) => void;
 }
 
-export default function Dropdown({ data, setter, handleValue }: DropdownProps) {
+export default function Dropdown({
+  data,
+  selectedValue,
+  setSelectedValue,
+  handleValue,
+}: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<string>("선택");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,13 +35,13 @@ export default function Dropdown({ data, setter, handleValue }: DropdownProps) {
     };
   }, []);
 
-  useEffect(() => {
-    setSelected("선택");
-  }, [data]);
+  // useEffect(() => {
+  //   setSelectedValue?.("선택");
+  // }, [data]);
 
   const handleSelect = (item: string) => {
-    setSelected(item); // 버튼 텍스트 업데이트
-    setter?.(item); // 부모로 선택값 전달
+    setSelectedValue?.(item); // 버튼 텍스트 업데이트
+    setSelectedValue?.(item); // 부모로 선택값 전달
     setIsOpen(false); // 목록 닫기
   };
 
@@ -48,7 +53,7 @@ export default function Dropdown({ data, setter, handleValue }: DropdownProps) {
         className="border-2 w-full flex px-2 py-2 items-center justify-center rounded-sm cursor-pointer active:scale-95"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex-1">{selected}</div>{" "}
+        <div className="flex-1">{selectedValue ? selectedValue : "선택"}</div>{" "}
         <ChevronDownIcon className="w-5 h-5" />
       </button>
 

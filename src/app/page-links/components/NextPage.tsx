@@ -1,3 +1,4 @@
+"use client";
 interface MoreLinkProps {
   pages: number;
   currentPage: number;

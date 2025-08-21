@@ -1,16 +1,10 @@
 "use client";
 
 import InputForm from "../components/InputForm";
-import useCategory from "../hooks/useCategory";
+import useCategory from "@/app/page-links/hooks/useCategory";
 import { useState, useEffect } from "react";
-// import useUrlValidation from "../hooks/validation/useUrlValidation";
-
-const INITQUERYVALUE = {
-  URL: "",
-  large: "",
-  medium: "",
-  small: "",
-};
+import useUrlValidation from "../hooks/validation/useUrlValidation";
+import { postToURL } from "../controllers/axiosLink";
 
 export default function AddLinkPage() {
   const {
@@ -25,21 +19,43 @@ export default function AddLinkPage() {
     selectedSmall,
   } = useCategory();
 
-  const [queryValue, setQueryValue] = useState(INITQUERYVALUE);
+  const [url, setUrl] = useState("");
+  const [hasSubmit, setHasSubmit] = useState(false);
 
-  const submitUrl = (e: React.FormEvent<HTMLFormElement>) => {
+  const responseData = {
+    URL: url,
+    large: selectedLarge,
+    medium: selectedMedium,
+    small: selectedSmall,
+  };
+  const { validationMessage } = useUrlValidation(responseData);
+
+  const resetValue = () => {
+    setUrl("");
+    setSelectedLarge("");
+    setSelectedMedium("");
+    setSelectedSmall("");
+  };
+
+  const submitUrl = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setQueryValue(INITQUERYVALUE);
+    if (validationMessage) {
+      alert(validationMessage);
+      return;
+    }
+    setHasSubmit(!hasSubmit);
+    await postToURL(responseData);
+    resetValue();
   };
 
   useEffect(() => {
     setSelectedMedium("");
     setSelectedSmall("");
-  }, [queryValue.large]);
+  }, [selectedLarge]);
 
   useEffect(() => {
     setSelectedSmall("");
-  }, [queryValue.medium]);
+  }, [selectedMedium]);
 
   return (
     <>
@@ -51,48 +67,51 @@ export default function AddLinkPage() {
           <input
             type="text"
             id="URL"
-            value={queryValue.URL}
-            onChange={(e) =>
-              setQueryValue({ ...queryValue, URL: e.target.value })
-            }
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
             className="bg-white flex-1 p-2 border border-gray-300 rounded text-black"
           />
         </div>
         <InputForm
           label="대분류"
           data={largeList}
-          setter={setSelectedLarge}
-          handleValue={(value) =>
-            setQueryValue({ ...queryValue, large: value })
-          }
+          selectedValue={selectedLarge}
+          setSelectedValue={setSelectedLarge}
+          hasSubmit={hasSubmit}
+          handleValue={(value) => {
+            setSelectedLarge(value);
+          }}
         />
         <InputForm
           label="중분류"
           data={mediumList}
-          setter={setSelectedMedium}
-          handleValue={(value) =>
-            setQueryValue({ ...queryValue, medium: value })
-          }
+          parentValue={selectedLarge}
+          selectedValue={selectedMedium}
+          setSelectedValue={setSelectedMedium}
+          hasSubmit={hasSubmit}
+          handleValue={(value) => {
+            setSelectedMedium(value);
+          }}
         />
         <InputForm
           label="소분류"
           data={smallList}
-          setter={setSelectedSmall}
-          handleValue={(value) =>
-            setQueryValue({ ...queryValue, small: value })
-          }
+          parentValue={selectedMedium}
+          selectedValue={selectedSmall}
+          setSelectedValue={setSelectedSmall}
+          hasSubmit={hasSubmit}
+          handleValue={(value) => {
+            setSelectedSmall(value);
+          }}
         />
         <button className="p-2 border-2 text-white rounded-sm text-lg md:text-2xl cursor-pointer hover:bg-gray-500 active:scale-90 w-full">
           확인
         </button>
       </form>
-      <div>{queryValue.URL}</div>
-      <div>{queryValue.large}</div>
-      <div>{queryValue.medium}</div>
-      <div>{queryValue.small}</div>
-      {/* <div>{selectedLarge}</div>
+      <div>{url}</div>
+      <div>{selectedLarge}</div>
       <div>{selectedMedium}</div>
-      <div>{selectedSmall}</div> */}
+      <div>{selectedSmall}</div>
     </>
   );
 }

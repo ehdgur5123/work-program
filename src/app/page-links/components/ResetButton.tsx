@@ -1,3 +1,4 @@
+"use client";
 import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/solid";
 
 interface ResetButtonProps {

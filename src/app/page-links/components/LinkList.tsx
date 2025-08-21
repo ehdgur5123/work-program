@@ -19,7 +19,7 @@ export default function LinkList({ linkData }: LinkListProps) {
     >
       <div className="p-2 h-20 w-20 bg-white rounded-2xl flex justify-center items-center">
         <div>
-          {imageError ? (
+          {imageError || !linkData.logo ? (
             <EyeSlashIcon className="size-8 text-black" />
           ) : (
             <img

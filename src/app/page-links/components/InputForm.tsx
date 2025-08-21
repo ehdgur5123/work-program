@@ -1,31 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Dropdown from "./Dropdown";
 import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 interface InputFormProps {
   label: string;
   data?: string[] | null;
-  setter?: React.Dispatch<React.SetStateAction<string>>;
+  parentValue?: string;
+  selectedValue?: string;
+  setSelectedValue?: React.Dispatch<React.SetStateAction<string>>;
+  hasSubmit: boolean;
   handleValue: (value: string) => void;
 }
 
 export default function InputForm({
   label,
   data,
-  setter,
+  selectedValue,
+  setSelectedValue,
+  hasSubmit,
   handleValue,
+  parentValue,
 }: InputFormProps) {
   const [value, setValue] = useState("");
   const [hasInputClick, setHasInputClick] = useState(false);
 
-  const handleClick = () => {
-    setHasInputClick(!hasInputClick);
-  };
-
   useEffect(() => {
     handleValue(value);
   }, [value]);
+
+  useEffect(() => {
+    setValue("");
+  }, [hasInputClick, hasSubmit]);
+
+  useEffect(() => {
+    setValue("");
+  }, [parentValue]);
 
   return (
     <div className="flex items-center gap-2 min-h-12">
@@ -43,7 +53,8 @@ export default function InputForm({
       ) : data ? (
         <Dropdown
           data={data}
-          setter={setter}
+          selectedValue={selectedValue}
+          setSelectedValue={setSelectedValue}
           handleValue={(item) => setValue(item)}
         />
       ) : null}
@@ -51,12 +62,12 @@ export default function InputForm({
         {!hasInputClick ? (
           <PlusCircleIcon
             className="size-6 cursor-pointer hover:text-gray-500 active:scale-95"
-            onClick={handleClick}
+            onClick={() => setHasInputClick(!hasInputClick)}
           />
         ) : (
           <XCircleIcon
             className="size-6 cursor-pointer hover:text-gray-500 active:scale-95"
-            onClick={handleClick}
+            onClick={() => setHasInputClick(!hasInputClick)}
           />
         )}
       </button>

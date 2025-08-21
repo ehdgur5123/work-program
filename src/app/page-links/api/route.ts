@@ -46,3 +46,21 @@ export async function GET(req: NextRequest) {
     totalPages: Math.ceil(filtered.length / limit),
   });
 }
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { url, category } = body;
+    if (!url) {
+      return NextResponse.json({ error: "URL이 필요합니다." }, { status: 400 });
+    }
+
+    // DB 저장 / 외부 API 호출 / 비즈니스 로직 등 처리
+    console.log("받은 데이터:", { url, category });
+
+    return NextResponse.json({ message: "성공", data: { url, category } });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "서버 에러" }, { status: 500 });
+  }
+}
