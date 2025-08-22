@@ -7,6 +7,7 @@ export interface LinkCategory {
 
 // LinkItem: 개별 링크 정보를 나타냄
 export interface LinkItem {
+  _id: string;
   url: string;
   title: string;
   content: string;
@@ -26,4 +27,10 @@ export interface CategoryProps {
   selectedLarge: string;
   selectedMedium: string;
   selectedSmall: string;
+}
+
+export interface Data {
+  title?: string;
+  content?: string;
+  category?: { large?: string; medium?: string; small?: string };
 }

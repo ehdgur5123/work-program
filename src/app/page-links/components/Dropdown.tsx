@@ -35,10 +35,6 @@ export default function Dropdown({
     };
   }, []);
 
-  // useEffect(() => {
-  //   setSelectedValue?.("선택");
-  // }, [data]);
-
   const handleSelect = (item: string) => {
     setSelectedValue?.(item); // 버튼 텍스트 업데이트
     setSelectedValue?.(item); // 부모로 선택값 전달

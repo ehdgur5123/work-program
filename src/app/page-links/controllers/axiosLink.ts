@@ -50,3 +50,30 @@ export async function postToURL(queryValue: {
   const response = await axios.post(`${SERVER_URL}`, payload);
   return response.data;
 }
+
+export async function deleteToURL(id: string) {
+  try {
+    const response = await axios.delete(`${SERVER_URL}/${id}`);
+    return response.data;
+  } catch (err) {
+    console.error("❌  삭제 실패:", err);
+    return null;
+  }
+}
+
+export async function patchToURL(
+  id: string,
+  data: {
+    title?: string;
+    content?: string;
+    category?: { large?: string; medium?: string; small?: string };
+  }
+) {
+  try {
+    const response = await axios.patch(`${SERVER_URL}/${id}`, data);
+    return response.data;
+  } catch (err) {
+    console.error("❌  수정 실패:", err);
+    return null;
+  }
+}

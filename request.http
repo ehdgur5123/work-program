@@ -1,1 +1,2 @@
-http://naver.com
+DELETE http://localhost:3000/page-links/api/68a6eac504e3065af6577663
+Content-Type: application/json

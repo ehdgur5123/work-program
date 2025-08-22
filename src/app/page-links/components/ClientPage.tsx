@@ -101,7 +101,7 @@ export default function PageLinks() {
         resetTrigger={resetFlag}
       />
 
-      {!isEmptyResult ? <Content links={links.data} /> : <EmptyResult />}
+      {!isEmptyResult ? <Content links={links.data} handleReset={handleReset}/> : <EmptyResult />}
       <NextPage
         pages={totalPages}
         currentPage={links.page}
