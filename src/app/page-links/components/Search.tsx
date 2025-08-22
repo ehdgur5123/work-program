@@ -13,6 +13,8 @@ export default function Search({ handleSearch }: SearchProps) {
     event.preventDefault();
     if (searchValue.length === 0) {
       alert("검색어를 입력하세요.");
+    } else if (searchValue.length >= 50) {
+      alert("글자수는 50자 이내로 작성하세요.");
     } else {
       handleSearch(searchValue);
     }

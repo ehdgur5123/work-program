@@ -10,12 +10,12 @@ interface DetailedSearchProps {
     selectedMedium: string;
     selectedSmall: string;
   }) => void;
-  resetTrigger: boolean;
+  resetFlag: boolean;
 }
 
 export default function DetailedSearch({
   handleCategory,
-  resetTrigger,
+  resetFlag,
 }: DetailedSearchProps) {
   const [showDetailSearch, setShowDetailSearch] = useState(false);
   const isMobile = useIsMobile();
@@ -34,20 +34,15 @@ export default function DetailedSearch({
   } = useCategory();
 
   useEffect(() => {
+    setSelectedLarge("");
+    setSelectedMedium("");
+    setSelectedSmall("");
+  }, [resetFlag]);
+  useEffect(() => {
     if (!isLoading && data) {
       handleCategory({ selectedLarge, selectedMedium, selectedSmall });
     }
   }, [selectedLarge, selectedMedium, selectedSmall, isLoading, data]);
-
-  const resetCategory = () => {
-    setSelectedLarge("");
-    setSelectedMedium("");
-    setSelectedSmall("");
-  };
-
-  useEffect(() => {
-    resetCategory();
-  }, [resetTrigger]);
 
   useEffect(() => {
     if (!isMobile) setShowDetailSearch(true);
