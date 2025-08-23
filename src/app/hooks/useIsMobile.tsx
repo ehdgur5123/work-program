@@ -5,7 +5,12 @@ export default function useIsMobile(breakpoint = 768) {
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= breakpoint);
+      const userAgent = navigator.userAgent.toLowerCase();
+      const mobile =
+        /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(
+          userAgent
+        );
+      setIsMobile(window.innerWidth <= breakpoint || mobile);
     };
 
     checkScreenSize(); // 초기 실행

@@ -45,7 +45,7 @@ export default function DetailedSearch({
   }, [selectedLarge, selectedMedium, selectedSmall, isLoading, data]);
 
   useEffect(() => {
-    if (!isMobile) setShowDetailSearch(true);
+    if (!isMobile) setShowDetailSearch(false);
   }, [isMobile]);
 
   return (

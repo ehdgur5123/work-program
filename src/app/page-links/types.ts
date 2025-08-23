@@ -28,9 +28,3 @@ export interface CategoryProps {
   selectedMedium: string;
   selectedSmall: string;
 }
-
-export interface Data {
-  title?: string;
-  content?: string;
-  category?: { large?: string; medium?: string; small?: string };
-}

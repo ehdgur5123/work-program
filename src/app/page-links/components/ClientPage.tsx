@@ -3,7 +3,7 @@ import Content from "@/app/page-links/components/Content";
 import Search from "@/app/page-links/components/Search";
 import { useState } from "react";
 import { CategoryProps } from "@/app/page-links/types";
-import LoadingSpinner from "@/app/page-links/loading";
+import { LoadingSpinner } from "@/app/components/Loading";
 import NextPage from "@/app/page-links/components/NextPage";
 import DetailedSearch from "@/app/page-links/components/DetailedSearch";
 import EmptyResult from "@/app/components/EmptyResult";

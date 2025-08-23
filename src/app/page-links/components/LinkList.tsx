@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { LinkItem } from "@/app/page-links/types";
 import { EyeSlashIcon } from "@heroicons/react/24/solid";
@@ -8,6 +9,8 @@ import ContextMenu from "@/app/page-links/components/ContextMenu";
 import CorrectionEdit from "@/app/page-links/components/CorrectionEdit";
 import useLinks from "../hooks/useLinks";
 import useDeleteLink from "../hooks/useDeleteLink";
+import useIsMobile from "@/app/hooks/useIsMobile";
+
 interface LinkListProps {
   linkData: LinkItem;
 }
@@ -17,6 +20,7 @@ export default function LinkList({ linkData }: LinkListProps) {
   const [isCorrection, setIsCorrection] = useState(false);
   const { resetFilters } = useLinks();
   const { mutate: deleteToURL } = useDeleteLink();
+
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -26,47 +30,68 @@ export default function LinkList({ linkData }: LinkListProps) {
     y: number;
   } | null>(null);
 
-  // 클릭 바깥에서 메뉴 닫기
   const dropdownRef = useRef<HTMLDivElement>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
+  const correctionRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isMobile = useIsMobile();
 
+  // 클릭/터치 바깥에서 메뉴 닫기
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Node;
 
       const clickedInsideDropdown =
         dropdownRef.current?.contains(target) ?? false;
       const clickedInsideContextMenu =
         contextMenuRef.current?.contains(target) ?? false;
+      const clickedInsideCorrection =
+        correctionRef.current?.contains(target) ?? false;
 
-      if (!clickedInsideDropdown && !clickedInsideContextMenu) {
-        setContextMenu(null); // 바깥쪽 클릭 → 닫기
+      if (
+        !clickedInsideDropdown &&
+        !clickedInsideContextMenu &&
+        !clickedInsideCorrection
+      ) {
+        setContextMenu(null);
+        handleIsCorrection();
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
     };
   }, []);
 
+  // 데스크톱 → 오른쪽 클릭
   const handleContextMenu = (e: React.MouseEvent) => {
+    if (isMobile) return;
     e.preventDefault();
+    setContextMenu(null); // 이전 메뉴 닫기
     setContextMenu({ x: e.pageX, y: e.pageY });
+  };
+
+  // 모바일 → 길게 누르기
+  const handleLongPress = (e: React.TouchEvent) => {
+    e.preventDefault();
+    setContextMenu(null); // 이전 메뉴 닫기
+    const touch = e.touches[0];
+    setContextMenu({ x: touch.pageX, y: touch.pageY });
   };
 
   const handleEdit = () => {
     setContextMenu(null);
-    setEditPosition(contextMenu); // 버튼 오른쪽 살짝 옆
+    setEditPosition(contextMenu);
     setIsCorrection(true);
   };
 
   const handleDelete = async (_id: string) => {
-    console.log("Delete", _id);
-    setContextMenu(null); // 메뉴 닫기
-
+    setContextMenu(null);
     deleteToURL(_id);
-
     resetFilters();
   };
 
@@ -80,7 +105,22 @@ export default function LinkList({ linkData }: LinkListProps) {
         href={linkData.url}
         target="_blank"
         rel="noopener noreferrer"
-        onContextMenu={handleContextMenu}
+        onContextMenu={(e) => {
+          if (isMobile) {
+            e.preventDefault(); // 모바일 기본 메뉴 차단
+          } else {
+            handleContextMenu(e);
+          }
+        }}
+        onTouchStart={(e) => {
+          if (!isMobile) return;
+          e.preventDefault(); // 모바일 기본 메뉴 차단
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+          timeoutRef.current = setTimeout(() => handleLongPress(e), 600);
+        }}
+        onTouchEnd={() => {
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        }}
         className="flex items-center gap-2 border-2 rounded-2xl p-2 w-full hover:bg-gray-500 active:scale-90"
       >
         <div className="p-2 h-20 w-20 bg-white rounded-2xl flex justify-center items-center">
@@ -106,14 +146,14 @@ export default function LinkList({ linkData }: LinkListProps) {
         </div>
       </Link>
 
-      {/* ContextMenu를 body에 포탈로 렌더링 */}
       {contextMenu &&
         createPortal(
           <ContextMenu
             ref={contextMenuRef}
             x={contextMenu.x}
             y={contextMenu.y}
-            onEdit={() => handleEdit()}
+            onEdit={handleEdit}
+            setContextMenu={setContextMenu}
             onDelete={() => handleDelete(linkData._id)}
           />,
           document.body
@@ -121,6 +161,7 @@ export default function LinkList({ linkData }: LinkListProps) {
 
       {isCorrection && editPosition && (
         <CorrectionEdit
+          correctionRef={correctionRef}
           handleIsCorrection={handleIsCorrection}
           linkData={linkData}
           x={editPosition.x}

@@ -3,7 +3,12 @@ import { NextResponse, NextRequest } from "next/server";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "@/lib/mongodb";
 import { LinksModel } from "@/app/page-links/models/links";
-import { Data } from "@/app/page-links/types";
+
+interface Data {
+  title?: string;
+  content?: string;
+  category?: { large?: string; medium?: string; small?: string };
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

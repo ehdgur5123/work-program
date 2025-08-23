@@ -5,12 +5,14 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { LinkItem } from "@/app/page-links/types";
 import { useState } from "react";
 import useUpdateLink from "@/app/page-links/hooks/useUpdateLink";
+import useIsMobile from "@/app/hooks/useIsMobile";
 
 interface CorrectionEditProps {
   x: number;
   y: number;
   handleIsCorrection: () => void;
   linkData: LinkItem;
+  correctionRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export default function CorrectionEdit({
@@ -18,9 +20,11 @@ export default function CorrectionEdit({
   linkData,
   x,
   y,
+  correctionRef,
 }: CorrectionEditProps) {
   const [correctionData, setCorrectionData] = useState<LinkItem>(linkData);
   const { mutate: patchToURL } = useUpdateLink();
+  const isMobile = useIsMobile();
   const submitCorrection = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -53,8 +57,11 @@ export default function CorrectionEdit({
 
   return (
     <div
-      className="border-2 absolute shadow-lg z-50 p-2 rounded-sm bg-black"
-      style={{ top: y, left: x }}
+      ref={correctionRef}
+      className={`border-2 shadow-lg z-50 p-2 rounded-sm bg-black ${
+        isMobile ? "fixed bottom-0 left-0 w-full" : "absolute"
+      }`}
+      style={isMobile ? undefined : { top: y, left: x }}
     >
       <div className="flex items-center justify-end cursor-pointer hover:text-gray-400 active:text-gray-500">
         <button type="button" onClick={handleIsCorrection}>
