@@ -4,13 +4,12 @@ import { LinkItem } from "@/app/page-links/types";
 
 interface LinkListsProps {
   links: LinkItem[];
-  handleReset: () => void;
 }
-export default function LinkLists({ links, handleReset }: LinkListsProps) {
+export default function LinkLists({ links }: LinkListsProps) {
   return (
     <>
       {links.map((item: LinkItem) => (
-        <LinkList linkData={item} key={item._id} handleReset={handleReset} />
+        <LinkList linkData={item} key={item._id} />
       ))}
     </>
   );

@@ -1,5 +1,5 @@
 import axios from "@/lib/axios";
-import { PaginatedLinkResponse } from "../types";
+import { PaginatedLinkResponse, LinkItem } from "../types";
 
 const SERVER_URL = "/page-links/api";
 const LIMIT = 5;
@@ -61,19 +61,15 @@ export async function deleteToURL(id: string) {
   }
 }
 
-export async function patchToURL(
-  id: string,
-  data: {
-    title?: string;
-    content?: string;
-    category?: { large?: string; medium?: string; small?: string };
-  }
-) {
+export async function patchToURL(updatedData: LinkItem) {
   try {
-    const response = await axios.patch(`${SERVER_URL}/${id}`, data);
+    const response = await axios.patch(
+      `${SERVER_URL}/${updatedData._id}`,
+      updatedData
+    );
     return response.data;
   } catch (err) {
-    console.error("❌  수정 실패:", err);
+    console.error("❌ 수정 실패:", err);
     return null;
   }
 }

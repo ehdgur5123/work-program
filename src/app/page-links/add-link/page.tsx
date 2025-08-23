@@ -4,8 +4,8 @@ import InputForm from "../components/InputForm";
 import useCategory from "@/app/page-links/hooks/useCategory";
 import { useState, useEffect } from "react";
 import useUrlValidation from "../hooks/validation/useUrlValidation";
-import { postToURL } from "../controllers/axiosLink";
 import { LoadingSpinnerSmall } from "@/app/components/Loading";
+import useAddLink from "@/app/page-links/hooks/useAddLink";
 
 export default function AddLinkPage() {
   const {
@@ -24,7 +24,7 @@ export default function AddLinkPage() {
   const [hasSubmit, setHasSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ text: "", color: "text-black" });
-
+  const { mutate: postToURL } = useAddLink();
   const responseData = {
     URL: url,
     large: selectedLarge,
@@ -40,7 +40,7 @@ export default function AddLinkPage() {
     setSelectedSmall("");
   };
 
-  const submitUrl = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitUrl = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validationMessage) {
       setMessage({ text: validationMessage, color: "text-red" });
@@ -49,7 +49,7 @@ export default function AddLinkPage() {
     setHasSubmit(!hasSubmit);
     setIsLoading(true);
     try {
-      await postToURL(responseData);
+      postToURL(responseData);
       setMessage({ text: "추가가 완료되었습니다.", color: "text-green" });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

@@ -9,7 +9,7 @@ import DetailedSearch from "@/app/page-links/components/DetailedSearch";
 import EmptyResult from "@/app/components/EmptyResult";
 import ResetButton from "@/app/page-links/components/ResetButton";
 import useLinks from "@/app/page-links/hooks/useLinks";
-import { divide } from "lodash";
+import { Toaster } from "react-hot-toast";
 
 export default function PageLinks() {
   const {
@@ -63,7 +63,7 @@ export default function PageLinks() {
       )}
 
       {totalPages !== 0 ? (
-        <Content links={paginatedLinks?.data ?? []} handleReset={handleReset} />
+        <Content links={paginatedLinks?.data ?? []} />
       ) : (
         <EmptyResult />
       )}
@@ -73,6 +73,7 @@ export default function PageLinks() {
         currentPage={paginatedLinks?.page ?? 1}
         nextPage={nextPage}
       />
+      <Toaster position="bottom-right" reverseOrder={false} />
     </div>
   );
 }

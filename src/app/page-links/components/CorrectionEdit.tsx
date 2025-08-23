@@ -4,13 +4,7 @@ import CorrectionInput from "./CorrectionInput";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { LinkItem } from "@/app/page-links/types";
 import { useState } from "react";
-import { patchToURL } from "@/app/page-links/controllers/axiosLink";
-
-type Data = {
-  title?: string;
-  content?: string;
-  category?: { large?: string; medium?: string; small?: string };
-};
+import useUpdateLink from "@/app/page-links/hooks/useUpdateLink";
 
 interface CorrectionEditProps {
   x: number;
@@ -25,22 +19,12 @@ export default function CorrectionEdit({
   x,
   y,
 }: CorrectionEditProps) {
-  const initData = {
-    title: linkData.title,
-    content: linkData.content,
-    category: {
-      large: linkData.category.large,
-      medium: linkData.category.medium,
-      small: linkData.category.small,
-    },
-  };
-  const [correctionData, setCorrectionData] = useState<Data>(initData);
-
+  const [correctionData, setCorrectionData] = useState<LinkItem>(linkData);
+  const { mutate: patchToURL } = useUpdateLink();
   const submitCorrection = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const res = await patchToURL(linkData._id, correctionData);
-      console.log("수정이 완료 되었습니다.", res);
+      patchToURL(correctionData);
     } catch {
       console.log("수정에 실패 하였습니다.");
     } finally {

@@ -31,7 +31,7 @@ export default function useLinks() {
       return getToLink(pageState, searchValue, large, medium, small);
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 60 * 10,
   });
 
   const resetFilters = () => {

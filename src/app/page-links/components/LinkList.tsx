@@ -6,19 +6,17 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import ContextMenu from "@/app/page-links/components/ContextMenu";
 import CorrectionEdit from "@/app/page-links/components/CorrectionEdit";
-
-import { deleteToURL } from "@/app/page-links/controllers/axiosLink";
-import useCategory from "@/app/page-links/hooks/useCategory";
-
+import useLinks from "../hooks/useLinks";
+import useDeleteLink from "../hooks/useDeleteLink";
 interface LinkListProps {
   linkData: LinkItem;
-  handleReset: () => void;
 }
 
-export default function LinkList({ linkData, handleReset }: LinkListProps) {
+export default function LinkList({ linkData }: LinkListProps) {
   const [imageError, setImageError] = useState(false);
   const [isCorrection, setIsCorrection] = useState(false);
-
+  const { resetFilters } = useLinks();
+  const { mutate: deleteToURL } = useDeleteLink();
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -52,8 +50,6 @@ export default function LinkList({ linkData, handleReset }: LinkListProps) {
     };
   }, []);
 
-  const { largeEntries, mediumEntries, smallEntries } = useCategory();
-
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
     setContextMenu({ x: e.pageX, y: e.pageY });
@@ -69,10 +65,9 @@ export default function LinkList({ linkData, handleReset }: LinkListProps) {
     console.log("Delete", _id);
     setContextMenu(null); // 메뉴 닫기
 
-    const res = await deleteToURL(_id);
+    deleteToURL(_id);
 
-    handleReset();
-    console.log(largeEntries, mediumEntries, smallEntries, res);
+    resetFilters();
   };
 
   const handleIsCorrection = () => {

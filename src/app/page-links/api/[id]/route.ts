@@ -67,7 +67,7 @@ export async function PATCH(
 
     const updated = await LinksModel.findByIdAndUpdate(id, updateData, {
       new: true,
-    });
+    }).lean();
 
     if (!updated) {
       return NextResponse.json(
@@ -75,9 +75,10 @@ export async function PATCH(
         { status: 404 }
       );
     }
+
     revalidatePath("/page-links");
 
-    return NextResponse.json({ message: "수정 성공", updated });
+    return NextResponse.json(updated);
   } catch (error) {
     console.error("PATCH error:", error);
     return NextResponse.json({ error: "수정 실패" }, { status: 500 });

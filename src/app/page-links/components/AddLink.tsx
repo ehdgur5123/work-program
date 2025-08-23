@@ -1,15 +1,25 @@
 "use client";
 
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "@/app/components/Loading";
 
 export default function AddLink() {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   return (
-    <Link
-      href="page-links/add-link"
-      className="h-20 flex items-center justify-center hover:bg-gray-600 rounded-2xl active:scale-90"
+    <button
+      className="h-20 flex items-center justify-center hover:bg-gray-600 rounded-2xl active:scale-90 cursor-pointer"
+      onClick={() => startTransition(() => router.push("/page-links/add-link"))}
     >
       <PlusCircleIcon className="size-12" />
-    </Link>
+      {isPending && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/30">
+          <LoadingSpinner />
+        </div>
+      )}
+    </button>
   );
 }
