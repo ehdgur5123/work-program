@@ -75,14 +75,6 @@ export default function LinkList({ linkData }: LinkListProps) {
     setContextMenu({ x: e.pageX, y: e.pageY });
   };
 
-  // 모바일 → 길게 누르기
-  const handleLongPress = (e: React.TouchEvent) => {
-    e.preventDefault();
-    setContextMenu(null); // 이전 메뉴 닫기
-    const touch = e.touches[0];
-    setContextMenu({ x: touch.pageX, y: touch.pageY });
-  };
-
   const handleEdit = () => {
     setContextMenu(null);
     setEditPosition(contextMenu);
