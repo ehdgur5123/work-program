@@ -33,7 +33,7 @@ export default function LinkList({ linkData }: LinkListProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const correctionRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isMobile = useIsMobile();
 
   // 클릭/터치 바깥에서 메뉴 닫기
@@ -102,21 +102,21 @@ export default function LinkList({ linkData }: LinkListProps) {
   return (
     <>
       <Link
-        href={linkData.url}
+        href="#" // 직접 링크 이동 방지
+        onClick={() => window.open(linkData.url, "_blank")} // 새 창 열기
         target="_blank"
         rel="noopener noreferrer"
         onContextMenu={(e) => {
-          if (isMobile) {
-            e.preventDefault(); // 모바일 기본 메뉴 차단
-          } else {
-            handleContextMenu(e);
-          }
+          if (isMobile) e.preventDefault();
+          else handleContextMenu(e);
         }}
         onTouchStart={(e) => {
           if (!isMobile) return;
           e.preventDefault(); // 모바일 기본 메뉴 차단
           if (timeoutRef.current) clearTimeout(timeoutRef.current);
-          timeoutRef.current = setTimeout(() => handleLongPress(e), 600);
+          timeoutRef.current = setTimeout(() => {
+            setContextMenu({ x: 0, y: 0 }); // 모바일은 위치 무시, 아래쪽 표시
+          }, 600);
         }}
         onTouchEnd={() => {
           if (timeoutRef.current) clearTimeout(timeoutRef.current);
