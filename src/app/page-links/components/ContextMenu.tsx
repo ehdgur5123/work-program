@@ -11,10 +11,12 @@ interface ContextMenuProps {
   setContextMenu: React.Dispatch<
     React.SetStateAction<{ x: number; y: number } | null>
   >;
+  connectionUrl: () => void;
+  title: string;
 }
 
 const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
-  ({ x, y, onEdit, onDelete, setContextMenu }, ref) => {
+  ({ x, y, onEdit, onDelete, setContextMenu, connectionUrl, title }, ref) => {
     const isMobile = useIsMobile();
     return (
       <div
@@ -25,13 +27,25 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
         } bg-white border rounded-xl shadow-lg p-2 z-50 text-black text-center w-2xs`}
       >
         {isMobile ? (
-          <div className="text-end pr-2">
-            <button onClick={() => setContextMenu(null)}>
+          <div className="flex pr-2 relative mb-1">
+            <div className="flex-1">{title}</div>
+            <button
+              className="absolute right-0"
+              onClick={() => setContextMenu(null)}
+            >
               <XMarkIcon className="size-6" />
             </button>
           </div>
         ) : null}
         <div className="flex flex-col gap-1">
+          {isMobile ? (
+            <button
+              onClick={connectionUrl}
+              className="hover:bg-gray-500 p-2 rounded-lg border cursor-pointer active:scale-95"
+            >
+              접속
+            </button>
+          ) : null}
           <button
             onClick={onEdit}
             className="hover:bg-gray-500 p-2 rounded-lg border cursor-pointer active:scale-95"
