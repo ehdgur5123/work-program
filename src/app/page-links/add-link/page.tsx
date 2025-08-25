@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import InputForm from "../components/InputForm";
 import useCategory from "@/app/page-links/hooks/useCategory";
 import { useState, useEffect } from "react";
@@ -58,10 +57,9 @@ export default function AddLinkPage() {
         setHasSubmit(false);
         setIsLoading(false);
       },
-      onError: (error: any) => {
+      onError: () => {
         setMessage({
-          text:
-            error?.response?.data?.error || "알 수 없는 오류가 발생했습니다.",
+          text: "추가에 실패하였습니다.",
           color: "text-red",
         });
         setIsLoading(false);
