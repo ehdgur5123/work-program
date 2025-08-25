@@ -42,26 +42,31 @@ export default function AddLinkPage() {
 
   const submitUrl = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (validationMessage) {
       setMessage({ text: validationMessage, color: "text-red" });
       return;
     }
-    setHasSubmit(!hasSubmit);
-    setIsLoading(true);
-    try {
-      postToURL(responseData);
-      setMessage({ text: "추가가 완료되었습니다.", color: "text-green" });
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage =
-          error?.response?.data?.error || "알 수 없는 오류가 발생했습니다.";
-        setMessage({ text: serverMessage, color: "text-red" });
-      }
-    } finally {
-      setIsLoading(false);
-    }
 
-    resetValue();
+    setIsLoading(true);
+    setHasSubmit(true);
+
+    postToURL(responseData, {
+      onSuccess: () => {
+        setMessage({ text: "추가가 완료되었습니다.", color: "text-green" });
+        resetValue();
+        setHasSubmit(false);
+        setIsLoading(false);
+      },
+      onError: (error: any) => {
+        setMessage({
+          text:
+            error?.response?.data?.error || "알 수 없는 오류가 발생했습니다.",
+          color: "text-red",
+        });
+        setIsLoading(false);
+      },
+    });
   };
 
   useEffect(() => {
