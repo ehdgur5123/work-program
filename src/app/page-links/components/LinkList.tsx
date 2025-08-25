@@ -10,29 +10,34 @@ import CorrectionEdit from "@/app/page-links/components/CorrectionEdit";
 import useLinks from "../hooks/useLinks";
 import useDeleteLink from "../hooks/useDeleteLink";
 import useIsMobile from "@/app/hooks/useIsMobile";
+import HoverTooltip from "./HoverTooltip";
 
 interface LinkListProps {
   linkData: LinkItem;
 }
 
+interface PositionType {
+  x: number;
+  y: number;
+}
 export default function LinkList({ linkData }: LinkListProps) {
   const [imageError, setImageError] = useState(false);
-  const [isCorrection, setIsCorrection] = useState(false);
   const { resetFilters } = useLinks();
   const { mutate: deleteToURL } = useDeleteLink();
 
-  const [contextMenu, setContextMenu] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
-  const [editPosition, setEditPosition] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+  const [contextMenuPosition, setContextMenuPosition] =
+    useState<PositionType | null>(null);
+  const [editPosition, setEditPosition] = useState<PositionType | null>(null);
+  const [contentPosition, setContentPosition] = useState<PositionType | null>(
+    null
+  );
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const correctionRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastMousePosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const isMobile = useIsMobile();
 
   // 클릭/터치 바깥에서 메뉴 닫기
@@ -46,14 +51,17 @@ export default function LinkList({ linkData }: LinkListProps) {
         contextMenuRef.current?.contains(target) ?? false;
       const clickedInsideCorrection =
         correctionRef.current?.contains(target) ?? false;
-
+      const clickedInsideContent =
+        contentRef.current?.contains(target) ?? false;
       if (
         !clickedInsideDropdown &&
         !clickedInsideContextMenu &&
-        !clickedInsideCorrection
+        !clickedInsideCorrection &&
+        !clickedInsideContent
       ) {
-        setContextMenu(null);
-        handleIsCorrection();
+        setContextMenuPosition(null);
+        setEditPosition(null);
+        setContentPosition(null);
       }
     };
 
@@ -67,29 +75,50 @@ export default function LinkList({ linkData }: LinkListProps) {
   const handleContextMenu = (e: React.MouseEvent) => {
     if (isMobile) return;
     e.preventDefault();
-    setContextMenu(null); // 이전 메뉴 닫기
-    setContextMenu({ x: e.pageX, y: e.pageY });
+    setContextMenuPosition(null); // 이전 메뉴 닫기
+    setContextMenuPosition({ x: e.pageX, y: e.pageY });
   };
 
   const handleEdit = () => {
-    setContextMenu(null);
-    setEditPosition(contextMenu);
-    setIsCorrection(true);
+    setContextMenuPosition(null);
+    setEditPosition(contextMenuPosition);
   };
 
   const handleDelete = async (_id: string) => {
-    setContextMenu(null);
+    setContextMenuPosition(null);
     deleteToURL(_id);
     resetFilters();
   };
 
-  const handleIsCorrection = () => {
-    setIsCorrection(false);
-  };
-
-  const connectionUrl = () => {
+  const onConnection = () => {
     window.open(linkData.url, "_blank");
   };
+
+  const handleMouseEnter: React.MouseEventHandler<HTMLAnchorElement> = () => {
+    if (isMobile) return;
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = setTimeout(() => {
+      setContentPosition(lastMousePosRef.current);
+    }, 800);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isMobile) return;
+    // 항상 최신 커서 좌표 저장
+    lastMousePosRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    setContentPosition(null);
+  };
+
+  // 언마운트 시 타이머 정리 (메모리 누수 방지)
+  useEffect(() => {
+    return () => {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    };
+  }, []);
   return (
     <>
       <Link
@@ -97,14 +126,17 @@ export default function LinkList({ linkData }: LinkListProps) {
         onClick={(e) => {
           e.preventDefault();
           if (!isMobile) {
-            connectionUrl();
+            onConnection();
           } else {
-            setContextMenu({ x: 0, y: 0 });
+            setContextMenuPosition({ x: 0, y: 0 });
           }
-        }} // 새 창 열기
+        }}
         target="_blank"
         rel="noopener noreferrer"
         onContextMenu={handleContextMenu}
+        onMouseEnter={handleMouseEnter}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className="flex items-center gap-2 border-2 rounded-2xl p-2 w-full hover:bg-gray-500 active:scale-90"
       >
         <div className="p-2 h-20 w-20 bg-white rounded-2xl flex justify-center items-center">
@@ -130,30 +162,43 @@ export default function LinkList({ linkData }: LinkListProps) {
         </div>
       </Link>
 
-      {contextMenu &&
+      {contextMenuPosition &&
         createPortal(
           <ContextMenu
             ref={contextMenuRef}
-            x={contextMenu.x}
-            y={contextMenu.y}
+            x={contextMenuPosition.x}
+            y={contextMenuPosition.y}
             onEdit={handleEdit}
-            setContextMenu={setContextMenu}
-            connectionUrl={connectionUrl}
+            setContextMenu={setContextMenuPosition}
+            onConnection={onConnection}
             title={linkData.title}
             onDelete={() => handleDelete(linkData._id)}
           />,
           document.body
         )}
 
-      {isCorrection && editPosition && (
-        <CorrectionEdit
-          correctionRef={correctionRef}
-          handleIsCorrection={handleIsCorrection}
-          linkData={linkData}
-          x={editPosition.x}
-          y={editPosition.y}
-        />
-      )}
+      {editPosition &&
+        createPortal(
+          <CorrectionEdit
+            correctionRef={correctionRef}
+            handleIsCorrection={() => setEditPosition(null)}
+            linkData={linkData}
+            x={editPosition.x}
+            y={editPosition.y}
+          />,
+          document.body
+        )}
+
+      {contentPosition &&
+        createPortal(
+          <HoverTooltip
+            contentRef={contentRef}
+            x={contentPosition.x}
+            y={contentPosition.y}
+            content={linkData.content}
+          />,
+          document.body
+        )}
     </>
   );
 }

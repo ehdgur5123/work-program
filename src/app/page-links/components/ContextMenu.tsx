@@ -8,15 +8,15 @@ interface ContextMenuProps {
   y: number;
   onEdit: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onDelete: () => void;
+  onConnection: () => void;
   setContextMenu: React.Dispatch<
     React.SetStateAction<{ x: number; y: number } | null>
   >;
-  connectionUrl: () => void;
   title: string;
 }
 
 const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
-  ({ x, y, onEdit, onDelete, setContextMenu, connectionUrl, title }, ref) => {
+  ({ x, y, onEdit, onDelete, onConnection, setContextMenu, title }, ref) => {
     const isMobile = useIsMobile();
     return (
       <div
@@ -40,7 +40,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
         <div className="flex flex-col gap-1">
           {isMobile ? (
             <button
-              onClick={connectionUrl}
+              onClick={onConnection}
               className="hover:bg-gray-500 p-2 rounded-lg border cursor-pointer active:scale-95"
             >
               접속
