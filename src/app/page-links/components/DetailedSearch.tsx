@@ -44,10 +44,6 @@ export default function DetailedSearch({
     }
   }, [selectedLarge, selectedMedium, selectedSmall, isLoading, data]);
 
-  useEffect(() => {
-    if (!isMobile) setShowDetailSearch(false);
-  }, [isMobile]);
-
   return (
     <>
       {isMobile ? (
@@ -58,7 +54,7 @@ export default function DetailedSearch({
           DETAIL SEARCH
         </button>
       ) : null}
-      {showDetailSearch && data && (
+      {(isMobile ? showDetailSearch : true) && data && (
         <div
           className={
             isMobile

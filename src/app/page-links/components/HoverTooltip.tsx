@@ -21,7 +21,7 @@ export default function HoverTooltip({
         left: x,
         transform: "translate(12px, -12px)",
       }}
-      className="bg-black text-white text-2xl p-2 rounded-md shadow-md"
+      className="bg-black text-white text-xl max-w-lg p-2 rounded-md shadow-md"
     >
       {content.length === 0 ? "설명이 없습니다." : content}
     </div>
