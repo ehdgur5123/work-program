@@ -12,6 +12,9 @@ export default function Home() {
         <Link href="/page-links" className={linkStyle}>
           인터넷 링크
         </Link>
+        <Link href="/disaster-map" className={linkStyle}>
+          재난 지도
+        </Link>
       </div>
     </div>
   );

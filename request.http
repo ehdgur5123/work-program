@@ -1,2 +1,15 @@
-DELETE http://localhost:3000/page-links/api/68a6eac504e3065af6577663
-Content-Type: application/json
+### 산사태우려지역 API 호출
+GET https://www.safetydata.go.kr/V2/api/DSSP-IF-10694
+    ?serviceKey=3R5AE60OJR72X7A6
+    &numOfRows=10
+    &pageNo=1
+    &returnType=json
+
+### MapBox 지오코딩 API
+GET https://api.mapbox.com/search/geocode/v6/forward?q=서울&access_token=pk.eyJ1IjoiZWhkZ3VyMzUwNiIsImEiOiJjbWVyMXBlMjcwMXd6MmxwdGowcnowaTkzIn0.e-ckpTz5GO5mqwVgMeByMA&language=ko
+
+### Mapbox 역지오 API
+GET https://api.mapbox.com/search/geocode/v6/reverse?longitude=126.978&latitude=37.5665&language=ko&access_token=pk.eyJ1IjoiZWhkZ3VyMzUwNiIsImEiOiJjbWVyMXBlMjcwMXd6MmxwdGowcnowaTkzIn0.e-ckpTz5GO5mqwVgMeByMA&country=KR
+
+### 침수흔적도 API 호출(총 38003개, EPSG:3857)
+GET https://www.safetydata.go.kr/V2/api/DSSP-IF-00117?serviceKey=12FBXYOCU912G46K&numOfRows=1&returnType=JSON&pageNo=1
