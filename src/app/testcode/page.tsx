@@ -23,14 +23,14 @@ type FloodBodyItem = {
 };
 
 type floodDataType = {
-  header: {};
+  header: object;
   numOfRows: number;
   pageNo: number;
   totalCount: number;
   body: FloodBodyItem[];
 };
 
-export default function testcode() {
+export default function TestcodePage() {
   const [floodData, setFloodData] = useState<floodDataType | undefined>();
 
   useEffect(() => {

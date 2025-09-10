@@ -1,15 +1,19 @@
 // app/api/symbols/route.ts
 import { connectToDatabase } from "@/lib/mongodb";
 import { SymbolModel } from "@/app/symbol-search/models/symbol";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function GET() {
-  await connectToDatabase();
-  const symbols = await SymbolModel.find({});
+  try {
+    await connectToDatabase();
+    const symbols = await SymbolModel.find({});
+    revalidatePath("/symbols");
 
-  const res = NextResponse.json(symbols);
-  res.headers.set("Access-Control-Allow-Origin", "*"); // 모든 도메인 허용 (필요 시 조절)
-  revalidatePath("/symbols");
-  return res;
+    return NextResponse.json(symbols, { status: 200 });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Internal Server Error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
