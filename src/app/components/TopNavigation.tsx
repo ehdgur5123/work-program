@@ -6,7 +6,7 @@ import LoginButton from "./LoginButton";
 
 export default function TopNavigation() {
   return (
-    <div className="h-20 md:h-28 sticky top-0 z-50 w-full bg-black mb-20">
+    <div className="h-20 md:h-28 sticky top-0 z-50 w-full bg-black">
       <header className="max-w-6xl min-w-80 mx-auto flex justify-between items-center h-full">
         <Link href="/">
           <h1 className=" hover:text-gray-500 active:scale-90">

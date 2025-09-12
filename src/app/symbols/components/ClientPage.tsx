@@ -9,6 +9,7 @@ import SymbolItemList from "@/app/symbols/components/SymbolItemList";
 import { LoadingSpinner } from "@/app/components/Loading";
 import useIsMobile from "@/app/hooks/useIsMobile";
 import { SymbolItemType } from "@/app/symbols/types";
+import SideBar from "./SideBar";
 
 interface InitialDataProps {
   initialData?: SymbolItemType[];
@@ -42,29 +43,40 @@ export default function ClientPage({ initialData = [] }: InitialDataProps) {
   }
 
   return (
-    <div>
-      <h1 className="text-5xl text-center p-2 m-10">기호검색</h1>
+    <div className="flex flex-row">
+      <div className="flex-1 relative">
+        <h1 className="text-5xl text-center p-2 m-10">기호검색</h1>
+        <div
+          className={`flex flex-col gap-2 ${
+            isMobile ? "mx-3" : "w-3xl mx-auto"
+          }`}
+        >
+          <div className="flex flex-row justify-end">
+            <Search
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              handleSubmit={handleSubmit}
+              mode={mode}
+            />
+          </div>
 
-      <div
-        className={`flex flex-col gap-2 ${isMobile ? "mx-3" : "w-3xl mx-auto"}`}
-      >
-        <div className="flex flex-row justify-end">
-          <Search
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-            handleSubmit={handleSubmit}
-            mode={mode}
-          />
+          {/* 백그라운드 refetch 중일 때 얕은 알림 */}
+          {isFetching && (
+            <div className="text-sm text-gray-500 mb-2">
+              데이터 업데이트 중…
+            </div>
+          )}
+
+          <SymbolItemList symbolItemList={filteredData} />
         </div>
-
-        {/* 백그라운드 refetch 중일 때 얕은 알림 */}
-        {isFetching && (
-          <div className="text-sm text-gray-500 mb-2">데이터 업데이트 중…</div>
-        )}
-
-        <SymbolItemList symbolItemList={filteredData} />
+        <button type="button" className=" top-30 right-0 sticky self-start">
+          버튼임
+        </button>
+        <div className="h-20"></div>
       </div>
-      <div className="h-20"></div>
+      <div className="w-1/3 bg-amber-700">
+        <SideBar />
+      </div>
     </div>
   );
 }
