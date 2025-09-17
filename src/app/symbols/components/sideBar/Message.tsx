@@ -19,5 +19,5 @@ export default function Message() {
     }
   }, [message]);
 
-  return <div className={`h-6 text-center ${color}`}>{message.text}</div>;
+  return <div className={`text-center ${color}`}>{message.text}</div>;
 }

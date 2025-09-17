@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+
+// 기호 클릭 시, 해당 기호를 복사하는 커스텀훅
 export default function useCopySymbol() {
   const [copyData, setCopyData] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{

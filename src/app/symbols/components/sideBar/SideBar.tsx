@@ -13,6 +13,7 @@ export default function SideBar() {
   const [selectedTab, setSelectedTab] = useState("정보");
   const symbolData = useSymbolStore((state) => state.symbolData);
 
+  // 다른 기호 선택 시, 메시지 초기화
   useEffect(() => {
     useMessageStore.getState().clearMessage();
   }, [symbolData]);

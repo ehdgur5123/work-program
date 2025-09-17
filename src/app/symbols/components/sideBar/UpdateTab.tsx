@@ -4,7 +4,10 @@ import { SymbolItemType } from "@/app/symbols/types";
 import DetailToInfo from "@/app/symbols/components/sideBar/DetailToInfo";
 import NameList from "./NameList";
 import { useEffect, useState } from "react";
-import nameValidation from "@/app/symbols/lib/validation/nameValidation";
+import {
+  nameAddValidation,
+  nameDeleteValidation,
+} from "@/app/symbols/lib/validation/updateValidation";
 import Message from "./Message";
 import { useMessageStore } from "../../hooks/useMessageStore";
 
@@ -15,24 +18,59 @@ interface UpdateTabProps {
 export default function UpdateTab({ symbolData }: UpdateTabProps) {
   const [addNameValue, setAddNameValue] = useState("");
   const [submitNameList, setSubmitNameList] = useState(symbolData.name);
+  const [submitCodeList, setSubmitCodeList] = useState({
+    unicode: symbolData.unicode,
+    html: symbolData.html,
+    code: symbolData.code,
+  });
+  const [updatedSymbol, setUpdatedSymbol] =
+    useState<SymbolItemType>(symbolData);
+
   const { setMessage } = useMessageStore();
 
+  // 기호이름 추가 함수
   const handleAddNameClick = () => {
-    const validation = nameValidation(submitNameList, addNameValue);
+    const validation = nameAddValidation(submitNameList, addNameValue);
     setMessage(validation);
     if (validation.state === "error") return;
     setSubmitNameList((prev) => [...prev, addNameValue]);
     setAddNameValue("");
   };
 
+  // 기호이름 삭제 함수
   const handleDeleteNameClick = (deleteName: string) => {
+    const validation = nameDeleteValidation(deleteName);
+    setMessage(validation);
+    if (validation.state === "error") return;
     setSubmitNameList((prev) => prev.filter((name) => name !== deleteName));
   };
 
+  // 다른기호 선택시 상태 초기화
   useEffect(() => {
     setSubmitNameList(symbolData.name);
+    setUpdatedSymbol(symbolData);
     setAddNameValue("");
   }, [symbolData]);
+
+  // 기호이름 변경 시, 서버에 전송할 updatedSymbol 업데이트
+  useEffect(() => {
+    setUpdatedSymbol((prev) => ({ ...prev, name: submitNameList }));
+  }, [submitNameList]);
+
+  // 기호 코드들 변경 시, 서버에 전송할 updatedSymbol 업데이트
+  useEffect(() => {
+    setUpdatedSymbol((prev) => ({
+      ...prev,
+      code: submitCodeList.code,
+      unicode: submitCodeList.unicode,
+      html: submitCodeList.html,
+    }));
+  }, [submitCodeList]);
+
+  // 서버에 전송
+  const handleSubmit = () => {
+    console.log(updatedSymbol);
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -48,18 +86,27 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
               value={symbolData?.unicode}
               element="input"
               dependencyData={symbolData}
+              onChange={(newValue) =>
+                setSubmitCodeList((prev) => ({ ...prev, unicode: newValue }))
+              }
             />
             <DetailToInfo
               label="HTML"
               value={symbolData?.html}
               element="input"
               dependencyData={symbolData}
+              onChange={(newValue) =>
+                setSubmitCodeList((prev) => ({ ...prev, html: newValue }))
+              }
             />
             <DetailToInfo
               label="윈도우코드"
               value={symbolData?.code}
               element="input"
               dependencyData={symbolData}
+              onChange={(newValue) =>
+                setSubmitCodeList((prev) => ({ ...prev, code: newValue }))
+              }
             />
           </div>
         </div>
@@ -68,7 +115,6 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
           isEditable={true}
           onDelete={handleDeleteNameClick}
         />
-
         <div className="flex flex-row gap-2 p-2">
           <input
             type="text"
@@ -90,13 +136,17 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
           >
             추가
           </button>
-        </div>
+        </div>{" "}
+      </div>
+      <div className="h-6">
         <Message />
       </div>
+
       <div className="flex flex-col gap-3 items-center justify-center mx-10">
         <button
           type="button"
           className="p-2 rounded-2xl w-full mx-auto bg-blue-400 cursor-pointer"
+          onClick={handleSubmit}
         >
           저장
         </button>

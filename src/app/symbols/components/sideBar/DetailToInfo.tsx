@@ -8,6 +8,7 @@ interface SymbolInfoProps {
   value?: string;
   element?: "div" | "input";
   dependencyData?: SymbolItemType | null;
+  onChange?: (newValue: string) => void;
 }
 
 export default function InfoToSymbol({
@@ -15,12 +16,21 @@ export default function InfoToSymbol({
   value,
   element,
   dependencyData,
+  onChange,
 }: SymbolInfoProps) {
   const [inputValue, setInputValue] = useState(value);
 
+  // 다른 기호 선택 시, inputValue값 초기화
   useEffect(() => {
     setInputValue(value);
   }, [dependencyData]);
+
+  // input값 변경 시, 부모 컴포넌트로 데이터 전달 handler
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    onChange?.(newValue);
+  };
 
   return (
     <div className="flex gap-2 w-64">
@@ -30,7 +40,7 @@ export default function InfoToSymbol({
           type="text"
           className="flex-1 bg-white py-1 px-2 w-40 text-black"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleChange}
         />
       ) : (
         <div className="flex-1 border py-1 px-2 truncate w-2/3">{value}</div>
