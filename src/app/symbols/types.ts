@@ -6,3 +6,8 @@ export interface SymbolItemType {
   name: string[];
   code: string;
 }
+
+export interface MessageType {
+  text: string;
+  state: "success" | "error" | "warning" | "";
+}

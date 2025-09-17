@@ -2,7 +2,7 @@
 
 import { SymbolItemType } from "@/app/symbols/types";
 import useCopySymbol from "../hooks/useCopySymbol";
-import Tooltip from "../components/Tooltip";
+import CopyTooltip from "./CopyTooltip";
 import { useSymbolStore } from "../hooks/useSymbolStore";
 interface SymbolItemProps {
   data: SymbolItemType;
@@ -23,7 +23,7 @@ export default function SymbolItem({ data }: SymbolItemProps) {
       <div className="text-2xl">{data.symbol}</div>
       <div className="text-sm">{data.code}</div>
       {copyData && tooltipPosition && (
-        <Tooltip tooltipPosition={tooltipPosition} text="Copyed" />
+        <CopyTooltip tooltipPosition={tooltipPosition} text="Copyed" />
       )}
     </div>
   );
