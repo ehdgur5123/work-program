@@ -17,12 +17,6 @@ interface UpdateTabProps {
 
 export default function UpdateTab({ symbolData }: UpdateTabProps) {
   const [addNameValue, setAddNameValue] = useState("");
-  const [submitNameList, setSubmitNameList] = useState(symbolData.name);
-  const [submitCodeList, setSubmitCodeList] = useState({
-    unicode: symbolData.unicode,
-    html: symbolData.html,
-    code: symbolData.code,
-  });
   const [updatedSymbol, setUpdatedSymbol] =
     useState<SymbolItemType>(symbolData);
 
@@ -30,10 +24,13 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
 
   // 기호이름 추가 함수
   const handleAddNameClick = () => {
-    const validation = nameAddValidation(submitNameList, addNameValue);
+    const validation = nameAddValidation(updatedSymbol.name, addNameValue);
     setMessage(validation);
     if (validation.state === "error") return;
-    setSubmitNameList((prev) => [...prev, addNameValue]);
+    setUpdatedSymbol((prev) => ({
+      ...prev,
+      name: [...prev.name, addNameValue],
+    }));
     setAddNameValue("");
   };
 
@@ -42,30 +39,17 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
     const validation = nameDeleteValidation(deleteName);
     setMessage(validation);
     if (validation.state === "error") return;
-    setSubmitNameList((prev) => prev.filter((name) => name !== deleteName));
+    setUpdatedSymbol((prev) => ({
+      ...prev,
+      name: prev.name.filter((name) => name !== deleteName),
+    }));
   };
 
   // 다른기호 선택시 상태 초기화
   useEffect(() => {
-    setSubmitNameList(symbolData.name);
     setUpdatedSymbol(symbolData);
     setAddNameValue("");
   }, [symbolData]);
-
-  // 기호이름 변경 시, 서버에 전송할 updatedSymbol 업데이트
-  useEffect(() => {
-    setUpdatedSymbol((prev) => ({ ...prev, name: submitNameList }));
-  }, [submitNameList]);
-
-  // 기호 코드들 변경 시, 서버에 전송할 updatedSymbol 업데이트
-  useEffect(() => {
-    setUpdatedSymbol((prev) => ({
-      ...prev,
-      code: submitCodeList.code,
-      unicode: submitCodeList.unicode,
-      html: submitCodeList.html,
-    }));
-  }, [submitCodeList]);
 
   // 서버에 전송
   const handleSubmit = () => {
@@ -83,35 +67,35 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
             <DetailToInfo label="ID" value={symbolData?._id} />
             <DetailToInfo
               label="유니코드"
-              value={symbolData?.unicode}
+              value={updatedSymbol?.unicode}
               element="input"
               dependencyData={symbolData}
               onChange={(newValue) =>
-                setSubmitCodeList((prev) => ({ ...prev, unicode: newValue }))
+                setUpdatedSymbol((prev) => ({ ...prev, unicode: newValue }))
               }
             />
             <DetailToInfo
               label="HTML"
-              value={symbolData?.html}
+              value={updatedSymbol?.html}
               element="input"
               dependencyData={symbolData}
               onChange={(newValue) =>
-                setSubmitCodeList((prev) => ({ ...prev, html: newValue }))
+                setUpdatedSymbol((prev) => ({ ...prev, html: newValue }))
               }
             />
             <DetailToInfo
               label="윈도우코드"
-              value={symbolData?.code}
+              value={updatedSymbol?.code}
               element="input"
               dependencyData={symbolData}
               onChange={(newValue) =>
-                setSubmitCodeList((prev) => ({ ...prev, code: newValue }))
+                setUpdatedSymbol((prev) => ({ ...prev, code: newValue }))
               }
             />
           </div>
         </div>
         <NameList
-          nameList={submitNameList}
+          nameList={updatedSymbol?.name}
           isEditable={true}
           onDelete={handleDeleteNameClick}
         />
@@ -136,7 +120,7 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
           >
             추가
           </button>
-        </div>{" "}
+        </div>
       </div>
       <div className="h-6">
         <Message />

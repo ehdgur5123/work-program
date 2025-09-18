@@ -9,14 +9,14 @@ import { useSymbolStore } from "@/app/symbols/hooks/useSymbolStore";
 import { useMessageStore } from "@/app/symbols/hooks/useMessageStore";
 
 export default function SideBar() {
-  const tabList = ["정보", "생성", "수정·삭제"];
+  const tabList = ["정보", "수정·삭제", "생성"];
   const [selectedTab, setSelectedTab] = useState("정보");
   const symbolData = useSymbolStore((state) => state.symbolData);
 
   // 다른 기호 선택 시, 메시지 초기화
   useEffect(() => {
     useMessageStore.getState().clearMessage();
-  }, [symbolData]);
+  }, [symbolData, selectedTab]);
 
   return (
     <div className="sticky flex flex-col p-5 top-[14%] min-w-[400px]">
@@ -31,18 +31,21 @@ export default function SideBar() {
         ))}
       </div>
       <div className="h-[630px] border">
-        {!symbolData && (
+        {!symbolData && selectedTab !== "생성" && (
           <div className="flex items-center justify-center text-4xl h-full">
             기호를 선택해주세요.
           </div>
         )}
+
         {symbolData && selectedTab === "정보" && (
           <InformationTab symbolData={symbolData} />
         )}
-        {symbolData && selectedTab === "생성" && <CreateTab />}
+
         {symbolData && selectedTab === "수정·삭제" && (
           <UpdateTab symbolData={symbolData} />
         )}
+
+        {selectedTab === "생성" && <CreateTab />}
       </div>
     </div>
   );

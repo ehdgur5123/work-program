@@ -41,6 +41,7 @@ export default function InfoToSymbol({
           className="flex-1 bg-white py-1 px-2 w-40 text-black"
           value={inputValue}
           onChange={handleChange}
+          maxLength={10}
         />
       ) : (
         <div className="flex-1 border py-1 px-2 truncate w-2/3">{value}</div>
