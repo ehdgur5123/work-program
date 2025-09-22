@@ -25,7 +25,7 @@ export default function ClientPage({ initialData = [] }: InitialDataProps) {
     queryKey: ["symbols"],
     queryFn: getSymbols,
     initialData,
-    staleTime: 1000 * 60 * 5, // 5분 동안 stale 처리 (필요 시 조절)
+    staleTime: 1000 * 60 * 60 * 24,
     refetchOnWindowFocus: false, // 필요하면 true로
   });
 

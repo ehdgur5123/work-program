@@ -13,3 +13,15 @@ GET https://api.mapbox.com/search/geocode/v6/reverse?longitude=126.978&latitude=
 
 ### 침수흔적도 API 호출(총 38003개, EPSG:3857)
 GET https://www.safetydata.go.kr/V2/api/DSSP-IF-00117?serviceKey=12FBXYOCU912G46K&numOfRows=1&returnType=JSON&pageNo=1
+
+### Symbol 삭제 요청
+DELETE http://localhost:3000/symbols/api/68cbda7fae9eb2db73b18f8d
+
+### Symbol 수정 요청
+PATCH http://localhost:3000/symbols/api/68ce6e20c95a7290f2d014ce
+Content-Type: application/json
+
+{
+  "html": "새 이름",
+  "code": "5342"
+}

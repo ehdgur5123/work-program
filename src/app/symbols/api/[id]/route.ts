@@ -28,8 +28,33 @@ export async function DELETE(
 
   try {
     await connectToDatabase();
-    const symbols = await SymbolModel.deleteOne({ _id: id });
-    return NextResponse.json(symbols, { status: 200 });
+    const symbol = await SymbolModel.deleteOne({ _id: id });
+    return NextResponse.json(symbol, { status: 200 });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Internal Server Error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const body = await req.json();
+
+  try {
+    await connectToDatabase();
+    const symbol = await SymbolModel.findByIdAndUpdate(
+      id,
+      { $set: body },
+      { new: true }
+    );
+    if (!symbol) {
+      return NextResponse.json({ error: "Symbol not found" }, { status: 404 });
+    }
+    return NextResponse.json(symbol, { status: 200 });
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message : "Internal Server Error";

@@ -1,4 +1,4 @@
-import { MessageType } from "@/app/symbols/types";
+import { MessageType, SymbolItemType } from "@/app/symbols/types";
 
 export function nameAddValidation(
   submitNameList: string[],
@@ -14,4 +14,28 @@ export function nameAddValidation(
 export function nameDeleteValidation(deleteName: string): MessageType {
   if (!deleteName) return { text: "알 수 없는 에러!", state: "error" };
   return { text: "삭제가 완료되었습니다.", state: "success" };
+}
+
+export function symbolUpdateValidation(
+  initialSymbolData: SymbolItemType,
+  updatedSymbolData: SymbolItemType
+): MessageType {
+  if (initialSymbolData === updatedSymbolData)
+    return { text: "변경사항이 없습니다.", state: "error" };
+
+  const requiredFields: ("code" | "html" | "unicode")[] = [
+    "code",
+    "html",
+    "unicode",
+  ];
+
+  const emptyField = requiredFields.find(
+    (field) => updatedSymbolData[field].trim().length === 0
+  );
+
+  if (emptyField) {
+    return { text: `${emptyField}에 값이 없습니다.`, state: "error" };
+  }
+
+  return { text: "수정이 완료되었습니다.", state: "success" };
 }

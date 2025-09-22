@@ -30,18 +30,18 @@ export default function InfoToSymbol({
   };
 
   return (
-    <div className="flex gap-2 w-64">
-      <div className="border w-1/3 text-center p-1">{label}</div>
+    <div className="flex gap-2 w-60">
+      <div className="border w-2/5 text-center p-1">{label}</div>
       {element === "input" ? (
         <input
           type="text"
-          className="flex-1 bg-white py-1 px-2 w-40 text-black"
+          className="flex-1 bg-white py-1 px-2 w-2/5 text-black"
           value={inputValue}
           onChange={handleChange}
           maxLength={10}
         />
       ) : (
-        <div className="flex-1 border py-1 px-2 truncate w-2/3">{value}</div>
+        <div className="flex-1 border py-1 px-2 truncate w-3/5">{value}</div>
       )}
     </div>
   );
