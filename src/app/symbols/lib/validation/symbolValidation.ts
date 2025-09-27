@@ -39,3 +39,22 @@ export function symbolUpdateValidation(
 
   return { text: "수정이 완료되었습니다.", state: "success" };
 }
+
+export function symbolCreateValidation(
+  createdSymbolData: SymbolItemType,
+  symbolDataList: SymbolItemType[]
+): MessageType {
+  if (createdSymbolData.symbol === "") {
+    return { text: "기호는 필수값입니다.", state: "error" };
+  }
+
+  if (
+    symbolDataList.some((item) =>
+      item.symbol.includes(createdSymbolData.symbol)
+    )
+  ) {
+    return { text: "이미 존재하는 기호입니다.", state: "error" };
+  }
+
+  return { text: "생성이 완료되었습니다.", state: "success" };
+}

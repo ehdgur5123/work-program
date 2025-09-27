@@ -8,8 +8,9 @@ import CrudButton from "../sideBar/CrudButton";
 import { useSymbolStore } from "@/app/symbols/hooks/useSymbolStore";
 import useDeleteSymbol from "@/app/symbols/hooks/useDeleteSymbol";
 import useUpdateSymbol from "@/app/symbols/hooks/useUpdateSymbol";
-import { symbolUpdateValidation } from "@/app/symbols/lib/validation/updateValidation";
+import { symbolUpdateValidation } from "@/app/symbols/lib/validation/symbolValidation";
 import { useMessageStore } from "../../hooks/useMessageStore";
+
 interface UpdateTabProps {
   symbolData: SymbolItemType;
 }
@@ -17,10 +18,12 @@ interface UpdateTabProps {
 export default function UpdateTab({ symbolData }: UpdateTabProps) {
   const [updatedSymbol, setUpdatedSymbol] =
     useState<SymbolItemType>(symbolData);
-  const { mutate: deleteSymbolMutate, isPending } = useDeleteSymbol();
-  const { mutate: updateSymbolMutate, data: updatedSymbolData } =
+  const { mutate: deleteSymbolMutate, isPending: isPendingDelete } =
+    useDeleteSymbol();
+  const { mutate: updateSymbolMutate, isPending: isPendingUpdate } =
     useUpdateSymbol();
   const { setMessage } = useMessageStore();
+  const setSymbolData = useSymbolStore((state) => state.setSymbolData);
 
   useEffect(() => {
     setUpdatedSymbol(symbolData);
@@ -49,13 +52,19 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
             : newVal !== oldVal;
 
         if (changed) {
-          patchData[key] = newVal as any;
-          console.log(`업데이트: ${key} =`, newVal, "(기존:", oldVal, ")");
+          if (key === "name") {
+            patchData[key] = newVal as string[];
+          } else {
+            patchData[key] = newVal as string;
+          }
         }
       });
-    console.log(patchData);
+
     // 3. mutation 호출
-    updateSymbolMutate({ id: symbolData._id, data: patchData });
+    updateSymbolMutate(
+      { id: symbolData._id, data: patchData },
+      { onSuccess: (data) => setSymbolData(data) }
+    );
   };
 
   // 서버에 삭제 요청
@@ -78,12 +87,17 @@ export default function UpdateTab({ symbolData }: UpdateTabProps) {
         <Message />
       </div>
       <div className="flex flex-col gap-3 items-center justify-center mx-10">
-        <CrudButton text="저장" handleClick={handleSubmit} color="blue" />
         <CrudButton
-          text={!isPending ? "삭제" : "삭제 중..."}
+          text={!isPendingUpdate ? "저장" : "저장 중..."}
+          handleClick={handleSubmit}
+          color={!isPendingUpdate ? "blue" : "gray"}
+          disabled={!isPendingUpdate ? false : true}
+        />
+        <CrudButton
+          text={!isPendingDelete ? "삭제" : "삭제 중..."}
           handleClick={handleDelete}
-          color={!isPending ? "red" : "gray"}
-          disabled={!isPending ? false : true}
+          color={!isPendingDelete ? "red" : "gray"}
+          disabled={!isPendingDelete ? false : true}
         />
       </div>
     </div>

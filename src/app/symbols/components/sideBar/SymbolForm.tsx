@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import {
   nameAddValidation,
   nameDeleteValidation,
-} from "@/app/symbols/lib/validation/updateValidation";
+} from "@/app/symbols/lib/validation/symbolValidation";
 
 interface SymbolFormProps {
   symbolData: SymbolItemType;

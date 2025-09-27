@@ -9,6 +9,8 @@ export interface SymbolItemType {
 
 export type updatedSymbolItemType = Partial<Omit<SymbolItemType, "_id">>;
 
+export type createSymbolItemType = Omit<SymbolItemType, "_id">;
+
 export interface MessageType {
   text: string;
   state: "success" | "error" | "warning" | "";

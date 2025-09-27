@@ -1,5 +1,8 @@
 import axios from "@/lib/axios";
-import { updatedSymbolItemType } from "@/app/symbols/types";
+import {
+  updatedSymbolItemType,
+  createSymbolItemType,
+} from "@/app/symbols/types";
 const URL = "/symbols/api";
 
 export async function getSymbols() {
@@ -17,5 +20,10 @@ export async function patchSymbol(
   updatedSymbol: updatedSymbolItemType
 ) {
   const res = await axios.patch(`${URL}/${id}`, updatedSymbol);
+  return res.data;
+}
+
+export async function postSymbol(createdSymbol: createSymbolItemType) {
+  const res = await axios.post(URL, createdSymbol);
   return res.data;
 }

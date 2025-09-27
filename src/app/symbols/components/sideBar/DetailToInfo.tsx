@@ -36,7 +36,7 @@ export default function InfoToSymbol({
         <input
           type="text"
           className="flex-1 bg-white py-1 px-2 w-2/5 text-black"
-          value={inputValue}
+          value={inputValue ?? ""}
           onChange={handleChange}
           maxLength={10}
         />

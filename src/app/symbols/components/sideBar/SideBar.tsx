@@ -16,7 +16,7 @@ export default function SideBar() {
   // 다른 기호 선택 시, 메시지 초기화
   useEffect(() => {
     useMessageStore.getState().clearMessage();
-  }, [symbolData, selectedTab]);
+  }, [symbolData?._id, selectedTab]);
 
   return (
     <div className="sticky flex flex-col p-5 top-[14%] min-w-[400px]">

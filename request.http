@@ -25,3 +25,13 @@ Content-Type: application/json
   "html": "새 이름",
   "code": "5342"
 }
+
+### Symbol 생성 요청
+POST http://localhost:3000/symbols/api/
+Content-Type: application/json
+
+{
+  "html": "새 이름",
+  "code": "5342",
+  "symbol": "똥"
+}
