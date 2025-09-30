@@ -7,6 +7,7 @@ export default function Home() {
     { title: "지도검색", href: "/disaster-map" },
     { title: "테스트 코드", href: "/testcode" },
     { title: "기호검색 버전2", href: "/symbols" },
+    { title: "QUIZ 생성기", href: "/quiz" },
   ];
   const linkStyle =
     "p-2 border-1 text-center rounded-lg hover:bg-gray-500 active:scale-95";
