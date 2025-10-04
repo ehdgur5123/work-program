@@ -4,6 +4,7 @@ import { SymbolItemType } from "@/app/symbols/types";
 import useCopySymbol from "../hooks/useCopySymbol";
 import CopyTooltip from "./CopyTooltip";
 import { useSymbolStore } from "../stores/useSymbolStore";
+
 interface SymbolItemProps {
   data: SymbolItemType;
 }

@@ -7,16 +7,18 @@ export default function useGetSymbols() {
     data: symbolItemList,
     isLoading: isSymbolLoading,
     isFetching: isSymbolFetching,
+    isError: isSymbolError,
   } = useQuery<SymbolItemType[]>({
     queryKey: ["symbols"],
     queryFn: getSymbols,
     staleTime: 1000 * 60 * 60 * 24,
-    refetchOnWindowFocus: false, // 필요하면 true로
+    refetchOnWindowFocus: false,
   });
 
   return {
     symbolItemList,
     isSymbolLoading,
     isSymbolFetching,
+    isSymbolError,
   };
 }

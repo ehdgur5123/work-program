@@ -5,7 +5,7 @@ import Search from "@/app/symbols/components/Search";
 import SymbolItemList from "@/app/symbols/components/SymbolItemList";
 import useIsMobile from "@/app/hooks/useIsMobile";
 import useGetSymbols from "../hooks/useGetSymbols";
-import { LoadingSpinnerSmall } from "@/app/components/Loading";
+import SymbolItemListLoading from "@/app/symbols/components/SymbolItemListLoading";
 
 export default function ClientPage() {
   const { symbolItemList, isSymbolLoading } = useGetSymbols();
@@ -32,7 +32,7 @@ export default function ClientPage() {
             />
           </div>
           {isSymbolLoading ? (
-            <LoadingSpinnerSmall />
+            <SymbolItemListLoading />
           ) : (
             <SymbolItemList symbolItemList={filteredData} />
           )}
