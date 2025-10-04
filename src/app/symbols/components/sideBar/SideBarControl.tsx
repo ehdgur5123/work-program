@@ -7,30 +7,28 @@ import SideBarForm from "@/app/symbols/components/sideBar/SideBarForm";
 export default function SideBarControl() {
   const [isSideBar, setIsSideBar] = useState(false);
   const isMobile = useIsMobile();
+  if (isMobile) return null;
 
   return (
     <>
-      {!isMobile && (
-        <div className="sticky top-[15%] self-start right-0 border-2 rounded-l-2xl">
-          <button
-            className="cursor-pointer p-2 h-32"
-            onClick={() => setIsSideBar(!isSideBar)}
-          >
-            {isSideBar ? (
-              <ChevronRightIcon className="size-6" />
-            ) : (
-              <ChevronLeftIcon className="size-6" />
-            )}
-          </button>
+      <div className="sticky top-[15%] self-start right-0 border-2 rounded-l-2xl">
+        <button
+          className="cursor-pointer p-2 h-32"
+          onClick={() => setIsSideBar(!isSideBar)}
+        >
+          {isSideBar ? (
+            <ChevronRightIcon className="w-6 h-6" />
+          ) : (
+            <ChevronLeftIcon className="w-6 h-6" />
+          )}
+        </button>
+      </div>
+
+      {isSideBar && (
+        <div className="w-1/3 border-4 min-w-[440px]">
+          <SideBarForm />
         </div>
       )}
-      {isMobile
-        ? null
-        : isSideBar && (
-            <div className="w-1/3 border-4 min-w-[440px]">
-              <SideBarForm />
-            </div>
-          )}
     </>
   );
 }
