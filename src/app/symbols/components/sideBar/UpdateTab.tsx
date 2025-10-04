@@ -5,11 +5,11 @@ import SymbolForm from "@/app/symbols/components/sideBar/SymbolForm";
 import { useEffect, useState } from "react";
 import Message from "./Message";
 import CrudButton from "../sideBar/CrudButton";
-import { useSymbolStore } from "@/app/symbols/hooks/useSymbolStore";
+import { useSymbolStore } from "@/app/symbols/stores/useSymbolStore";
 import useDeleteSymbol from "@/app/symbols/hooks/useDeleteSymbol";
 import useUpdateSymbol from "@/app/symbols/hooks/useUpdateSymbol";
 import { symbolUpdateValidation } from "@/app/symbols/lib/validation/symbolValidation";
-import { useMessageStore } from "../../hooks/useMessageStore";
+import { useMessageStore } from "../../stores/useMessageStore";
 
 interface UpdateTabProps {
   symbolData: SymbolItemType;

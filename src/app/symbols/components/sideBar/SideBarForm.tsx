@@ -5,10 +5,10 @@ import TabButton from "./TabButton";
 import InformationTab from "./InformationTab";
 import CreateTab from "./CreateTab";
 import UpdateTab from "./UpdateTab";
-import { useSymbolStore } from "@/app/symbols/hooks/useSymbolStore";
-import { useMessageStore } from "@/app/symbols/hooks/useMessageStore";
+import { useSymbolStore } from "@/app/symbols/stores/useSymbolStore";
+import { useMessageStore } from "@/app/symbols/stores/useMessageStore";
 
-export default function SideBar() {
+export default function SideBarForm() {
   const tabList = ["정보", "수정·삭제", "생성"];
   const [selectedTab, setSelectedTab] = useState("정보");
   const symbolData = useSymbolStore((state) => state.symbolData);

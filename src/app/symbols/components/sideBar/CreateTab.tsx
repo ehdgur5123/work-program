@@ -7,8 +7,8 @@ import SymbolForm from "./SymbolForm";
 import CrudButton from "../sideBar/CrudButton";
 import useCreatedSymbol from "../../hooks/useCreatedSymbol";
 import { symbolCreateValidation } from "@/app/symbols/lib/validation/symbolValidation";
-import { useMessageStore } from "../../hooks/useMessageStore";
-import { useSymbolStore } from "@/app/symbols/hooks/useSymbolStore";
+import { useMessageStore } from "../../stores/useMessageStore";
+import { useSymbolStore } from "@/app/symbols/stores/useSymbolStore";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreateTab() {

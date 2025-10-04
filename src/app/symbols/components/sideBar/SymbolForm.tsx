@@ -1,7 +1,7 @@
 import DetailToInfo from "@/app/symbols/components/sideBar/DetailToInfo";
 import { SymbolItemType } from "@/app/symbols/types";
 import NameList from "./NameList";
-import { useMessageStore } from "../../hooks/useMessageStore";
+import { useMessageStore } from "../../stores/useMessageStore";
 import { useEffect, useState } from "react";
 import {
   nameAddValidation,

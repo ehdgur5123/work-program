@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useMessageStore } from "@/app/symbols/hooks/useMessageStore";
+import { useMessageStore } from "@/app/symbols/stores/useMessageStore";
 
 export default function Message() {
   const { message } = useMessageStore();
