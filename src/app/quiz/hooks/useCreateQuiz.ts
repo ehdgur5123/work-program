@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { postQuiz } from "@/app/quiz/controllers/axiosQuiz";
 import { useQuizStore } from "@/app/quiz/stores/useQuizStore";
-import { QuizResponse } from "@/app/quiz/type";
+import { QuizDocument } from "@/app/quiz/type";
 
 export function useCreateQuiz() {
   const setQuizData = useQuizStore((state) => state.setQuizData);
   const [loadingTime, setLoadingTime] = useState<number | null>(null);
 
-  const createQuiz = useMutation<QuizResponse, Error, string>({
+  const createQuiz = useMutation<QuizDocument, Error, string>({
     mutationFn: (value: string) => postQuiz(value),
   });
 

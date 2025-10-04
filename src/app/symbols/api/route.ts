@@ -8,7 +8,6 @@ export async function GET() {
   try {
     await connectToDatabase();
     const symbols = await SymbolModel.find({});
-    revalidatePath("/symbols");
 
     return NextResponse.json(symbols, { status: 200 });
   } catch (err: unknown) {

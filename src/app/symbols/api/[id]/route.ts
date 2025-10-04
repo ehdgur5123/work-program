@@ -2,6 +2,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import { SymbolModel } from "@/app/symbols/models/symbol";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   _req: NextRequest,
@@ -29,6 +30,7 @@ export async function DELETE(
   try {
     await connectToDatabase();
     const symbol = await SymbolModel.deleteOne({ _id: id });
+    revalidatePath("/symbols");
     return NextResponse.json(symbol, { status: 200 });
   } catch (err: unknown) {
     const message =
@@ -54,6 +56,7 @@ export async function PATCH(
     if (!symbol) {
       return NextResponse.json({ error: "Symbol not found" }, { status: 404 });
     }
+    revalidatePath("/symbols");
     return NextResponse.json(symbol, { status: 200 });
   } catch (err: unknown) {
     const message =

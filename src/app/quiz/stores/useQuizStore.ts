@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { QuizResponse } from "../type";
+import { QuizDocument } from "../type";
 
 interface State {
-  quizData: QuizResponse | null;
-  setQuizData: (data: QuizResponse | null) => void;
+  quizData: QuizDocument | null;
+  setQuizData: (data: QuizDocument | null) => void;
 }
 
 export const useQuizStore = create<State>((set) => ({
