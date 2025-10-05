@@ -1,6 +1,7 @@
 import { requireSession } from "@/lib/auth/session";
 import ClientPage from "./components/ClientPage";
 import SideBarToggle from "@/app/symbols/components/sideBar/SideBarToggle";
+import ClientOnly from "@/app/symbols/components/ClientOnly";
 
 export default async function SymbolsPage() {
   await requireSession();
@@ -12,7 +13,9 @@ export default async function SymbolsPage() {
         <ClientPage />
         <div className="h-20"></div>
       </div>
-      <SideBarToggle />
+      <ClientOnly>
+        <SideBarToggle />
+      </ClientOnly>
     </div>
   );
 }

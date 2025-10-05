@@ -4,10 +4,9 @@ export default function Home() {
   const projectList = [
     { title: "기호검색 버전1", href: "/symbol-search" },
     { title: "즐겨찾기", href: "/page-links" },
-    { title: "지도검색", href: "/disaster-map" },
-    { title: "테스트 코드", href: "/testcode" },
     { title: "기호검색 버전2", href: "/symbols" },
     { title: "QUIZ 생성기", href: "/quiz" },
+    { title: "지도검색 테스트", href: "/map" },
   ];
   const linkStyle =
     "p-2 border-1 text-center rounded-lg hover:bg-gray-500 active:scale-95";
