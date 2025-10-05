@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import useIsMobile from "@/app/hooks/useIsMobile";
 import SideBarForm from "@/app/symbols/components/sideBar/SideBarForm";
 
-export default function SideBarControl() {
+export default function SideBarToggle() {
   const [isSideBar, setIsSideBar] = useState(false);
   const isMobile = useIsMobile();
-  if (isMobile) return null;
+  if (isMobile === null) return null;
 
   return (
     <>
