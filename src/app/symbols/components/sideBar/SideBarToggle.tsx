@@ -1,13 +1,17 @@
 "use client";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import useIsMobile from "@/app/hooks/useIsMobile";
 import SideBarForm from "@/app/symbols/components/sideBar/SideBarForm";
 
 export default function SideBarToggle() {
   const [isSideBar, setIsSideBar] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const isMobile = useIsMobile();
-  if (isMobile === null) return null;
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted || isMobile) return null;
 
   return (
     <>
