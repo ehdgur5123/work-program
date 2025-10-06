@@ -14,13 +14,15 @@ function shuffleArray<T>(array: T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5);
 }
 
+const MAX_LEVEL = 100;
+
 // OPEN AI 요청
 async function openAiResponse(
   inputValue: string,
   randomLevel: number
 ): Promise<QuizResponse> {
   const content = `너는 ${inputValue} 전문가야. ${inputValue} 관련하여 객관식 퀴즈를 만들어줘.
-    - 난이도는 초등학교 수준(1)부터 박사 수준(1000)까지로 하고, 내가 현재 원하는 난이도는 ${randomLevel}이야.
+    - 난이도는 초등학교 수준(1)부터 고등학교 수준${MAX_LEVEL}까지로 하고, 내가 현재 원하는 난이도는 ${randomLevel}이야.
     - 오답은 현실적이어야 하고, 답과 혼동될 수 있는 수준으로 만들어
     - 난이도는 explanation 마지막에 (난이도: 숫자) 형식으로 표시해
     - explanation의 글자 수는 150자 이내로 해. 
@@ -106,7 +108,7 @@ export async function POST(req: Request) {
     }
 
     // 난이도 1 ~ 1000
-    const randomLevel = Math.floor(Math.random() * 1000) + 1;
+    const randomLevel = Math.floor(Math.random() * MAX_LEVEL) + 1;
     // OPEN AI 퀴즈 요청&응답
     const responsedQuiz = await openAiResponse(inputValue, randomLevel);
     // 데이터베이스(몽고DB) 저장

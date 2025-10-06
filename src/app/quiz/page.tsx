@@ -14,7 +14,7 @@ export default async function QuizPage() {
           🎲 QUIZ POP!
         </h1>
         <p className="text-sm md:text-base text-gray-700 mt-2">
-          재미있는 사지선다 퀴즈 게임 🎉
+          AI 객관식 퀴즈 게임 🎉
         </p>
       </header>
 

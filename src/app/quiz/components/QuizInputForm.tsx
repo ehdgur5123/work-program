@@ -39,7 +39,7 @@ export default function QuizInputForm({
         type="submit"
         disabled={pending}
         className={`
-      w-full sm:w-28 
+      w-full sm:w-32
       px-5 py-3 rounded-full font-bold shadow-md transition 
       ${
         pending
