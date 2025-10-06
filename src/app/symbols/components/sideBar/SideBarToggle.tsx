@@ -6,10 +6,7 @@ import SideBarForm from "@/app/symbols/components/sideBar/SideBarForm";
 
 export default function SideBarToggle() {
   const [isSideBar, setIsSideBar] = useState(false);
-  // const [mounted, setMounted] = useState(false);
   const isMobile = useIsMobile();
-
-  // useEffect(() => setMounted(true), []);
 
   if (isMobile) return null;
 

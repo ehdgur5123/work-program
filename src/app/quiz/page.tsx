@@ -1,52 +1,32 @@
-"use client";
+import ClientPage from "@/app/quiz/components/ClientPage";
+import { requireSession } from "@/lib/auth/session";
 
-import useIsMobile from "@/app/hooks/useIsMobile";
-import { useQuizStore } from "@/app/quiz/stores/useQuizStore";
-import { useCreateQuiz } from "@/app/quiz/hooks/useCreateQuiz";
-import QuizWindow from "@/app/quiz/components/QuizWindow";
-import useQuizAnswer from "@/app/quiz/hooks/useQuizAnswer";
-import QuizInputForm from "./components/QuizInputForm";
-
-export default function QuizPage() {
-  const { clearAnswerState } = useQuizAnswer();
-  const isMobile = useIsMobile();
-  const quizData = useQuizStore((state) => state.quizData);
-  const { createQuiz, runCreateQuiz, loadingTime } = useCreateQuiz();
-
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement>,
-    inputValue: string
-  ) => {
-    event.preventDefault();
-    clearAnswerState();
-    runCreateQuiz(inputValue);
-  };
-
+export default async function QuizPage() {
+  await requireSession();
   return (
     <div
-      className={`${
-        isMobile ? "w-full px-7" : "w-1/2"
-      } flex flex-col gap-4 justify-center items-center mx-auto`}
+      className="m-4 p-6 rounded-3xl min-h-[500px] md:w-1/2 md:mx-auto 
+      bg-gradient-to-tr from-sky-200 via-pink-200 to-amber-200 shadow-xl flex flex-col"
     >
-      <h1 className={`${isMobile ? "text-4xl" : "text-6xl"} p-5 mt-10`}>
-        QUIZ 생성기
-      </h1>
+      {/* 헤더 */}
+      <header className="mb-6 text-center">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-pink-600 drop-shadow">
+          🎲 QUIZ POP!
+        </h1>
+        <p className="text-sm md:text-base text-gray-700 mt-2">
+          재미있는 사지선다 퀴즈 게임 🎉
+        </p>
+      </header>
 
-      <QuizInputForm
-        handleSubmit={handleSubmit}
-        pending={createQuiz.isPending}
-      />
+      {/* 메인 컨텐츠 */}
+      <main className="flex-1">
+        <ClientPage />
+      </main>
 
-      <div>
-        응답 시간 : {loadingTime ? (loadingTime / 1000).toFixed(2) + "초" : "-"}
-      </div>
-
-      {/* 에러 표시 */}
-      {createQuiz.isError && <p className="text-red-500">퀴즈 생성 실패!</p>}
-
-      {/* 퀴즈 표시 */}
-      {quizData && <QuizWindow />}
-      <footer className="h-20"></footer>
+      {/* 푸터(선택) */}
+      <footer className="mt-6 text-center text-xs text-gray-600">
+        © 2025 Quiz Pop!
+      </footer>
     </div>
   );
 }

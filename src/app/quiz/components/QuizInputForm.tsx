@@ -15,20 +15,40 @@ export default function QuizInputForm({
   const [inputValue, setInputValue] = useState("");
 
   return (
-    <form className="flex gap-2" onSubmit={(e) => handleSubmit(e, inputValue)}>
+    <form
+      className="flex flex-col gap-3 w-full sm:flex-row sm:items-center sm:justify-center"
+      onSubmit={(e) => handleSubmit(e, inputValue)}
+    >
+      {/* 입력창 */}
       <input
         type="text"
-        className="bg-white text-black pl-2"
         value={inputValue}
-        placeholder="주제를 입력해주세요."
+        placeholder="주제를 입력해주세요 🎯"
         onChange={(e) => setInputValue(e.target.value)}
+        className="
+      w-full sm:flex-1 
+      px-4 py-3 rounded-full 
+      border border-pink-300 
+      focus:outline-none focus:ring-2 focus:ring-pink-400 
+      bg-white/90 text-gray-800 placeholder-gray-400 shadow-sm
+    "
       />
+
+      {/* 버튼 */}
       <button
         type="submit"
-        className="p-1 border cursor-pointer w-28"
         disabled={pending}
+        className={`
+      w-full sm:w-28 
+      px-5 py-3 rounded-full font-bold shadow-md transition 
+      ${
+        pending
+          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+          : "bg-pink-500 text-white hover:bg-pink-600 active:scale-95"
+      }
+    `}
       >
-        {pending ? "생성 중..." : "생성"}
+        {pending ? "🎲 생성 중..." : "🚀 생성"}
       </button>
     </form>
   );
