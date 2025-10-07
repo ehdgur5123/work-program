@@ -15,7 +15,7 @@ export default async function QuizPage() {
         </div>
       </nav>
       <div
-        className="m-4 p-6 rounded-3xl min-h-[500px] md:w-1/2 md:mx-auto 
+        className="m-4 p-6 rounded-3xl min-h-[500px] w-full md:w-1/2 md:mx-auto 
       bg-gradient-to-tr from-sky-200 via-pink-200 to-amber-200 shadow-xl flex flex-col"
       >
         {/* 헤더 */}
