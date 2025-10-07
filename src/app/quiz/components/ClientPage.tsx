@@ -6,6 +6,7 @@ import { useCreateQuiz } from "@/app/quiz/hooks/useCreateQuiz";
 import QuizWindow from "@/app/quiz/components/QuizWindow";
 import useQuizAnswer from "@/app/quiz/hooks/useQuizAnswer";
 import QuizInputForm from "@/app/quiz/components/QuizInputForm";
+import QuizDataPending from "@/app/quiz/components/QuizDataPending";
 
 export default function ClientPage() {
   const { clearAnswerState } = useQuizAnswer();
@@ -53,6 +54,13 @@ export default function ClientPage() {
       {quizData && (
         <div className="w-full bg-white/80 backdrop-blur-md rounded-3xl shadow-lg p-6 animate-fadeIn">
           <QuizWindow />
+        </div>
+      )}
+
+      {/* Pending 영역 */}
+      {createQuiz.isPending && (
+        <div className="w-full bg-white/80 backdrop-blur-md rounded-3xl shadow-lg p-6 animate-fadeIn">
+          <QuizDataPending />
         </div>
       )}
     </div>
