@@ -9,7 +9,6 @@ import { QuizDocument } from "@/app/quiz/type";
 export function useCreateQuiz() {
   const setQuizList = useQuizStore((state) => state.setQuizList);
   const [loadingTime, setLoadingTime] = useState<number | null>(null);
-
   const createQuiz = useMutation<QuizDocument, Error, string>({
     mutationFn: (value: string) => postQuiz(value),
   });

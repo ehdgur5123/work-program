@@ -3,16 +3,33 @@
 import { useState } from "react";
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import SubjectList from "@/app/quiz/components/SubjectList";
+import { useCreateToggleStore } from "@/app/quiz/stores/useCreateToggleStore";
+import { useQuizStore } from "@/app/quiz/stores/useQuizStore";
 
 export default function Navigation() {
   const [isRecordOpen, setIsRecordOpen] = useState(false);
+  const setIsCreateToggle = useCreateToggleStore(
+    (state) => state.setIsCreateToggle
+  );
+  const isCreateToggle = useCreateToggleStore((state) => state.isCreateToggle);
+  const setQuizList = useQuizStore((state) => state.setQuizList);
+
   return (
     <div className="flex flex-col bg-white/70 backdrop-blur-md w-64 sm:w-72 p-4 rounded-3xl shadow-lg gap-4">
       {/* 생성하기 버튼 */}
       <button
         type="button"
-        className="w-full py-3 rounded-full bg-gradient-to-r from-pink-400 to-amber-300 text-white font-bold shadow-md
-        hover:scale-105 hover:shadow-lg transition active:scale-95 cursor-pointer"
+        className={`w-full py-3 rounded-full  text-white font-bold shadow-md
+         ${
+           isCreateToggle
+             ? "bg-gray-400 cursor-not-allowed"
+             : "bg-gradient-to-r from-pink-400 to-amber-300 hover:scale-105 hover:shadow-lg transition active:scale-95 cursor-pointer"
+         }`}
+        disabled={isCreateToggle}
+        onClick={() => {
+          setIsCreateToggle(true);
+          setQuizList([]);
+        }}
       >
         생성하기
       </button>

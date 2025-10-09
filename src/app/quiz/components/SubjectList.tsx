@@ -5,12 +5,15 @@ import { useSubjectStore } from "@/app/quiz/stores/useSubjectStore";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { getSubjectContent } from "@/app/quiz/controllers/axiosQuiz";
 import { useQuizStore } from "@/app/quiz/stores/useQuizStore";
+import { useCreateToggleStore } from "@/app/quiz/stores/useCreateToggleStore";
 
 export default function SubjectList() {
   const { isSubjectListLoading, isSubjectListError } = useSubjectList();
   const subjectList = useSubjectStore((state) => state.subjectList);
   const setQuizList = useQuizStore((state) => state.setQuizList);
-
+  const setIsCreateToggle = useCreateToggleStore(
+    (state) => state.setIsCreateToggle
+  );
   const handleSelectSubject = async (subject: string) => {
     const res = await getSubjectContent(subject);
     setQuizList(res);
@@ -45,7 +48,10 @@ export default function SubjectList() {
           <button
             type="button"
             className="flex-1 text-left px-4 py-2 text-pink-700 font-semibold rounded-xl cursor-pointer"
-            onClick={() => handleSelectSubject(subject)}
+            onClick={() => {
+              handleSelectSubject(subject);
+              setIsCreateToggle(false);
+            }}
           >
             {subject}
           </button>
