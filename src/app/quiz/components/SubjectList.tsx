@@ -4,24 +4,21 @@ import useSubjectList from "@/app/quiz/hooks/useSubjectList";
 import { useSubjectStore } from "@/app/quiz/stores/useSubjectStore";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { getSubjectContent } from "@/app/quiz/controllers/axiosQuiz";
-import { useEffect, useState } from "react";
+import { useQuizStore } from "@/app/quiz/stores/useQuizStore";
 
 export default function SubjectList() {
-  const [content, setContent] = useState();
   const { isSubjectListLoading, isSubjectListError } = useSubjectList();
   const subjectList = useSubjectStore((state) => state.subjectList);
+  const setQuizList = useQuizStore((state) => state.setQuizList);
 
   const handleSelectSubject = async (subject: string) => {
-    console.log(subject);
     const res = await getSubjectContent(subject);
-    setContent(res);
+    setQuizList(res);
   };
 
-  const handleDeleteSubject = (subject: string) => {};
-
-  useEffect(() => {
-    console.log(content);
-  }, [content]);
+  const handleDeleteSubject = (subject: string) => {
+    console.log(subject);
+  };
 
   if (isSubjectListLoading)
     return (

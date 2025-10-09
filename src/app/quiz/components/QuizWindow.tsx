@@ -1,10 +1,18 @@
 import useIsMobile from "@/app/hooks/useIsMobile";
-import { useQuizStore } from "@/app/quiz/stores/useQuizStore";
+import { QuizDocument } from "@/app/quiz/type";
 import useQuizAnswer from "@/app/quiz/hooks/useQuizAnswer";
+import { useEffect } from "react";
 
-export default function QuizWindow() {
+interface QuizWindowProps {
+  quizData: QuizDocument;
+}
+
+export default function QuizWindow({ quizData }: QuizWindowProps) {
   const isMobile = useIsMobile();
-  const quizData = useQuizStore((state) => state.quizData);
+
+  useEffect(() => {
+    console.log(quizData);
+  }, [quizData]);
   const {
     selectAnswer,
     setSelectAnswer,

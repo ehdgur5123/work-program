@@ -11,7 +11,7 @@ import QuizDataPending from "@/app/quiz/components/QuizDataPending";
 export default function ClientPage() {
   const { clearAnswerState } = useQuizAnswer();
   const isMobile = useIsMobile();
-  const quizData = useQuizStore((state) => state.quizData);
+  const quizList = useQuizStore((state) => state.quizList);
   const { createQuiz, runCreateQuiz, loadingTime } = useCreateQuiz();
 
   const handleSubmit = (
@@ -55,11 +55,14 @@ export default function ClientPage() {
       )}
 
       {/* 퀴즈 영역 */}
-      {quizData && (
-        <div className="w-full bg-white/80 backdrop-blur-md rounded-3xl shadow-lg p-6 animate-fadeIn">
-          <QuizWindow />
+      {quizList?.map((quizData) => (
+        <div
+          key={quizData._id.toString()}
+          className="w-full bg-white/80 backdrop-blur-md rounded-3xl shadow-lg p-6 animate-fadeIn flex flex-col gap-4"
+        >
+          <QuizWindow quizData={quizData} />
         </div>
-      )}
+      ))}
 
       {/* Pending 영역 */}
       {createQuiz.isPending && (

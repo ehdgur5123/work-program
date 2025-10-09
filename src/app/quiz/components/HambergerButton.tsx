@@ -15,7 +15,7 @@ export default function HambergerButton() {
       >
         <Bars3Icon className="w-6 h-6 text-white drop-shadow-sm" />
       </button>
-      {isOpen && <Navigation isOpen={isOpen} />}
+      {isOpen && <Navigation />}
     </div>
   );
 }

@@ -3,11 +3,8 @@
 import { useState } from "react";
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import SubjectList from "@/app/quiz/components/SubjectList";
-interface NavigationProps {
-  isOpen?: boolean;
-}
 
-export default function Navigation({ isOpen }: NavigationProps) {
+export default function Navigation() {
   const [isRecordOpen, setIsRecordOpen] = useState(false);
   return (
     <div className="flex flex-col bg-white/70 backdrop-blur-md w-64 sm:w-72 p-4 rounded-3xl shadow-lg gap-4">

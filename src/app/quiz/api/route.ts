@@ -87,7 +87,7 @@ async function mongoDbResponse(
     };
     const savedQuiz = await QuizModel.create(saveToDatabase);
     return {
-      id: savedQuiz._id.toString(),
+      _id: savedQuiz._id.toString(),
       subject: savedQuiz.subject,
       level: savedQuiz.level,
       ...responsedQuiz,

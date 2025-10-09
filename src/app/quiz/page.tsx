@@ -2,6 +2,7 @@ import ClientPage from "@/app/quiz/components/ClientPage";
 import { requireSession } from "@/lib/auth/session";
 import Navigation from "@/app/quiz/components/Navigation";
 import HambergerButton from "@/app/quiz/components/HambergerButton";
+
 export default async function QuizPage() {
   await requireSession();
   return (

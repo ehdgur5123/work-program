@@ -7,7 +7,7 @@ import { useQuizStore } from "@/app/quiz/stores/useQuizStore";
 import { QuizDocument } from "@/app/quiz/type";
 
 export function useCreateQuiz() {
-  const setQuizData = useQuizStore((state) => state.setQuizData);
+  const setQuizList = useQuizStore((state) => state.setQuizList);
   const [loadingTime, setLoadingTime] = useState<number | null>(null);
 
   const createQuiz = useMutation<QuizDocument, Error, string>({
@@ -15,7 +15,7 @@ export function useCreateQuiz() {
   });
 
   const runCreateQuiz = (inputValue: string) => {
-    setQuizData(null);
+    setQuizList([]);
     setLoadingTime(null);
     const start = performance.now();
 
@@ -23,13 +23,13 @@ export function useCreateQuiz() {
       onSuccess: (data) => {
         const end = performance.now();
         setLoadingTime(end - start);
-        setQuizData(data);
+        setQuizList([data]);
       },
       onError: (err) => {
         const end = performance.now();
         setLoadingTime(end - start);
         console.error(err);
-        setQuizData(null);
+        setQuizList([]);
       },
     });
   };
