@@ -18,6 +18,10 @@ export default function ClientPage() {
     event: React.FormEvent<HTMLFormElement>,
     inputValue: string
   ) => {
+    if (inputValue.trim().length === 0) {
+      alert("주제를 입력해주세요");
+      return;
+    }
     event.preventDefault();
     clearAnswerState();
     runCreateQuiz(inputValue);

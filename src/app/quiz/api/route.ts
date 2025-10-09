@@ -4,6 +4,8 @@ import OpenAI from "openai";
 import { QuizResponse, QuizDocument } from "@/app/quiz/type";
 import { QuizModel } from "@/app/quiz/models/quiz";
 
+const MAX_LEVEL = 100;
+
 // OPEN AI KEY
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -13,8 +15,6 @@ const openai = new OpenAI({
 function shuffleArray<T>(array: T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5);
 }
-
-const MAX_LEVEL = 100;
 
 // OPEN AI 요청
 async function openAiResponse(
@@ -72,6 +72,7 @@ async function openAiResponse(
   return convertQuiz;
 }
 
+// 데이터베이스(몽고DB) 저장 함수
 async function mongoDbResponse(
   inputValue: string,
   randomLevel: number,
@@ -97,6 +98,7 @@ async function mongoDbResponse(
   }
 }
 
+// POST 요청
 export async function POST(req: Request) {
   try {
     const { inputValue } = await req.json();
@@ -107,7 +109,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 난이도 1 ~ 1000
+    // 난이도 설정
     const randomLevel = Math.floor(Math.random() * MAX_LEVEL) + 1;
     // OPEN AI 퀴즈 요청&응답
     const responsedQuiz = await openAiResponse(inputValue, randomLevel);
@@ -125,19 +127,5 @@ export async function POST(req: Request) {
       { error: "Something went wrong" },
       { status: 500 }
     );
-  }
-}
-
-export async function GET() {
-  try {
-    await connectToDatabase();
-
-    const subjects = await QuizModel.distinct("subject");
-
-    return NextResponse.json(subjects, { status: 200 });
-  } catch (err: unknown) {
-    const message =
-      err instanceof Error ? err.message : "Internal Server Error";
-    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
