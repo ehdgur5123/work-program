@@ -11,7 +11,9 @@ export const navDropDownList: NavItem[] = [
     href: "/project",
     item: [
       { text: "기호검색", href: "/project/symbols" },
-      { text: "최근 프로젝트", href: "/project/recent" },
+      { text: "즐겨찾기", href: "/project/page-links" },
+      { text: "퀴즈 생성기", href: "/project/quiz" },
+      { text: "카카오지도 테스트", href: "/project/map" },
     ],
   },
   { text: "서비스", href: "/service" },

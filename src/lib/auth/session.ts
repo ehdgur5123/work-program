@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export async function requireSession() {
   const session = await getServerSession(authOptions);
   if (!session) {
-    redirect("/api/auth/signin");
+    redirect("/login");
   }
   return session;
 }

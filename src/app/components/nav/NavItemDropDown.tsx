@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
-
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 export interface NavItemDropDownProps {
   text: string;
   items?: { text: string; href: string }[]; // 하위 메뉴 (optional)
@@ -18,14 +17,19 @@ export default function NavItemDropDown({
   const [open, setOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
 
-  // 모바일이면 그냥 클릭 링크, 데스크톱이면 hover 드롭다운
+  // 모바일 드롭다운
   if (isMobile) {
     return (
       <div className="flex flex-col w-full">
         <button
           onClick={() => setToggle((prev) => !prev)}
-          className="w-full text-left text-white py-2 px-4 hover:bg-gray-800 rounded-md transition"
+          className="w-full text-left text-white py-2 px-4 hover:bg-gray-800 rounded-md transition flex gap-1 items-center"
         >
+          {toggle && items ? (
+            <ChevronDownIcon className="w-4 h-4 text-gray-300 group-hover:text-white transition" />
+          ) : (
+            <ChevronRightIcon className="w-4 h-4 text-gray-300 group-hover:text-white transition" />
+          )}
           {text}
         </button>
         {toggle && items && (
@@ -55,7 +59,7 @@ export default function NavItemDropDown({
       <div className="flex items-center gap-1 text-lg text-gray-200 hover:text-white transition">
         {text}
         {items && (
-          <ChevronDown className="w-4 h-4 text-gray-300 group-hover:text-white transition" />
+          <ChevronDownIcon className="w-4 h-4 text-gray-300 group-hover:text-white transition" />
         )}
       </div>
 
