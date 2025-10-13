@@ -2,7 +2,7 @@
 
 // app/components/ClientLayout.tsx
 import { SessionProvider } from "next-auth/react";
-import TopNavigation from "./TopNavigation";
+import TopNavigation from "./nav/TopNavigation";
 
 export default function ClientLayout({
   children,
