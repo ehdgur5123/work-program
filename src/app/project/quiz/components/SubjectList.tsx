@@ -38,16 +38,16 @@ export default function SubjectList() {
     );
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col">
       {subjectList.map((subject) => (
         <div
           key={subject}
-          className="relative w-full rounded-xl bg-gradient-to-r from-pink-200 to-amber-200 shadow-md flex items-center justify-between group"
+          className="relative w-full rounded-xl hover:bg-gradient-to-r hover:from-pink-200 hover:to-amber-200 hover:shadow-md flex items-center justify-between group "
         >
           {/* 선택 영역 */}
           <button
             type="button"
-            className="flex-1 text-left px-4 py-2 text-pink-700 font-semibold rounded-xl cursor-pointer"
+            className="flex-1 text-left px-4 text-pink-700 font-semibold rounded-xl cursor-pointer active:scale-95"
             onClick={() => {
               handleSelectSubject(subject);
               setIsCreateToggle(false);
@@ -59,7 +59,7 @@ export default function SubjectList() {
           {/* 휴지통 버튼 */}
           <button
             type="button"
-            className="p-2 opacity-0 group-hover:opacity-30 hover:opacity-100 transition-opacity cursor-pointer"
+            className="p-2 opacity-0 group-hover:opacity-30 hover:opacity-100 transition-opacity cursor-pointer active:scale-80"
             onClick={() => handleDeleteSubject(subject)}
           >
             <TrashIcon className="w-5 h-5 text-pink-700" />

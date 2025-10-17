@@ -46,7 +46,7 @@ export default function TopNavigation() {
           {session ? (
             <>
               <img
-                src={session.user?.image || "/default-avatar.png"}
+                src={session.user?.image || "/google-login-dark.svg"}
                 alt="User Avatar"
                 className="w-8 h-8 rounded-full object-cover"
               />
@@ -60,7 +60,7 @@ export default function TopNavigation() {
           ) : (
             <>
               <Link
-                href="/login"
+                href="/signin"
                 className="text-sm bg-white text-black px-4 py-2 rounded-full hover:bg-gray-200"
               >
                 로그인
@@ -111,7 +111,7 @@ export default function TopNavigation() {
             ) : (
               <div className="flex flex-col items-start text-gray-200 text-lg">
                 <Link
-                  href="/login"
+                  href="/signin"
                   className="w-full text-left text-white py-2 hover:text-gray-300"
                 >
                   로그인

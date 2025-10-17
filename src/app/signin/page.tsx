@@ -1,31 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import AuthInput from "@/app/components/auth/AuthInput";
 import AuthLayout from "@/app/components/auth/AuthLayout";
 import AuthButton from "@/app/components/auth/AuthButton";
 import AuthFooter from "@/app/components/auth/AuthFooter";
 
-export default function SignUpPage() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+export default function SignInPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
-    <AuthLayout title="회원가입">
+    <AuthLayout title="로그인">
       {/* Email */}
       <AuthInput
         label="이메일"
         id="email"
         type="email"
-        handleChange={handleChange}
-        value={form.email}
+        handleChange={(e) => setEmail(e.target.value)}
+        value={email}
         placeholder="이메일을 입력하세요"
       />
 
@@ -34,26 +28,16 @@ export default function SignUpPage() {
         label="비밀번호"
         id="password"
         type="password"
-        handleChange={handleChange}
-        value={form.password}
+        handleChange={(e) => setPassword(e.target.value)}
+        value={password}
         placeholder="비밀번호를 입력하세요"
-      />
-
-      {/* Confirm Password */}
-      <AuthInput
-        label="비밀번호 확인"
-        id="confirmPassword"
-        type="password"
-        handleChange={handleChange}
-        value={form.confirmPassword}
-        placeholder="비밀번호를 다시 입력하세요"
       />
 
       {/* Submit */}
       <AuthButton
         provider="normal"
+        text="로그인"
         handleClick={() => console.log("응애")}
-        text="회원가입"
       />
 
       {/* Divider */}
@@ -63,22 +47,22 @@ export default function SignUpPage() {
         <div className="flex-grow h-px bg-gray-700" />
       </div>
 
-      {/* SNS Signup */}
+      {/* SNS Login */}
       <div className="flex flex-col gap-3">
         <AuthButton
           provider="google"
-          handleClick={() => console.log("응애")}
-          text="Google 계정으로 가입"
+          text="Google 계정으로 로그인"
+          handleClick={() => signIn("google", { callbackUrl: "/" })}
         />
         <AuthButton
           provider="naver"
+          text="Naver 계정으로 로그인"
           handleClick={() => console.log("응애")}
-          text="Naver 계정으로 가입"
         />
       </div>
 
       {/* Footer */}
-      <AuthFooter link="signup" />
+      <AuthFooter link="signin" />
     </AuthLayout>
   );
 }
