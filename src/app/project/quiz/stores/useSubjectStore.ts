@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 interface State {
-  subjectList: string[] | [];
+  subjectList: string[];
   setSubjectList: (data: string[] | []) => void;
 }
 

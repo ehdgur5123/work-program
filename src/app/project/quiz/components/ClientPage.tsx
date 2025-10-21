@@ -1,6 +1,5 @@
 "use client";
 
-import useIsMobile from "@/app/hooks/useIsMobile";
 import { useQuizStore } from "@/app/project/quiz/stores/useQuizStore";
 import { useCreateQuiz } from "@/app/project/quiz/hooks/useCreateQuiz";
 import QuizWindow from "@/app/project/quiz/components/QuizWindow";
@@ -11,10 +10,11 @@ import { useCreateToggleStore } from "@/app/project/quiz/stores/useCreateToggleS
 
 export default function ClientPage() {
   const { clearAnswerState } = useQuizAnswer();
-  const isMobile = useIsMobile();
   const quizList = useQuizStore((state) => state.quizList);
+  const isLoading = useQuizStore((state) => state.isLoading);
   const { createQuiz, runCreateQuiz, loadingTime } = useCreateQuiz();
   const isCreateToggle = useCreateToggleStore((state) => state.isCreateToggle);
+
   const handleSubmit = (
     event: React.FormEvent<HTMLFormElement>,
     inputValue: string
@@ -30,9 +30,8 @@ export default function ClientPage() {
 
   return (
     <div
-      className={`${
-        isMobile ? "w-full px-4" : "w-3/4 md:w-2/3"
-      } flex flex-col gap-6 justify-center items-center mx-auto`}
+      className="flex flex-col gap-6 justify-center items-center mx-auto
+                w-full px-4 md:w-3/4 lg:w-full"
     >
       {isCreateToggle && (
         <>
@@ -69,7 +68,14 @@ export default function ClientPage() {
         </div>
       ))}
 
-      {/* Pending 영역 */}
+      {/* 퀴즈 선택 로딩 */}
+      {isLoading && !createQuiz.isPending && (
+        <div className="w-full bg-white/80 backdrop-blur-md rounded-3xl shadow-lg p-6 animate-fadeIn">
+          <QuizDataPending />
+        </div>
+      )}
+
+      {/* 퀴즈 생성 Pending */}
       {createQuiz.isPending && (
         <div className="w-full bg-white/80 backdrop-blur-md rounded-3xl shadow-lg p-6 animate-fadeIn">
           <QuizDataPending />

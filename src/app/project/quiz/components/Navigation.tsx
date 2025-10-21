@@ -8,9 +8,10 @@ import { useQuizStore } from "@/app/project/quiz/stores/useQuizStore";
 
 interface NavigationProps {
   isNavOpen?: boolean;
+  className?: string;
 }
 
-export default function Navigation({ isNavOpen }: NavigationProps) {
+export default function Navigation({ isNavOpen, className }: NavigationProps) {
   const [isRecordOpen, setIsRecordOpen] = useState(false);
   const setIsCreateToggle = useCreateToggleStore(
     (state) => state.setIsCreateToggle
@@ -19,7 +20,9 @@ export default function Navigation({ isNavOpen }: NavigationProps) {
   const setQuizList = useQuizStore((state) => state.setQuizList);
 
   return (
-    <div className="flex flex-col bg-white/70 backdrop-blur-md w-64 sm:w-72 p-4 shadow-lg gap-4 h-full fixed top-20 left-0 z-20">
+    <div
+      className={`flex flex-col bg-white/70 backdrop-blur-md w-64 sm:w-72 p-4 shadow-lg gap-4 h-full fixed top-20 left-0 z-20 ${className}`}
+    >
       {isNavOpen && <div className="h-20"></div>}
       {/* 생성하기 버튼 */}
       <button
@@ -57,11 +60,13 @@ export default function Navigation({ isNavOpen }: NavigationProps) {
       </button>
 
       {/* 목록 */}
-      {!isRecordOpen && (
-        <div className="flex flex-col p-1 bg-amber-100 h-80 overflow-auto">
-          <SubjectList />
-        </div>
-      )}
+      <div
+        className={`flex flex-col p-1 bg-amber-100 h-80 overflow-auto ${
+          isRecordOpen ? "hidden" : "block"
+        }`}
+      >
+        <SubjectList />
+      </div>
     </div>
   );
 }

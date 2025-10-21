@@ -35,3 +35,9 @@ Content-Type: application/json
   "code": "5342",
   "symbol": "똥"
 }
+
+### QUIZ 생성기 퀴즈 삭제
+DELETE http://localhost:3000/project/quiz/api/68f719bedffa96aa991b4dd0
+
+### 
+GET http://localhost:3000/project/quiz/api/subject/content?subject=디지몬

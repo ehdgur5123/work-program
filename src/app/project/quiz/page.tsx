@@ -17,7 +17,10 @@ export default function QuizPage() {
           </div>
           <div className="block md:hidden">
             <HambergerButton setIsNavOpen={setIsNavOpen} />
-            {isNavOpen && <Navigation isNavOpen={isNavOpen} />}
+            <Navigation
+              isNavOpen={isNavOpen}
+              className={`${isNavOpen && "hidden md:block"}`}
+            />
           </div>
         </nav>
 

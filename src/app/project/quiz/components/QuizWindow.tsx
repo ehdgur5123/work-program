@@ -1,7 +1,8 @@
 import useIsMobile from "@/app/hooks/useIsMobile";
 import { QuizDocument } from "@/app/project/quiz/type";
 import useQuizAnswer from "@/app/project/quiz/hooks/useQuizAnswer";
-import { useEffect } from "react";
+import { TrashIcon } from "@heroicons/react/24/solid";
+import { useDeleteQuiz } from "@/app/project/quiz/hooks/useDeleteQuiz";
 
 interface QuizWindowProps {
   quizData: QuizDocument;
@@ -9,10 +10,8 @@ interface QuizWindowProps {
 
 export default function QuizWindow({ quizData }: QuizWindowProps) {
   const isMobile = useIsMobile();
+  const { mutate: deleteQuizMutate } = useDeleteQuiz();
 
-  useEffect(() => {
-    console.log(quizData);
-  }, [quizData]);
   const {
     selectAnswer,
     setSelectAnswer,
@@ -32,9 +31,17 @@ export default function QuizWindow({ quizData }: QuizWindowProps) {
     }
   };
 
+  const handleDelete = () => {
+    deleteQuizMutate(String(quizData._id), {
+      onSuccess: () => {
+        console.log("삭제성공");
+      },
+    });
+  };
+
   return (
     /* QuizWindow (부모 그라데이션에 어울리는 파스텔 톤) */
-    <div className="w-full max-w-2xl mx-auto p-4 sm:p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-lg">
+    <div className="w-full mx-auto p-4 sm:p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-lg">
       {/* 문제 텍스트 */}
       <div
         className={`${
@@ -69,7 +76,7 @@ export default function QuizWindow({ quizData }: QuizWindowProps) {
       </div>
 
       {/* 제출 버튼: 부모의 핑크→앰버 그라데이션과 연계 */}
-      <div className="flex justify-end mt-4">
+      <div className="flex justify-end mt-4 gap-2">
         <button
           type="button"
           onClick={checkAnswerClick}
@@ -78,6 +85,12 @@ export default function QuizWindow({ quizData }: QuizWindowProps) {
         transition hover:from-pink-400 hover:to-amber-300 active:scale-95"
         >
           제출
+        </button>
+        <button
+          className="p-2 rounded-full bg-red-500 hover:bg-red-600 active:scale-95 transition"
+          onClick={handleDelete}
+        >
+          <TrashIcon className="w-5 h-5 text-white" />
         </button>
       </div>
 

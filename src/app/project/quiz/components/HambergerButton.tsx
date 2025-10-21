@@ -3,12 +3,14 @@ import { Bars3Icon } from "@heroicons/react/24/solid";
 
 interface HambergerButtonProps {
   setIsNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  className?: string;
 }
 export default function HambergerButton({
   setIsNavOpen,
+  className,
 }: HambergerButtonProps) {
   return (
-    <div className="fixed top-28 left-6 z-30">
+    <div className={`fixed top-[90px] left-6 z-30 ${className}`}>
       <button
         type="button"
         className="p-3 rounded-full bg-gradient-to-tr from-pink-400 via-amber-300 to-sky-300
