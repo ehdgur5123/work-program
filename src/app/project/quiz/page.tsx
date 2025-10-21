@@ -12,20 +12,20 @@ export default function QuizPage() {
     <div className="min-h-[1000px] bg-gradient-to-b from-sky-100 via-rose-50 to-yellow-100">
       <div className="flex">
         <nav>
-          <div className="hidden md:block h-full">
+          <div className="hidden lg:block h-full">
             <Navigation />
           </div>
-          <div className="block md:hidden">
+          <div className="block lg:hidden">
             <HambergerButton setIsNavOpen={setIsNavOpen} />
             <Navigation
               isNavOpen={isNavOpen}
-              className={`${isNavOpen && "hidden md:block"}`}
+              className={`${isNavOpen && "hidden lg:block"}`}
             />
           </div>
         </nav>
 
         <div
-          className="m-4 p-6 rounded-3xl min-h-[750px] w-full md:w-1/2 md:mx-auto 
+          className="m-4 p-6 rounded-3xl min-h-[750px] w-full lg:w-1/2 lg:mx-auto
           bg-gradient-to-tr from-sky-200 via-pink-200 to-amber-200 shadow-xl flex flex-col"
         >
           <header className="mb-6 text-center">
