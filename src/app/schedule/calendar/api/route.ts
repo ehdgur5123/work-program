@@ -7,7 +7,7 @@ export async function GET() {
   if (!session?.accessToken) {
     return new Response("Not authenticated", { status: 401 });
   }
-
+  console.log(session);
   // OAuth 클라이언트 구성
   const oauth2Client = new google.auth.OAuth2();
   if (!oauth2Client) {
