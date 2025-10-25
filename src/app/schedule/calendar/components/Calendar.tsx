@@ -12,8 +12,9 @@ export default function Calendar() {
   if (!session?.accessToken) return <p>로그인이 필요합니다.</p>;
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-sm">
       <FullCalendar
+        height={600}
         plugins={[dayGridPlugin, googleCalendarPlugin]}
         initialView="dayGridMonth"
         locale={koLocale}

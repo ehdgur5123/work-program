@@ -97,6 +97,7 @@ export default function TopNavigation() {
               text={item.text}
               isMobile={true}
               items={item.item}
+              handleIsOpen={() => setIsOpen(!isOpen)}
             />
           ))}
 

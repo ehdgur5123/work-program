@@ -7,12 +7,14 @@ export interface NavItemDropDownProps {
   text: string;
   items?: { text: string; href: string }[]; // 하위 메뉴 (optional)
   isMobile?: boolean;
+  handleIsOpen?: () => void;
 }
 
 export default function NavItemDropDown({
   text,
   items,
   isMobile = false,
+  handleIsOpen,
 }: NavItemDropDownProps) {
   const [open, setOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -39,6 +41,7 @@ export default function NavItemDropDown({
                 key={sub.href}
                 href={sub.href}
                 className="w-full text-left text-gray-300 py-2 px-4 hover:bg-gray-700 rounded-md transition"
+                onClick={handleIsOpen}
               >
                 {sub.text}
               </Link>
