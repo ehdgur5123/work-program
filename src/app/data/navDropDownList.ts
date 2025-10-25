@@ -17,5 +17,9 @@ export const navDropDownList: NavItem[] = [
     ],
   },
   { text: "서비스", href: "/service" },
-  { text: "스케줄", href: "/schedule" },
+  {
+    text: "스케줄",
+    href: "/schedule",
+    item: [{ text: "구글 캘린더", href: "/schedule/calendar" }],
+  },
 ];

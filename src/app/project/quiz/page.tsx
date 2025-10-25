@@ -1,28 +1,13 @@
-"use client";
-
-import { useState } from "react";
+import { requireSession } from "@/lib/auth/session";
 import ClientPage from "@/app/project/quiz/components/ClientPage";
-import Navigation from "@/app/project/quiz/components/Navigation";
-import HambergerButton from "@/app/project/quiz/components/HambergerButton";
+import NavigationForm from "@/app/project/quiz/components/NavigationForm";
 
-export default function QuizPage() {
-  const [isNavOpen, setIsNavOpen] = useState(false);
-
+export default async function QuizPage() {
+  await requireSession();
   return (
-    <div className="min-h-[1000px] bg-gradient-to-b from-sky-100 via-rose-50 to-yellow-100">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 via-rose-50 to-yellow-100">
       <div className="flex">
-        <nav>
-          <div className="hidden lg:block h-full">
-            <Navigation />
-          </div>
-          <div className="block lg:hidden">
-            <HambergerButton setIsNavOpen={setIsNavOpen} />
-            <Navigation
-              isNavOpen={isNavOpen}
-              className={`${isNavOpen && "hidden lg:block"}`}
-            />
-          </div>
-        </nav>
+        <NavigationForm />
 
         <div
           className="m-4 p-6 rounded-3xl min-h-[750px] w-full lg:w-1/2 lg:mx-auto

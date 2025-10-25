@@ -57,7 +57,7 @@ export default function QuizWindow({ quizData }: QuizWindowProps) {
               <button
                 type="button"
                 onClick={() => setSelectAnswer(opt)}
-                className={`w-full text-left px-4 py-3 rounded-xl border transition ease-in-out duration-150
+                className={`cursor-pointer w-full text-left px-4 py-3 rounded-xl border transition ease-in-out duration-150
               ${
                 selectAnswer === opt
                   ? "bg-pink-500/20 border-pink-400 text-pink-700 font-semibold shadow-inner"
@@ -80,14 +80,14 @@ export default function QuizWindow({ quizData }: QuizWindowProps) {
         <button
           type="button"
           onClick={checkAnswerClick}
-          className="w-full sm:w-36 py-2 rounded-full font-semibold
+          className="cursor-pointer w-full sm:w-36 py-2 rounded-full font-semibold
         bg-gradient-to-r from-pink-500 to-amber-400 text-white shadow-md
         transition hover:from-pink-400 hover:to-amber-300 active:scale-95"
         >
           제출
         </button>
         <button
-          className="p-2 rounded-full bg-red-500 hover:bg-red-600 active:scale-95 transition"
+          className="cursor-pointer p-2 rounded-full bg-red-500 hover:bg-red-600 active:scale-95 transition"
           onClick={handleDelete}
         >
           <TrashIcon className="w-5 h-5 text-white" />
