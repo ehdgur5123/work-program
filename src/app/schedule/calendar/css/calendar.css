@@ -1,0 +1,25 @@
+.fc-daygrid-event-dot {
+  border: calc(var(--fc-daygrid-event-dot-width) / 2) solid
+    var(--fc-event-border-color);
+  border-radius: calc(var(--fc-daygrid-event-dot-width) / 2);
+  box-sizing: content-box;
+  height: 0px;
+  margin: 0px 4px;
+  width: 0px;
+}
+
+/* 모든 이벤트 텍스트 숨김 (이미 되어 있음) */
+.fc-event-title,
+.fc-event-time {
+  display: none;
+}
+
+/* 공휴일: 빨간색 점 */
+.holiday-event .fc-daygrid-event-dot {
+  border-color: red !important;
+}
+
+/* 개인 일정: 파란색 점 (원한다면 명시적으로) */
+.personal-event .fc-daygrid-event-dot {
+  border-color: #3b82f6 !important; /* Tailwind의 blue-500 색상 */
+}

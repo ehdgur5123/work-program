@@ -6,7 +6,13 @@ import googleCalendarPlugin from "@fullcalendar/google-calendar";
 import koLocale from "@fullcalendar/core/locales/ko";
 import { useSession } from "next-auth/react";
 
-export default function Calendar() {
+import "../css/calendar.css";
+
+interface CalendarProps {
+  height: number;
+}
+
+export default function Calendar({ height }: CalendarProps) {
   const { data: session } = useSession();
 
   if (!session?.accessToken) return <p>로그인이 필요합니다.</p>;
@@ -14,7 +20,7 @@ export default function Calendar() {
   return (
     <div className="p-4 text-sm">
       <FullCalendar
-        height={600}
+        height={height}
         plugins={[dayGridPlugin, googleCalendarPlugin]}
         initialView="dayGridMonth"
         locale={koLocale}
@@ -25,25 +31,39 @@ export default function Calendar() {
           if (!numberEl) return;
 
           if (day === 0)
-            (numberEl as HTMLElement).classList.add("text-red-700"); // 일요일
+            (numberEl as HTMLElement).classList.add("text-red-600"); // 일요일
           if (day === 6)
-            (numberEl as HTMLElement).classList.add("text-blue-700"); // 토요일
+            (numberEl as HTMLElement).classList.add("text-blue-600"); // 토요일
         }}
         eventSources={[
           {
-            // 개인 캘린더
             googleCalendarId: "primary",
+            className: "personal-event",
+            id: "personal-event",
             extraParams: { access_token: session.accessToken },
           },
           {
-            // 한국 공휴일
             googleCalendarId:
               "ko.south_korea#holiday@group.v.calendar.google.com",
+            id: "holiday-event",
+            className: "holiday-event", // ← 추가
             extraParams: { access_token: session.accessToken },
-            color: "green", // 공휴일 이벤트 색상
-            textColor: "white", // 글자 색
+            // backgroundColor: "red",
+            // borderColor: "red",
+            backgroundColor: "transparent",
+            borderColor: "transparent",
           },
         ]}
+        eventContent={(arg) => {
+          if (arg.event.source?.id === "personal-event")
+            return {
+              html: `<div class="fc-daygrid-event-dot"></div>`,
+            };
+          if (arg.event.source?.id === "holiday-event")
+            return {
+              html: `<div class="fc-daygrid-event-dot"></div>`,
+            };
+        }}
       />
     </div>
   );
