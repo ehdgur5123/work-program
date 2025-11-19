@@ -37,7 +37,7 @@ async function openAiResponse(japanese: string): Promise<string> {
       },
     ],
     temperature: 0, // 안정적인 반복 결과
-    max_tokens: 50, // 단일 발음 응답에 충분
+    max_tokens: 500, // 단일 발음 응답에 충분
   });
 
   // ⚡ 안전하게 단일 문자열 반환
@@ -50,7 +50,7 @@ const projectId = process.env.GOOGLE_PROJECT_ID!;
 const location = "global";
 
 export async function GET() {
-  const korean = "너의 이름은 뭐니?"; // 테스트 문장
+  const korean = "나랑 결혼해 줄래?"; // 테스트 문장
 
   // 📍 한국어 → 일본어 변환
   const [response] = await translationClient.translateText({
