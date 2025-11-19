@@ -14,6 +14,7 @@
     "@fullcalendar/daygrid": "^6.1.19",
     "@fullcalendar/google-calendar": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
+    "@google-cloud/translate": "^9.3.0",
     "@heroicons/react": "^2.2.0",
     "@lottiefiles/dotlottie-react": "^0.14.1",
     "@tanstack/react-query": "^5.83.0",

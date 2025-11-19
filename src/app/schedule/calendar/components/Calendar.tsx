@@ -48,8 +48,6 @@ export default function Calendar({ height }: CalendarProps) {
             id: "holiday-event",
             className: "holiday-event", // ← 추가
             extraParams: { access_token: session.accessToken },
-            // backgroundColor: "red",
-            // borderColor: "red",
             backgroundColor: "transparent",
             borderColor: "transparent",
           },
